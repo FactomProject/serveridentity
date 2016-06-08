@@ -213,10 +213,10 @@ func MakeSubChain(chainID string) (*Subchain, error) {
 	sub.version = []byte{0x00}
 	sub.message = []byte("Server Management")
 	// TODO: Why can't sub.rootChainID, err := hex.DecodeString(chainID)
-	root, err := hex.DecodeString(chainID)
-	sub.rootChainID = root
-	if err != nil {
+	if root, err := hex.DecodeString(chainID); err != nil {
 		return nil, err
+	} else {
+		sub.rootChainID = root
 	}
 	sub.nonce = findValidNonce(sub)
 	sub.ChainID = hex.EncodeToString(calcChainID(sub))

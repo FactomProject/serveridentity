@@ -8,6 +8,7 @@ import (
 	"bufio"
 	"crypto/rand"
 	"encoding/hex"
+	"errors"
 	"fmt"
 	"github.com/FactomProject/btcutil/base58"
 	ed "github.com/FactomProject/ed25519"
@@ -31,6 +32,15 @@ func GetInput(inputType string, message string) interface{} {
 		return i.Input.ReadIn()
 	case "ecAddr":
 		i := newECAddrIN(message)
+		return i.Input.ReadIn()
+	case "privStr":
+		i := newPrivIN(message, -1)
+		return i.Input.ReadIn()
+	case "privStrRoot":
+		i := newPrivIN(message, 4)
+		return i.Input.ReadIn()
+	case "hexStr":
+		i := newHexIN(message, identity.SeedMin, identity.SeedMax)
 		return i.Input.ReadIn()
 	}
 	// Should never reach
@@ -210,14 +220,106 @@ func (i *ecAddrIN) sanitize(input string) bool {
 }
 
 // Private Key
-type privIn struct {
+type privIN struct {
 	ReadInput
 	Input *Input
+	level int
 }
 
-func newPrivIN(message string) *privIn {
-	i := new(privIn)
+func newPrivIN(message string, lev int) *privIN {
+	i := new(privIN)
+	i.level = lev
+	i.Input = newInput(i, message)
 	return i
 }
 
-// TODO MORE
+func (i *privIN) sanitize(input string) bool {
+	if len(input) == 64 {
+		fmt.Println("Must be human readable base format, start with 'sk#', not hex.")
+		return false
+	} else if len(input) == 53 {
+		if strings.Compare(input[:2], "sk") == 0 {
+			levInt, err := strconv.Atoi(input[2:3])
+			if i.level > 0 && i.level != levInt {
+				fmt.Printf("%s%d%s\n", "Not the correct level private key. Please enter the level ", i.level, " key")
+				return false
+			}
+			if err != nil {
+				fmt.Println("Error in input: " + err.Error())
+			}
+			// TODO: Check valid human readable hash at end
+			p := base58.Decode(input[:53])
+			if !identity.CheckHumanReadable(p[:]) {
+				fmt.Println("Not a valid private key, end hash is incorrect.")
+				return false
+			}
+
+			pShort := p[3:35]
+			oByte, err := intToOneByte(levInt)
+			if err != nil {
+				fmt.Println("Error in input: " + err.Error())
+			}
+			i.Input.value = append(pShort[:], oByte[:]...)
+			return true
+		} else {
+			fmt.Println("Not a valid private key.")
+			return false
+		}
+	} else {
+		fmt.Println("Not a valid private key.")
+		return false
+	}
+}
+
+// Hex String
+type hexIN struct {
+	ReadInput
+	Input *Input
+	min   int
+	max   int
+}
+
+func newHexIN(message string, min int, max int) *hexIN {
+	h := new(hexIN)
+	h.min = min
+	h.max = max
+	h.Input = newInput(h, message)
+	return h
+}
+
+func (i *hexIN) sanitize(input string) bool {
+	if len(input)%2 != 0 {
+		fmt.Println("Hex string must be of even length.")
+		return false
+	}
+
+	if len(input) > i.max || len(input) < i.min {
+		fmt.Println("String must be between " + strconv.Itoa(i.min) + " and " + strconv.Itoa(i.max) + " length.")
+		return false
+	}
+
+	if _, err := hex.DecodeString(input); err != nil {
+		fmt.Println("Error in input: " + err.Error())
+	}
+
+	i.Input.value = input
+	return true
+}
+
+/********************************
+ *       Helper Functions       *
+ ********************************/
+
+func intToOneByte(i int) ([]byte, error) {
+	switch i {
+	case 1:
+		return []byte{0x01}, nil
+	case 2:
+		return []byte{0x02}, nil
+	case 3:
+		return []byte{0x03}, nil
+	case 4:
+		return []byte{0x04}, nil
+	}
+	return nil, errors.New("Key level must be between 1 and 4")
+}

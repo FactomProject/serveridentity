@@ -117,6 +117,17 @@ func (i *Identity) HumanReadablePrivate() string {
 	return str
 }
 
+func CheckHumanReadable(key []byte) bool {
+	// Sha356d
+	humanReadable := utils.Sha256d(key[:35])
+
+	// Append first 4 bytes
+	if bytes.Compare(humanReadable[:4], key[len(key)-4:]) == 0 {
+		return true
+	}
+	return false
+}
+
 func (i *Identity) HumanReadablePublic() string {
 	buf := new(bytes.Buffer)
 

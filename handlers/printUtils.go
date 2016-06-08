@@ -19,3 +19,9 @@ func PrintHeader(str string) {
 	fmt.Println(str)
 	fmt.Println("***********************************************************************")
 }
+
+func PrintBanner() {
+	fmt.Println("***********************************************************************")
+	fmt.Println("**              Factom Server Identity Management Tool              **")
+	fmt.Println("***********************************************************************")
+}

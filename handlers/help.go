@@ -7,16 +7,16 @@ import (
 )
 
 type helper struct {
-	topics map[string]*fctCmd
+	topics map[string]*sevCmd
 }
 
 func NewHelper() *helper {
 	h := new(helper)
-	h.topics = make(map[string]*fctCmd)
+	h.topics = make(map[string]*sevCmd)
 	return h
 }
 
-func (h *helper) Add(s string, c *fctCmd) {
+func (h *helper) Add(s string, c *sevCmd) {
 	h.topics[s] = c
 }
 
@@ -35,7 +35,7 @@ func (h *helper) All() {
 
 func (h *helper) Execute(args []string) {
 	if len(args) < 1 {
-		fmt.Println("serveridentity help [subcommand]")
+		fmt.Println("serveridentity help")
 		return
 	}
 	if len(args) < 2 {

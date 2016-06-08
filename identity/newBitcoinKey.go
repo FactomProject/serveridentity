@@ -35,32 +35,43 @@ func MakeBitcoinKey(rootChainID string, subChainID string, btcKeyLevel int, btcT
 	bk := new(BitcoinKey)
 	bk.version = []byte{0x00}
 	bk.message = []byte("New Bitcoin Key")
-	root, err := hex.DecodeString(rootChainID)
-	bk.rootChainID = root
-	if err != nil {
+	if root, err := hex.DecodeString(rootChainID); err != nil {
 		return nil, err
+	} else {
+		bk.rootChainID = root
 	}
+
 	idChainCheck := ProofOfWorkChainID[:ProofOfWorkLength]
 	if bytes.Compare(bk.rootChainID[:ProofOfWorkLength], idChainCheck) != 0 {
 		return nil, errors.New("Error creating new BTC key: Invalid root chain id")
 	}
-	bk.btcKeyLevel, err = intToOneByte(btcKeyLevel)
-	if err != nil {
+
+	if btcKeyLevel, err := intToOneByte(btcKeyLevel); err != nil {
 		return nil, err
+	} else {
+		bk.btcKeyLevel = btcKeyLevel
 	}
+
 	if btcType > 1 || btcType < 0 {
 		return nil, errors.New("Error creating new BTC key: Bitcoin key type must be either 0 or 1")
 	}
-	bk.btcType, err = intToOneByte(btcType)
-	if err != nil {
+	if bType, err := intToOneByte(btcType); err != nil {
 		return nil, err
+	} else {
+		bk.btcType = bType
 	}
+
 	if len(btcKey) != 20 {
 		return nil, errors.New("Error creating new BTC key: Incorrect bitcoin key length")
 	}
 	bk.btcKey = btcKey
+
 	t := interfaces.NewTimeStampNow()
-	bk.timestamp, err = t.MarshalBinary()
+	if timestamp, err := t.MarshalBinary(); err != nil {
+		return nil, err
+	} else {
+		bk.timestamp = timestamp
+	}
 
 	preI := make([]byte, 0)
 	preI = append(preI, []byte{0x01}...)

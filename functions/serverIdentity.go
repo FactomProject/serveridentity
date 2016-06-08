@@ -7,7 +7,6 @@ import (
 	"github.com/FactomProject/serveridentity/identity"
 )
 
-// Individual component in an IdentitySet
 type ServerIdentity struct {
 	ECAddr      *factom.ECAddress
 	IDSet       *identity.IdentitySet
@@ -45,9 +44,4 @@ func MakeServerIdentityFromEC(sec []byte) (*ServerIdentity, error) {
 	sid.IDSet = identity.NewIdentitySet()
 	sid.IDSet.GenerateIdentitySet()
 	return sid, nil
-}
-
-// TODO: Make Server Identity from existing keys
-func MakeServerIdentityFromKeys() (*ServerIdentity, error) {
-	return nil, nil
 }

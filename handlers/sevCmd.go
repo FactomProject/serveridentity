@@ -1,11 +1,11 @@
 package handlers
 
-type fctCmd struct {
+type sevCmd struct {
 	execFunc    func([]string)
 	helpMsg     string
 	description string
 }
 
-func (c *fctCmd) Execute(args []string) {
+func (c *sevCmd) Execute(args []string) {
 	c.execFunc(args)
 }

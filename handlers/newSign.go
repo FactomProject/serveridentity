@@ -3,6 +3,7 @@ package handlers
 import (
 	"bufio"
 	"bytes"
+	"encoding/hex"
 	"flag"
 	"fmt"
 	"github.com/FactomProject/btcutil/base58"
@@ -11,14 +12,16 @@ import (
 	"github.com/FactomProject/serveridentity/functions"
 	"github.com/FactomProject/serveridentity/utils"
 	"os"
-	"strconv"
 	"strings"
 )
 
-var NewKey = func() *fctCmd {
-	cmd := new(fctCmd)
+/********************************
+ *          Cli Control         *
+ ********************************/
+var NewKey = func() *sevCmd {
+	cmd := new(sevCmd)
 	cmd.helpMsg = "serveridentity newkey 'block'|'btc'"
-	cmd.description = "Create new block signing key"
+	cmd.description = "Create a new key to add/replace"
 	cmd.execFunc = func(args []string) {
 		os.Args = args
 		flag.Parse()
@@ -26,14 +29,20 @@ var NewKey = func() *fctCmd {
 		c := cli.New()
 		c.HandleFunc("block", newBlockKey)
 		c.HandleFunc("btc", newBtcKey)
+		c.HandleDefaultFunc(func(args []string) {
+			fmt.Println(cmd.helpMsg)
+		})
 		c.Execute(args)
 	}
 	Help.Add("Create new block signing key", cmd)
 	return cmd
 }()
 
-//
+/********************************
+ *        CLI Functions         *
+ ********************************/
 func newBtcKey(args []string) {
+	PrintBanner()
 	var raw interface{}
 	fmt.Println("To create a new bitcoin key multiple inputs will be required.")
 
@@ -66,12 +75,13 @@ func newBtcKey(args []string) {
 	if btcKey == nil { // Exit case
 		return
 	}
+	// END CONVERT
 
-	_, privKey := getPrivateKey("Input the human readable base58 private key or type 'exit':  ")
-	if privKey == nil { // Exit case
+	raw = GetInput("privStr", "Input the private key of the level below you wish to replace. \nHumanReadable base58 key expected, or type 'exit':  \n")
+	if raw == nil { // Exit case
 		return
 	}
-	// END CONVERT
+	privKey := raw.([]byte)[:32]
 
 	raw = GetInput("ecAddr", "Input the entry credit address or 'any' for a new one:  ")
 	if raw == nil { // Exit case
@@ -90,6 +100,7 @@ func newBtcKey(args []string) {
 }
 
 func newBlockKey(args []string) {
+	PrintBanner()
 	var raw interface{}
 	fmt.Println("To create a new block signing key multiple inputs will be required.")
 
@@ -104,14 +115,15 @@ func newBlockKey(args []string) {
 		return
 	}
 	ecAddr := raw.(*factom.ECAddress)
-	fmt.Println("Your public entry credit address is: \n * " + ecAddr.PubString())
+	fmt.Println(" -  Your public entry credit address is: \n * " + ecAddr.PubString())
 
 	// Just 32 bytes
-	lev, privKeyAbove := getPrivateKey("Input the private key of the level below you wish to replace. \nHumanReadable base58 key expected, or type 'exit' to exit")
-	if privKeyAbove == nil { // Exit case
+	raw = GetInput("privStr", "Input the private key to sign. HumanReadable base58 key expected, or type 'exit':  ")
+	if raw == nil { // Exit case
 		return
 	}
-	// END CONVERT
+	privKeyAbove := raw.([]byte)[:32]
+	//lev := raw.([]byte)[32:33] // No longer used, is level of key signing
 
 	strCom, strRev, newPriv, err := functions.CreateNewBlockSignEntry(rootID, privKeyAbove, ecAddr)
 	if err != nil {
@@ -119,23 +131,27 @@ func newBlockKey(args []string) {
 	}
 
 	PrintHeader("New Block Signing Key Curl Commands")
-	fmt.Println("New PrivateKey : " + newHumanReadable(lev, newPriv) + "\n")
+	fmt.Println("New PrivateKey : " + hex.EncodeToString(newPriv)[:32] + "\n")
+	// makeHumanReadable(lev, newPriv) + "\n")
 	fmt.Println(strCom + "\n")
 	fmt.Println(strRev + "\n")
 }
 
-// TODO: Move all code below to readInput.go
-func newHumanReadable(lev int, key []byte) string {
+/********************************
+ *       Helper Functions       *
+ ********************************/
+
+// No longer used
+func makeHumanReadable(lev []byte, key []byte) string {
 	var prefix []byte
-	switch lev {
-	case 1:
+	if bytes.Compare([]byte{0x01}, lev) == 0 {
 		// Case 1 should never happen
 		prefix = []byte{0x4d, 0xb6, 0xc9}
-	case 2:
+	} else if bytes.Compare([]byte{0x02}, lev) == 0 {
 		prefix = []byte{0x4d, 0xb6, 0xe7}
-	case 3:
+	} else if bytes.Compare([]byte{0x03}, lev) == 0 {
 		prefix = []byte{0x4d, 0xb7, 0x05}
-	case 4:
+	} else if bytes.Compare([]byte{0x04}, lev) == 0 {
 		prefix = []byte{0x4d, 0xb7, 0x23}
 	}
 
@@ -157,6 +173,7 @@ func newHumanReadable(lev int, key []byte) string {
 	return str
 }
 
+// TODO: Move all code below to readInput.go
 func getBase58(message string) []byte {
 	for true {
 		fmt.Print(message)
@@ -174,39 +191,4 @@ func getBase58(message string) []byte {
 	}
 	// should never reach here
 	return nil
-}
-
-// TODO: Santitize better and catch errors
-func getPrivateKey(message string) (int, []byte) {
-	//fmt.Println("Input the private key of the level below you wish to replace. \nHumanReadable base58 key expected, or type 'exit' to exit")
-	fmt.Println(message)
-	for true {
-		reader := bufio.NewReader(os.Stdin)
-		input, err := reader.ReadString('\n')
-		if err != nil {
-			panic(err)
-		}
-		if strings.Compare(input, "exit\n") == 0 { // Exit
-			return 0, nil
-		} else if len(input) == 65 {
-			fmt.Println("Must be human readable base format, start with 'sk#', not hex.")
-		} else if len(input) == 54 {
-			if strings.Compare(input[:2], "sk") == 0 {
-				levInt, err := strconv.Atoi(input[3:4])
-				if err != nil {
-					panic(err)
-				}
-				levInt++
-				// TODO: Check valid human readable hash at end
-				p := base58.Decode(input[:53])
-				return levInt, p[3:35]
-			} else {
-				fmt.Println("Not a private key, input the private key of the level below you wish to replace. \nHumanReadable base58 ley expected, or type 'exit' to exit")
-			}
-		} else {
-			fmt.Println("Invalid input, a the private key. HumanReadable base58 key expected, or type 'exit' to exit")
-		}
-	}
-	// Should never get here
-	return 0, nil
 }

@@ -38,15 +38,18 @@ func MakeBlockSigningKey(rootChainIDStr string, levelAbovePrivateKey *[64]byte) 
 	if err != nil {
 		return nil, nil, err
 	}
+
 	t := interfaces.NewTimeStampNow()
 	b.timestamp, err = t.MarshalBinary()
 	if err != nil {
 		return nil, nil, err
 	}
+
 	preI := make([]byte, 0)
 	preI = append(preI, []byte{0x01}...)
 	preI = append(preI, levelAbovePrivateKey[32:]...)
 	b.identityPreimage = preI
+
 	sig := ed.Sign(levelAbovePrivateKey, b.versionToTimestamp())
 	b.signiture = sig[:]
 	return b, priv[:], nil

@@ -17,6 +17,7 @@ func main() {
 	c.Handle("start", handlers.Start)
 	c.Handle("mhash", handlers.NewMHash)
 	c.Handle("newkey", handlers.NewKey)
+	c.Handle("get", handlers.Get)
 
 	c.HandleDefault(handlers.Help)
 	c.Execute(args)

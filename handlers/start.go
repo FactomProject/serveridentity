@@ -2,8 +2,10 @@ package handlers
 
 import (
 	"bufio"
-	"encoding/hex"
+	"flag"
 	"fmt"
+	"github.com/FactomProject/btcutil/base58"
+	"github.com/FactomProject/cli"
 	"github.com/FactomProject/factom"
 	"github.com/FactomProject/serveridentity/functions"
 	"github.com/FactomProject/serveridentity/identity"
@@ -11,36 +13,54 @@ import (
 	"strings"
 )
 
-var Start = func() *fctCmd {
-	cmd := new(fctCmd)
+var file *os.File
+
+var Start = func() *sevCmd {
+	cmd := new(sevCmd)
 	cmd.helpMsg = "serveridentity start 'fresh'|ESAddress"
 	cmd.description = "Create new identity and subchain."
 	cmd.execFunc = func(args []string) {
-		if len(args) > 1 && strings.Compare(args[1], "fresh") == 0 {
-			fresh(args)
-		} else if len(args) > 1 {
-			existingEC(args)
-		} else {
-		}
+		os.Args = args
+		flag.Parse()
+		args = flag.Args()
+		c := cli.New()
+		c.HandleFunc("fresh", fresh)
+		c.HandleDefaultFunc(existingEC)
+		c.HandleFunc("help", func(args []string) {
+			fmt.Println(cmd.helpMsg)
+		})
+		c.Execute(args)
 	}
-	Help.Add("Create new identity and subchain", cmd)
+	Help.Add("Create new Identity", cmd)
 	return cmd
 }()
 
 func existingEC(args []string) {
-	if len(args[1]) != 64 {
-		fmt.Println("Invalid EC Address, exiting program...")
+	if len(args) == 0 {
+		Help.All()
 		return
 	}
-	// Generate all new Keys from EC
-	sid := generateKeysFromEC(args[1])
-	if sid == nil {
+
+	PrintBanner()
+	l := len(args[0])
+	if l != 64 && l != 52 {
+		fmt.Println("server identity start 'fresh'|ESAddress")
+		fmt.Println("Invalid ES Address entered, exiting program...")
 		return
+	} else if l == 52 {
+		// Generate all new Keys from EC
+		sid := generateKeysFromEC(args[0])
+		if sid == nil {
+			return
+		}
+		start(sid)
+	} else if l == 64 {
+		fmt.Println("Only base58 human readable key accepted.")
 	}
-	start(sid)
 }
 
 func fresh(args []string) {
+	PrintBanner()
 	// Generate all new Keys
 	sid := generateKeys()
 	if sid == nil {
@@ -56,12 +76,30 @@ func start(sid *functions.ServerIdentity) {
 		panic(err)
 	}
 
+	file, err = os.Create("startidentity.sh")
+	if err != nil {
+		file, err = os.Open("startidentity.sh")
+		if err != nil {
+			panic(err)
+		}
+	}
+	defer file.Close()
+	var bar string
+	for i := 0; i < 76; i++ {
+		bar = bar + "\\*"
+	}
+	file.WriteString("echo " + bar + "\n")
+	file.WriteString("echo \\* Setup script will create and register an identity and its subchain \\ \\ \\ \\ \\ \\ \\*\n")
+	file.WriteString("echo \\* Credits must be in " + sid.ECAddr.PubString() + " \\ \\*\n")
+	file.WriteString("echo " + bar + "\n")
+
 	PrintHeader("Root Chain Curls")
 	createIdentityChain(sid)
 	registerIdentityChain(sid)
 	PrintHeader("Sub Chain Curls")
 	createSubChain(sid)
 	registerSubChain(sid)
+	file.WriteString("echo   \n")
 }
 
 func waitForEnter() error {
@@ -83,6 +121,9 @@ func createIdentityChain(sid *functions.ServerIdentity) {
 	}
 	fmt.Println("Root Chain ID: " + sid.RootChainID + "\n")
 
+	// startidentity.sh
+	writeCurlCmd("Creating Identity Chain - ChainID: "+sid.RootChainID, strCom, strRev)
+
 	fmt.Println(strCom + "\n")
 	fmt.Println(strRev + "\n")
 }
@@ -93,6 +134,10 @@ func registerIdentityChain(sid *functions.ServerIdentity) {
 	if err != nil {
 		panic(err)
 	}
+
+	// startidentity.sh
+	writeCurlCmd("Registering Identity Chain", strCom, strRev)
+
 	fmt.Println(strCom + "\n")
 	fmt.Println(strRev + "\n")
 }
@@ -104,6 +149,10 @@ func createSubChain(sid *functions.ServerIdentity) {
 		panic(err)
 	}
 	fmt.Println("Sub Chain ID: " + sid.SubChainID + "\n")
+
+	// startidentity.sh
+	writeCurlCmd("Creating Identity SubChain - ChainID: "+sid.SubChainID, strCom, strRev)
+
 	fmt.Println(strCom + "\n")
 	fmt.Println(strRev + "\n")
 }
@@ -114,8 +163,21 @@ func registerSubChain(sid *functions.ServerIdentity) {
 	if err != nil {
 		panic(err)
 	}
+
+	// startidentity.sh
+	writeCurlCmd("Registering Identity SubChain", strCom, strRev)
+
 	fmt.Println(strCom + "\n")
 	fmt.Println(strRev + "\n")
+}
+
+func writeCurlCmd(title string, strCom string, strRev string) {
+	file.WriteString("echo   \n")
+	file.WriteString("echo - " + title + "\n")
+	file.WriteString(strCom + "\n")
+	file.WriteString("echo   \n")
+	file.WriteString(strRev + "\n")
+	file.WriteString("echo   \n")
 }
 
 func generateKeys() *functions.ServerIdentity {
@@ -158,16 +220,20 @@ func generateKeysFromEC(ecStr string) *functions.ServerIdentity {
 	}
 
 	// Key generation
-	//sec, _ := hex.DecodeString("9FAA5D459E16C50F192630487B52D78EAB2442B29E23BAD433C83986DBC5DA29")
-	// TODO Validate input
-	sec, err := hex.DecodeString(ecStr)
-	if err != nil {
-		panic(err)
+	if strings.Compare(ecStr[:2], "Es") != 0 {
+		fmt.Println("Invalid entry credit private key prefix, exiting program...")
+		return nil
 	}
-
+	if !factom.IsValidAddress(ecStr) {
+		fmt.Println("Invalid entry credit private key, exiting program...")
+		return nil
+	}
+	ec := base58.Decode(ecStr[:52])
+	sec := ec[2:34]
 	sid, err := functions.MakeServerIdentityFromEC(sec)
 	if err != nil {
-		panic(err)
+		fmt.Println("Error: " + err.Error())
+		return nil
 	}
 
 	fmt.Println("Key Generation Complete")
