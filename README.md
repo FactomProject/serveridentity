@@ -11,6 +11,7 @@ serveridentity start fresh
 1. A lot of information will be outputted, **copy down** the private keys, identity keys, and the entry credit address private key.
   * You can pipe the output to a file to make it easier to copy down, but make sure to delete all trace of the file as these keys should be stored securely
     * ```serveridentity start fresh > out.txt```
+    * type ``` y ``` press enter, then press ```ENTER``` again and wait. That will guide you through the promts and start the generating
 2. Press 'ENTER' when you copied down your keys, the next step will take some time. Wait for it to complete
 3. Various curl commands will be outputted. Copy down these commands, as they are needed to be run in the order they appear to successfully create an identity chain and subchain.
   * The ChainIDs of the identity chain and subchain will be located here
@@ -42,7 +43,7 @@ serveridentity mhash
 ```
 serveridentity newkey btc
  ```
- 
+
  * Follow Prompts
 
 
