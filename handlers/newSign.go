@@ -70,12 +70,11 @@ func newBtcKey(args []string) {
 	}
 	btcType := raw.(int)
 
-	// TODO: CONVERT
-	btcKey := getBase58("Input your bitcoin address or type 'exit':  ")
-	if btcKey == nil { // Exit case
+	raw = GetInput("btcAddr", "Input your bitcoin address or type 'exit':  ")
+	if raw == nil { // Exit case
 		return
 	}
-	// END CONVERT
+	btcKey := raw.([]byte)
 
 	raw = GetInput("privStr", "Input the private key of the level below you wish to replace. \nHumanReadable base58 key expected, or type 'exit':  \n")
 	if raw == nil { // Exit case
@@ -171,24 +170,4 @@ func makeHumanReadable(lev []byte, key []byte) string {
 
 	str := base58.Encode(o)
 	return str
-}
-
-// TODO: Move all code below to readInput.go
-func getBase58(message string) []byte {
-	for true {
-		fmt.Print(message)
-		reader := bufio.NewReader(os.Stdin)
-		input, err := reader.ReadString('\n')
-		if err != nil {
-			fmt.Println("Error in input: " + err.Error())
-		} else if strings.Compare(input[:len(input)-1], "exit") == 0 {
-			return nil
-		} else {
-			// TODO: Sanitize
-			b := base58.Decode(input[:len(input)-1])
-			return b
-		}
-	}
-	// should never reach here
-	return nil
 }

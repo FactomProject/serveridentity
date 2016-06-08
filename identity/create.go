@@ -212,7 +212,6 @@ func MakeSubChain(chainID string) (*Subchain, error) {
 	sub := new(Subchain)
 	sub.version = []byte{0x00}
 	sub.message = []byte("Server Management")
-	// TODO: Why can't sub.rootChainID, err := hex.DecodeString(chainID)
 	if root, err := hex.DecodeString(chainID); err != nil {
 		return nil, err
 	} else {

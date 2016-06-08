@@ -79,7 +79,6 @@ func (i *Identity) generateIdentityKey(count int) error {
 	shaReturn := sha256.Sum256(temp[:])
 	shaReturn = sha256.Sum256(shaReturn[:])
 	i.identityKey = &shaReturn
-	// TODO: Change placement
 	switch count {
 	case 0:
 		i.privPrefix = privPrefix1
@@ -135,7 +134,7 @@ func (i *Identity) HumanReadablePublic() string {
 	buf.Write(i.publicKey[:32])
 
 	o := buf.Bytes()
-	// TODO: Catch err
+
 	str := hex.EncodeToString(o)
 	return str
 }

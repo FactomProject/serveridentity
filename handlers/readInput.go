@@ -42,6 +42,9 @@ func GetInput(inputType string, message string) interface{} {
 	case "hexStr":
 		i := newHexIN(message, identity.SeedMin, identity.SeedMax)
 		return i.Input.ReadIn()
+	case "btcAddr":
+		i := newBase58IN(message, 20)
+		return i.Input.ReadIn()
 	}
 	// Should never reach
 	return nil
@@ -247,7 +250,6 @@ func (i *privIN) sanitize(input string) bool {
 			if err != nil {
 				fmt.Println("Error in input: " + err.Error())
 			}
-			// TODO: Check valid human readable hash at end
 			p := base58.Decode(input[:53])
 			if !identity.CheckHumanReadable(p[:]) {
 				fmt.Println("Not a valid private key, end hash is incorrect.")
@@ -303,6 +305,30 @@ func (i *hexIN) sanitize(input string) bool {
 	}
 
 	i.Input.value = input
+	return true
+}
+
+// Base58 -- BTC Address
+type base58IN struct {
+	ReadInput
+	Input  *Input
+	length int // In bytes
+}
+
+func newBase58IN(message string, length int) *base58IN {
+	b := new(base58IN)
+	b.length = length
+	b.Input = newInput(b, message)
+	return b
+}
+
+func (b *base58IN) sanitize(input string) bool {
+	addr := base58.Decode(input)
+	if len(addr) != b.length {
+		fmt.Println("Invalid input, incorrect length.")
+		return false
+	}
+	b.Input.value = addr
 	return true
 }
 
