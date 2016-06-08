@@ -21,35 +21,44 @@ serveridentity start fresh
 6. Manually enter the curl commands in order, or run ```sh startidentity.sh```
 7. If all success messages are returned, your server identity has been successfully created and registered.
 
+
 ## Create a new Block Signing Key
 ```
 serveridentity newkey block
  ```
+
 * Follow Prompts
+
 
 ## Create a new Matryoshka Hash
 ```
 serveridentity mhash
  ```
+
 * Follow Prompts
+
 
 ## Create a new Bitcoin Key
 ```
 serveridentity newkey btc
  ```
+ 
  * Follow Prompts
 
 
- ## Get Pubkey from Private
+## Get Pubkey from Private
  ```
  serveridentity get pubkey PRIVATEKEY
   ```
+
 * Follow Prompts
 * Example: ``` serveridentity get pubkey sk11pz4AG9XgB1eNVkbppYAWsgyg7sftDXqBASsagKJqvVRKYodCU ```
+
 
 ## Get Identity Key from Private
 ```
 serveridentity get idkey PRIVATEKEY
  ```
+
 * Follow Prompts
 * Example: ``` serveridentity get pubkey sk11pz4AG9XgB1eNVkbppYAWsgyg7sftDXqBASsagKJqvVRKYodCU ```
