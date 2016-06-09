@@ -41,6 +41,8 @@ func MakeBitcoinKey(rootChainID string, subChainID string, btcKeyLevel int, btcT
 		bk.rootChainID = root
 	}
 
+	bk.subchain = subChainID
+
 	idChainCheck := ProofOfWorkChainID[:ProofOfWorkLength]
 	if bytes.Compare(bk.rootChainID[:ProofOfWorkLength], idChainCheck) != 0 {
 		return nil, errors.New("Error creating new BTC key: Invalid root chain id")
