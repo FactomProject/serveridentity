@@ -3,8 +3,9 @@ Server Identity Management
 An application that creates and manages a Factom Server's Identity. This application will not store or save any private keys once the application has terminated, so it is up to the user to copy down the keys displayed and store them appropriately.
 
 ## Compiling
-6/9/2016 Compiles with factom m2v2 branch
-* Requires this branch, no previous will be compatible
+* 6/9/2016 Compiles with factom m2v2 branch
+  * Requires this branch, no previous will be compatible
+* /identity/varsconfig.go contains various hardcode options. Until release, refer to these when creating an identity.
 
 
 Using Server Management Tool
