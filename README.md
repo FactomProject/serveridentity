@@ -33,7 +33,7 @@ serveridentity start fresh
 
 ## Create a new Block Signing Key
 ```
-serveridentity newkey block
+serveridentity newkey block [-s]
  ```
 
 * Follow Prompts, -s flag will generate a script to run the curl commands
@@ -41,7 +41,7 @@ serveridentity newkey block
 
 ## Create a new Matryoshka Hash
 ```
-serveridentity mhash
+serveridentity mhash [-s]
  ```
 
 * Follow Prompts, , -s flag will generate a script to run the curl commands
