@@ -3,7 +3,6 @@ package handlers
 import (
 	"flag"
 	"fmt"
-	"github.com/FactomProject/cli"
 	"github.com/FactomProject/factom"
 	"github.com/FactomProject/serveridentity/functions"
 	"os"
@@ -18,14 +17,9 @@ var NewMHash = func() *sevCmd {
 	cmd.description = "Create a new Matryoshka Hash"
 	cmd.execFunc = func(args []string) {
 		os.Args = args
+		sh := flag.Bool("s", false, "generate sh script")
 		flag.Parse()
-		args = flag.Args()
-		c := cli.New()
-		c.HandleFunc("help", func(args []string) {
-			fmt.Println(cmd.helpMsg)
-		})
-		c.HandleDefaultFunc(newMHash)
-		c.Execute(args)
+		newMHash(*sh)
 	}
 	Help.Add("Create a new Matryoshka Hash", cmd)
 	return cmd
@@ -34,8 +28,11 @@ var NewMHash = func() *sevCmd {
 /********************************
  *        CLI Functions         *
  ********************************/
-func newMHash(args []string) {
+func newMHash(sh bool) {
 	PrintBanner()
+	if sh == true {
+		fmt.Println("A script to run the curl commands will be generated under: 'MHash.sh'.")
+	}
 	var raw interface{}
 	fmt.Println("To create a new Matryoshka Hash multiple inputs will be required.")
 
@@ -68,8 +65,15 @@ func newMHash(args []string) {
 	if err != nil {
 		panic(err)
 	}
+
 	PrintHeader("New MHash Curl Commands")
 	fmt.Println("New MHash : " + mHash + "\n")
 	fmt.Println(strCom + "\n")
 	fmt.Println(strRev + "\n")
+
+	if sh == true {
+		fileB := makeFile("MHash")
+		defer file.Close()
+		writeCurlCmd(fileB, "New Bitcoin Key", strCom, strRev)
+	}
 }

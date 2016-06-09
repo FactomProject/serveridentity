@@ -76,13 +76,7 @@ func start(sid *functions.ServerIdentity) {
 		panic(err)
 	}
 
-	file, err = os.Create("startidentity.sh")
-	if err != nil {
-		file, err = os.Open("startidentity.sh")
-		if err != nil {
-			panic(err)
-		}
-	}
+	file = makeFile("startidentity")
 	defer file.Close()
 	var bar string
 	for i := 0; i < 76; i++ {
@@ -121,11 +115,10 @@ func createIdentityChain(sid *functions.ServerIdentity) {
 	}
 	fmt.Println("Root Chain ID: " + sid.RootChainID + "\n")
 
-	// startidentity.sh
-	writeCurlCmd("Creating Identity Chain - ChainID: "+sid.RootChainID, strCom, strRev)
-
 	fmt.Println(strCom + "\n")
 	fmt.Println(strRev + "\n")
+	// startidentity.sh
+	writeCurlCmd(file, "Creating Identity Chain - ChainID: "+sid.RootChainID, strCom, strRev)
 }
 
 // Step 2 : Root Chain Register
@@ -135,11 +128,10 @@ func registerIdentityChain(sid *functions.ServerIdentity) {
 		panic(err)
 	}
 
-	// startidentity.sh
-	writeCurlCmd("Registering Identity Chain", strCom, strRev)
-
 	fmt.Println(strCom + "\n")
 	fmt.Println(strRev + "\n")
+	// startidentity.sh
+	writeCurlCmd(file, "Registering Identity Chain", strCom, strRev)
 }
 
 // Step 1 : Subchain Create
@@ -150,11 +142,10 @@ func createSubChain(sid *functions.ServerIdentity) {
 	}
 	fmt.Println("Sub Chain ID: " + sid.SubChainID + "\n")
 
-	// startidentity.sh
-	writeCurlCmd("Creating Identity SubChain - ChainID: "+sid.SubChainID, strCom, strRev)
-
 	fmt.Println(strCom + "\n")
 	fmt.Println(strRev + "\n")
+	// startidentity.sh
+	writeCurlCmd(file, "Creating Identity SubChain - ChainID: "+sid.SubChainID, strCom, strRev)
 }
 
 // Step 2 : Subchain Register
@@ -164,20 +155,10 @@ func registerSubChain(sid *functions.ServerIdentity) {
 		panic(err)
 	}
 
-	// startidentity.sh
-	writeCurlCmd("Registering Identity SubChain", strCom, strRev)
-
 	fmt.Println(strCom + "\n")
 	fmt.Println(strRev + "\n")
-}
-
-func writeCurlCmd(title string, strCom string, strRev string) {
-	file.WriteString("echo   \n")
-	file.WriteString("echo - " + title + "\n")
-	file.WriteString(strCom + "\n")
-	file.WriteString("echo   \n")
-	file.WriteString(strRev + "\n")
-	file.WriteString("echo   \n")
+	// startidentity.sh
+	writeCurlCmd(file, "Registering Identity SubChain", strCom, strRev)
 }
 
 func generateKeys() *functions.ServerIdentity {

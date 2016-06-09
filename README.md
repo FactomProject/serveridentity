@@ -36,7 +36,7 @@ serveridentity start fresh
 serveridentity newkey block
  ```
 
-* Follow Prompts
+* Follow Prompts, -s flag will generate a script to run the curl commands
 
 
 ## Create a new Matryoshka Hash
@@ -44,15 +44,15 @@ serveridentity newkey block
 serveridentity mhash
  ```
 
-* Follow Prompts
+* Follow Prompts, , -s flag will generate a script to run the curl commands
 
 
 ## Create a new Bitcoin Key
 ```
-serveridentity newkey btc
+serveridentity newkey btc [-s]
  ```
 
- * Follow Prompts
+ * Follow Prompts, -s flag will generate a script to run the curl commands
 
 
 ## Get Pubkey from Private

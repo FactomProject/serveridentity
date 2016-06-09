@@ -22,15 +22,46 @@ var NewKey = func() *sevCmd {
 	cmd.description = "Create a new key to add/replace"
 	cmd.execFunc = func(args []string) {
 		os.Args = args
+
 		flag.Parse()
 		args = flag.Args()
 		c := cli.New()
-		c.HandleFunc("block", newBlockKey)
-		c.HandleFunc("btc", newBtcKey)
+		c.Handle("block", blockKey)
+		c.Handle("btc", btcKey)
 		c.HandleDefaultFunc(func(args []string) {
 			fmt.Println(cmd.helpMsg)
 		})
 		c.Execute(args)
+	}
+	Help.Add("Create a new signing key", cmd)
+	return cmd
+}()
+
+var btcKey = func() *sevCmd {
+	cmd := new(sevCmd)
+	cmd.helpMsg = "serveridentity newkey btc [-s]"
+	cmd.description = "Create a new bitcoin key"
+	cmd.execFunc = func(args []string) {
+		os.Args = args
+		sh := flag.Bool("s", false, "generate sh script")
+		flag.Parse()
+		newBtcKey(*sh)
+
+	}
+	Help.Add("Create new bitcoin signing key", cmd)
+	return cmd
+}()
+
+var blockKey = func() *sevCmd {
+
+	cmd := new(sevCmd)
+	cmd.helpMsg = "serveridentity newkey block signing key [-s]"
+	cmd.description = "Create a new block signing key"
+	cmd.execFunc = func(args []string) {
+		os.Args = args
+		sh := flag.Bool("s", false, "generate sh script")
+		flag.Parse()
+		newBlockKey(*sh)
 	}
 	Help.Add("Create new block signing key", cmd)
 	return cmd
@@ -39,8 +70,11 @@ var NewKey = func() *sevCmd {
 /********************************
  *        CLI Functions         *
  ********************************/
-func newBtcKey(args []string) {
+func newBtcKey(sh bool) {
 	PrintBanner()
+	if sh == true {
+		fmt.Println("A script to run the curl commands will be generated under: 'BtcKey.sh'.")
+	}
 	var raw interface{}
 	fmt.Println("To create a new bitcoin key multiple inputs will be required.")
 
@@ -91,12 +125,23 @@ func newBtcKey(args []string) {
 	if err != nil {
 		panic(err)
 	}
+
 	PrintHeader("New Bitcoin Key Curl Commands")
 	fmt.Println(strCom + "\n")
 	fmt.Println(strRev + "\n")
+
+	// Script Generating
+	if sh == true {
+		fileB := makeFile("BtcKey")
+		defer file.Close()
+		writeCurlCmd(fileB, "New Bitcoin Key", strCom, strRev)
+	}
 }
 
-func newBlockKey(args []string) {
+func newBlockKey(sh bool) {
+	if sh == true {
+		fmt.Println("A script to run the curl commands will be generated under: 'BlockKey.sh'.")
+	}
 	PrintBanner()
 	var raw interface{}
 	fmt.Println("To create a new block signing key multiple inputs will be required.")
@@ -129,9 +174,14 @@ func newBlockKey(args []string) {
 
 	PrintHeader("New Block Signing Key Curl Commands")
 	fmt.Println("New PrivateKey : " + hex.EncodeToString(newPriv)[:32] + "\n")
-	// makeHumanReadable(lev, newPriv) + "\n")
 	fmt.Println(strCom + "\n")
 	fmt.Println(strRev + "\n")
+
+	// Script Generating
+	if sh == true {
+		fileB := makeFile("BlockKey")
+		writeCurlCmd(fileB, "New Bitcoin Key", strCom, strRev)
+	}
 }
 
 /********************************

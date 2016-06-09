@@ -1,2 +1,5 @@
 *.txt
+BtcKey.sh
+BlockKey.sh
+MHash.sh
 startidentity.sh
