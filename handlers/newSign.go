@@ -1,7 +1,6 @@
 package handlers
 
 import (
-	"bufio"
 	"bytes"
 	"encoding/hex"
 	"flag"
@@ -12,7 +11,6 @@ import (
 	"github.com/FactomProject/serveridentity/functions"
 	"github.com/FactomProject/serveridentity/utils"
 	"os"
-	"strings"
 )
 
 /********************************
