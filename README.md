@@ -46,17 +46,12 @@ serveridentity start fresh
 ```
 serveridentity newkey block [-s]
  ```
-
 * Follow Prompts, -s flag will generate a script to run the curl commands
-
-
-## Create a new Matryoshka Hash
-```
-serveridentity mhash [-s]
- ```
-
-* Follow Prompts, , -s flag will generate a script to run the curl commands
-
+* Prompts
+  1. Identity ChainID: Root identity chain ID
+  2. Subchain ID: Sub identity chain ID
+  3. Private Key: Level 1 (sk1) private Key
+  4. Entry Credit Key: Can choose 'any' or import an entry credit address. Entry credits will be taken from this address to pay the cost of the entry
 
 ## Create a new Bitcoin Key
 ```
@@ -64,6 +59,26 @@ serveridentity newkey btc [-s]
  ```
 
  * Follow Prompts, -s flag will generate a script to run the curl commands
+ * Prompts
+   1. Identity ChainID: Root identity chain ID
+   2. Subchain ID: Sub identity chain ID
+   3. Bitcoin Key Level: Integer 0-3, start at 0 for first Key
+   4. Bitcoin Address Type: 0 for PKPKH or 1 for P2SH
+   5. Bitcoin address P2PKH or P2SH Type
+   6. Private Key: Level 1 (sk1) private Key
+   7. Entry Credit Key: Can choose 'any' or import an entry credit address. Entry credits will be taken from this address to pay the cost of the entry
+
+
+## Create a new Matryoshka Hash
+   ```
+   serveridentity mhash [-s]
+    ```
+   * Follow Prompts, , -s flag will generate a script to run the curl commands
+     1. Identity ChainID: Root identity chain ID
+     2. Subchain ID: Sub identity chain ID
+     3. Seed: Hex string of max length 64
+     4. Private Key: Level 1 (sk1) private Key
+     5. Entry Credit Key: Can choose 'any' or import an entry credit address. Entry credits will be taken from this address to pay the cost of the entry
 
 
 ## Get Pubkey from Private

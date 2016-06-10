@@ -15,7 +15,7 @@ func TestGenerateIdentityFromPrivateKey(t *testing.T) {
 	id := NewIdentity()
 	seedKey, err := hex.DecodeString("f84a80f204c8e5e4369a80336919f55885d0b093505d84b80d12f9c08b81cd5e")
 	if err != nil {
-		panic(err)
+		t.Error(err)
 	}
 	var seedPriv [64]byte
 	copy(seedPriv[:32], seedKey[:])
@@ -23,20 +23,20 @@ func TestGenerateIdentityFromPrivateKey(t *testing.T) {
 
 	err = id.GenerateIdentityFromPrivateKey(&seedPriv, 0)
 	if err != nil {
-		panic(err)
+		t.Error(err)
 	}
 
 	if debug == true {
 		strPb := hex.EncodeToString(id.GetPublicKey()[:])
 		strPv := hex.EncodeToString(id.GetPrivateKey()[:32])
 		strId := hex.EncodeToString(id.GetIdentityKey()[:])
-		fmt.Println("Test Data in Hex:")
-		fmt.Print("Public Key:   ")
-		fmt.Println(strPb)
-		fmt.Print("Private Key:  ")
-		fmt.Println(strPv)
-		fmt.Print("Identity Key: ")
-		fmt.Println(strId)
+		//fmt.Println("Test Data in Hex:")
+		//fmt.Print("Public Key:   ")
+		//fmt.Println(strPb)
+		//fmt.Print("Private Key:  ")
+		//fmt.Println(strPv)
+		//fmt.Print("Identity Key: ")
+		//fmt.Println(strId)
 	}
 
 	a, _ := hex.DecodeString("3f2b77bca02392c95149dc769a78bc758b1037b6a546011b163af0d492b1bcc0")
@@ -51,7 +51,7 @@ func TestGenerateIdentitySet(t *testing.T) {
 	idSet := NewIdentitySet()
 	err := idSet.GenerateIdentitySet()
 	if err != nil {
-		panic(err)
+		t.Error(err)
 	}
 }
 
@@ -81,7 +81,7 @@ func TestGenerateIdentitySetFromPrivateKeys(t *testing.T) {
 
 	err := idSet.GenerateIdentitySetFromPrivateKeys(seedKeys)
 	if err != nil {
-		panic(err)
+		t.Error(err)
 	}
 
 	/*for i := 0; i < 4; i++ {

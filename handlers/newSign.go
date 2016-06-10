@@ -97,17 +97,27 @@ func newBtcKey(sh bool) {
 	}
 	btcKeyLevel := raw.(int)
 
-	raw = GetInput("btcType", "Input the bitcoin address type (0=P2PKH 1=P2SH) or 'exit':  ")
+	// Can do without user input
+	/*raw = GetInput("btcType", "Input the bitcoin address type (0=P2PKH 1=P2SH) or 'exit':  ")
 	if raw == nil { // Exit case
 		return
 	}
-	btcType := raw.(int)
+	btcType := raw.(int)*/
 
 	raw = GetInput("btcAddr", "Input your bitcoin address or type 'exit':  ")
 	if raw == nil { // Exit case
 		return
 	}
 	btcKey := raw.([]byte)
+
+	var btcType int
+	if bytes.Compare(btcKey[:1], []byte{0x01}) == 0 {
+		fmt.Println("Detected P2PKH type.")
+		btcType = 0
+	} else if bytes.Compare(btcKey[:1], []byte{0x03}) == 0 {
+		fmt.Println("Detected P2SH type.")
+		btcType = 1
+	}
 
 	raw = GetInput("privStrLev1", "Input the level 1 ('sk1') private key. HumanReadable base58 key expected, or type 'exit':  \n")
 	if raw == nil { // Exit case
@@ -159,18 +169,18 @@ func newBlockKey(sh bool) {
 	}
 	subChainID := raw.(string)
 
+	raw = GetInput("privStrLev1", "Input the level 1 ('sk1') private key. HumanReadable base58 key expected, or type 'exit':  \n")
+	if raw == nil { // Exit case
+		return
+	}
+	privKeyAbove := raw.([]byte)[:32]
+
 	raw = GetInput("ecAddr", "Input the entry credit address or 'any' for a new one:  ")
 	if raw == nil { // Exit case
 		return
 	}
 	ecAddr := raw.(*factom.ECAddress)
 	fmt.Println(" -  Your public entry credit address is: \n * " + ecAddr.PubString())
-
-	raw = GetInput("privStrLev1", "Input the level 1 ('sk1') private key. HumanReadable base58 key expected, or type 'exit':  \n")
-	if raw == nil { // Exit case
-		return
-	}
-	privKeyAbove := raw.([]byte)[:32]
 
 	strCom, strRev, newPriv, err := functions.CreateNewBlockSignEntry(rootID, subChainID, privKeyAbove, ecAddr)
 	if err != nil {

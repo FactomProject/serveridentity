@@ -2,9 +2,9 @@ package identity_test
 
 import (
 	"encoding/hex"
-	"fmt"
+	//"fmt"
 	"github.com/FactomProject/factom"
-	f "github.com/FactomProject/serveridentity/functions"
+	//f "github.com/FactomProject/serveridentity/functions"
 	. "github.com/FactomProject/serveridentity/identity"
 	"testing"
 )
@@ -30,9 +30,10 @@ func TestBlankChain(t *testing.T) {
 	ec, _ := hex.DecodeString("0000000000000000000000000000000000000000000000000000000000000000")
 	ecAddr, _ := factom.MakeECAddress(ec[:32])
 	str, _ := GetChainCommitString(chain, ecAddr)
-	fmt.Println(f.CurlWrapPOST(str))
+	//fmt.Println(f.CurlWrapPOST(str))
 
 	str, _ = GetChainRevealString(chain)
-	fmt.Println(f.CurlWrapPOST(str))
-	fmt.Println(chain.ChainID)
+	//fmt.Println(f.CurlWrapPOST(str))
+	//fmt.Println(chain.ChainID)
+	_ = str
 }

@@ -1,11 +1,12 @@
 package functions_test
 
 import (
+	"bytes"
 	"encoding/hex"
 	"fmt"
 	ed "github.com/FactomProject/ed25519"
-	//. "github.com/FactomProject/serveridentity/functions"
-	"bytes"
+	"github.com/FactomProject/factom"
+	. "github.com/FactomProject/serveridentity/functions"
 	"testing"
 )
 
@@ -16,6 +17,12 @@ func TestBTCKey(t *testing.T) {
 	copy(p[:32], priv[:32])
 	_ = ed.GetPublicKey(&p)
 
+	btcKey, _ := hex.DecodeString("c5b7fd920dce5f61934e792c7e6fcc829aff533d")
+	time, _ := hex.DecodeString("00000000495EAA80")
+	ec, err := factom.MakeECAddress(priv[:32])
+
+	b, err := CreateNewBitcoinKey("888888d027c59579fc47a6fc6c4a5c0409c7c39bc38a86cb5fc0069978493762", "888888d027c59579fc47a6fc6c4a5c0409c7c39bc38a86cb5fc0069978493762", 0, 0, btcKey, priv, ec)
+
 	buf := new(bytes.Buffer)
 	a, _ := hex.DecodeString("00")
 	buf.Write(a)
@@ -23,12 +30,18 @@ func TestBTCKey(t *testing.T) {
 	buf.Write(a)
 	a, _ = hex.DecodeString("888888d027c59579fc47a6fc6c4a5c0409c7c39bc38a86cb5fc0069978493762")
 	buf.Write(a)
+	a, _ = hex.DecodeString("00")
+	buf.Write(a)
+	a, _ = hex.DecodeString("00")
+	buf.Write(a)
+	version, _ = hex.DecodeString("00")
 	a, _ = hex.DecodeString("c5b7fd920dce5f61934e792c7e6fcc829aff533d")
 	buf.Write(a)
 	a, _ = hex.DecodeString("00000000495EAA80")
 	buf.Write(a)
 
 	sig := ed.Sign(&p, buf.Bytes())
+
 	fmt.Println("BTC: " + hex.EncodeToString(sig[:]))
 }*/
 

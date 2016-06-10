@@ -46,7 +46,7 @@ func GetInput(inputType string, message string) interface{} {
 		i := newHexIN(message, identity.SeedMin, identity.SeedMax)
 		return i.Input.ReadIn()
 	case "btcAddr":
-		i := newBase58IN(message, 20)
+		i := newBase58IN(message)
 		return i.Input.ReadIn()
 	}
 	// Should never reach
@@ -314,21 +314,38 @@ func (i *hexIN) sanitize(input string) bool {
 // Base58 -- BTC Address
 type base58IN struct {
 	ReadInput
-	Input  *Input
-	length int // In bytes
+	Input *Input
+	min   int
+	max   int
 }
 
-func newBase58IN(message string, length int) *base58IN {
+func newBase58IN(message string) *base58IN {
 	b := new(base58IN)
-	b.length = length
+	b.max = 35 // Largest
+	b.min = 26 // Smallest
 	b.Input = newInput(b, message)
 	return b
 }
 
 func (b *base58IN) sanitize(input string) bool {
+	bType, err := strconv.Atoi(input[:1])
+	if err != nil {
+		fmt.Println("Error in input: " + err.Error())
+	}
+	//bType := 1
+	if bType == 1 || bType == 3 {
+
+	} else {
+		fmt.Println("Invalid bitcoin key, must start with '1' or '3'")
+		return false
+	}
 	addr := base58.Decode(input)
-	if len(addr) != b.length {
+	if len(input) > b.max || len(input) < b.min {
 		fmt.Println("Invalid input, incorrect length.")
+		return false
+	}
+	if strings.ContainsAny(input, "OIl0") {
+		fmt.Println("Invalid bitcoin address. Cannot contain 'O', '0', 'I', or 'l'.")
 		return false
 	}
 	b.Input.value = addr
