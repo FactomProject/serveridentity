@@ -3,7 +3,7 @@ package identity
 import (
 	"bytes"
 	"crypto/rand"
-	"crypto/sha256"
+	//"crypto/sha256"
 	"encoding/hex"
 	"errors"
 	"github.com/FactomProject/btcutil/base58"
@@ -80,31 +80,26 @@ func (i *Identity) generateIdentityKey(count int) error {
 	copy(temp[:1], []byte{0x01})
 	copy(temp[1:], i.publicKey[:])
 
-	shaReturn := sha256.Sum256(temp[:])
-	shaReturn = sha256.Sum256(shaReturn[:])
-	//shaReturn := utils.Sha256d(temp[:])
-	i.identityKey = &shaReturn
+	//shaReturn := sha256.Sum256(temp[:])
+	//shaReturn = sha256.Sum256(shaReturn[:])
+	shaReturn := utils.Sha256d(temp[:])
+	var t [32]byte
+	copy(t[:32], shaReturn[:32])
+	i.identityKey = &t
+
 	switch count {
 	case 0:
 		i.privPrefix = append(i.privPrefix[:], privPrefix1[:]...)
 		i.pubPrefix = append(i.pubPrefix[:], pubPrefix1[:]...)
-		//i.privPrefix = &privPrefix1
-		//i.pubPrefix = &pubPrefix1
 	case 1:
 		i.privPrefix = append(i.privPrefix[:], privPrefix2[:]...)
 		i.pubPrefix = append(i.pubPrefix[:], pubPrefix2[:]...)
-		//i.privPrefix = &privPrefix2
-		//i.pubPrefix = &pubPrefix2
 	case 2:
 		i.privPrefix = append(i.privPrefix[:], privPrefix3[:]...)
 		i.pubPrefix = append(i.pubPrefix[:], pubPrefix3[:]...)
-		//i.privPrefix = &privPrefix3
-		//i.pubPrefix = &pubPrefix3
 	case 3:
 		i.privPrefix = append(i.privPrefix[:], privPrefix4[:]...)
 		i.pubPrefix = append(i.pubPrefix[:], pubPrefix4[:]...)
-		//i.privPrefix = &privPrefix4
-		//i.pubPrefix = &pubPrefix4
 	}
 	return nil
 }
