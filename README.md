@@ -15,6 +15,9 @@ Here is a list of the entries that are created by this program and which chains 
   * Requires this branch, no previous will be compatible
 * /identity/varsconfig.go contains various hardcode options. Until release, refer to these when creating an identity.
 
+## Testing
+* To test in sandbox, run ```sh maketest.sh ```. This will add funds to the 'zeros' wallet and create the factom identity list, identity chain, and subchain. It will then add a new block signing key, btc key, and a new MHash.
+
 
 Using Server Management Tool
 ========
@@ -24,7 +27,7 @@ To create a new server identity is very simple, after compiling the source code 
 serveridentity start fresh
 ```
 
-1. A lot of information will be outputted, **copy down** the private keys, identity keys, and the entry credit address private key.
+1. A lot of information will be outputted, **copy down** the private keys and the entry credit address private key. The identity keys and public key can be found using the private key so are not needed to be copied down.
   * You can pipe the output to a file to make it easier to copy down, but make sure to delete all trace of the file as these keys should be stored securely
     * ```serveridentity start fresh > out.txt```
     * type ``` y ``` press enter, then press ```ENTER``` again and wait. That will guide you through the prompts and start the generating
