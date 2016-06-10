@@ -12,12 +12,12 @@ import (
 //		seed			string	= Must be hex
 //		privateKey		[]byte	=	len:32
 //		ec				*factom.ECAddress
-func CreateNewMHash(rootChainID string, privateKey []byte, seed string, ec *factom.ECAddress) (string, string, string, error) {
+func CreateNewMHash(rootChainID string, subChainID string, privateKey []byte, seed string, ec *factom.ECAddress) (string, string, string, error) {
 	var priv [64]byte
 	copy(priv[:32], privateKey[:32])
 	_ = ed.GetPublicKey(&priv)
 
-	mh, err := identity.MakeMHash(rootChainID, seed, &priv)
+	mh, err := identity.MakeMHash(rootChainID, subChainID, seed, &priv)
 
 	e := mh.GetEntry()
 	strCom, err := identity.GetEntryCommitString(e, ec)

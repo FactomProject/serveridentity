@@ -42,13 +42,19 @@ func newMHash(sh bool) {
 	}
 	rootID := raw.(string)
 
+	raw = GetInput("chainID", "Input the subchain ID in hex or 'exit':  ")
+	if raw == nil { // Exit case
+		return
+	}
+	subChainID := raw.(string)
+
 	raw = GetInput("hexStr", "Input a random hex seed or 'exit':  ")
 	if raw == nil { // Exit case
 		return
 	}
 	seed := raw.(string)
 
-	raw = GetInput("privStrRoot", "Input the root identity private key. HumanReadable base58 key expected, or type 'exit':  \n")
+	raw = GetInput("privStrLev1", "Input the level 1 ('sk1') private key. HumanReadable base58 key expected, or type 'exit':  \n")
 	if raw == nil { // Exit case
 		return
 	}
@@ -61,7 +67,7 @@ func newMHash(sh bool) {
 	ecAddr := raw.(*factom.ECAddress)
 	fmt.Println("Your public entry credit address is: \n * " + ecAddr.PubString())
 
-	strCom, strRev, mHash, err := functions.CreateNewMHash(rootID, privKey, seed, ecAddr)
+	strCom, strRev, mHash, err := functions.CreateNewMHash(rootID, subChainID, privKey, seed, ecAddr)
 	if err != nil {
 		panic(err)
 	}

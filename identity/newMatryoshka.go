@@ -17,9 +17,11 @@ type MHash struct {
 	timestamp   []byte
 	preimage    []byte
 	signiture   []byte
+
+	subchain string
 }
 
-func MakeMHash(rootChainID string, seed string, privateKey *[64]byte) (*MHash, error) {
+func MakeMHash(rootChainID string, subChainID string, seed string, privateKey *[64]byte) (*MHash, error) {
 	m := new(MHash)
 	m.version = []byte{0x00}
 	m.message = []byte("New Matryoshka Hash")
@@ -28,6 +30,8 @@ func MakeMHash(rootChainID string, seed string, privateKey *[64]byte) (*MHash, e
 	} else {
 		m.rootChainID = root
 	}
+
+	m.subchain = subChainID
 
 	if hash, err := generateMHash(seed); err != nil {
 		return nil, err
@@ -66,7 +70,7 @@ func generateMHash(seed string) ([]byte, error) {
 
 func (m *MHash) GetEntry() *factom.Entry {
 	e := new(factom.Entry)
-	e.ChainID = hex.EncodeToString(m.rootChainID)
+	e.ChainID = m.subchain
 	e.Content = []byte{}
 	e.ExtIDs = m.extIdList()
 

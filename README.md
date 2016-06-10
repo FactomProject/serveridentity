@@ -2,6 +2,14 @@ Server Identity Management
 ========
 An application that creates and manages a Factom Server's Identity. This application will not store or save any private keys once the application has terminated, so it is up to the user to copy down the keys displayed and store them appropriately.
 
+Here is a list of the entries that are created by this program and which chains they will be entered into. Bolded names are new chains, while unbolded are new entries.
+
+|Factom Identity List|Root Identity Chain|Sub Identity Chain
+|:---:|:---:|:---:|
+|"Register Factom Identity"<br />sk4 key sign|**"Identity Chain"**|**"Server Management"**
+||"Register Server Management"<br />sk4 key sign|"New Block Signing Key" <br />sk1 key sign
+|||"New Bitcoin Key"<br />sk1 key sign|
+|||"New Matryoshka Hash<br />sk1 key sign"
 ## Compiling
 * 6/9/2016 Compiles with factom m2v2 branch
   * Requires this branch, no previous will be compatible

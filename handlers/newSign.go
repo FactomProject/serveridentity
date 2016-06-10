@@ -76,6 +76,7 @@ func newBtcKey(sh bool) {
 		fmt.Println("A script to run the curl commands will be generated under: 'BtcKey.sh'.")
 	}
 	var raw interface{}
+
 	fmt.Println("To create a new bitcoin key multiple inputs will be required.")
 
 	raw = GetInput("chainID", "Input the identity chain ID in hex or 'exit':  ")
@@ -108,7 +109,7 @@ func newBtcKey(sh bool) {
 	}
 	btcKey := raw.([]byte)
 
-	raw = GetInput("privStr", "Input the private key of the level below you wish to replace. \nHumanReadable base58 key expected, or type 'exit':  \n")
+	raw = GetInput("privStrLev1", "Input the level 1 ('sk1') private key. HumanReadable base58 key expected, or type 'exit':  \n")
 	if raw == nil { // Exit case
 		return
 	}
@@ -152,6 +153,12 @@ func newBlockKey(sh bool) {
 	}
 	rootID := raw.(string)
 
+	raw = GetInput("chainID", "Input the subchain ID in hex or 'exit':  ")
+	if raw == nil { // Exit case
+		return
+	}
+	subChainID := raw.(string)
+
 	raw = GetInput("ecAddr", "Input the entry credit address or 'any' for a new one:  ")
 	if raw == nil { // Exit case
 		return
@@ -159,15 +166,13 @@ func newBlockKey(sh bool) {
 	ecAddr := raw.(*factom.ECAddress)
 	fmt.Println(" -  Your public entry credit address is: \n * " + ecAddr.PubString())
 
-	// Just 32 bytes
-	raw = GetInput("privStr", "Input the private key to sign. HumanReadable base58 key expected, or type 'exit':  ")
+	raw = GetInput("privStrLev1", "Input the level 1 ('sk1') private key. HumanReadable base58 key expected, or type 'exit':  \n")
 	if raw == nil { // Exit case
 		return
 	}
 	privKeyAbove := raw.([]byte)[:32]
-	//lev := raw.([]byte)[32:33] // No longer used, is level of key signing
 
-	strCom, strRev, newPriv, err := functions.CreateNewBlockSignEntry(rootID, privKeyAbove, ecAddr)
+	strCom, strRev, newPriv, err := functions.CreateNewBlockSignEntry(rootID, subChainID, privKeyAbove, ecAddr)
 	if err != nil {
 		panic(err)
 	}

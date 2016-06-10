@@ -18,10 +18,12 @@ type BlockSigningKey struct {
 	timestamp        []byte
 	identityPreimage []byte
 	signiture        []byte
+
+	subchain string
 }
 
 // Creates a new BlockSigningKey type. Used to change keys in identity chain
-func MakeBlockSigningKey(rootChainIDStr string, levelAbovePrivateKey *[64]byte) (*BlockSigningKey, []byte, error) {
+func MakeBlockSigningKey(rootChainIDStr string, subchainID string, levelAbovePrivateKey *[64]byte) (*BlockSigningKey, []byte, error) {
 	rootChainID, err := hex.DecodeString(rootChainIDStr)
 	if err != nil {
 		return nil, nil, err
@@ -33,6 +35,8 @@ func MakeBlockSigningKey(rootChainIDStr string, levelAbovePrivateKey *[64]byte) 
 	b.version = []byte{0x00}
 	b.message = []byte("New Block Signing Key")
 	b.rootChainID = rootChainID
+	b.subchain = subchainID
+
 	pub, priv, err := ed.GenerateKey(rand.Reader)
 	b.newPubKey = pub[:32]
 	if err != nil {
@@ -57,7 +61,7 @@ func MakeBlockSigningKey(rootChainIDStr string, levelAbovePrivateKey *[64]byte) 
 
 func (b *BlockSigningKey) GetEntry() *factom.Entry {
 	e := new(factom.Entry)
-	e.ChainID = hex.EncodeToString(b.rootChainID)
+	e.ChainID = b.subchain
 	e.Content = []byte{}
 	e.ExtIDs = b.extIdList()
 

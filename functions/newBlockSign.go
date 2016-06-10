@@ -6,7 +6,7 @@ import (
 	"github.com/FactomProject/serveridentity/identity"
 )
 
-func CreateNewBlockSignEntry(rootChainID string, levelAbovePrivate []byte, ec *factom.ECAddress) (string, string, []byte, error) {
+func CreateNewBlockSignEntry(rootChainID string, subChainID string, levelAbovePrivate []byte, ec *factom.ECAddress) (string, string, []byte, error) {
 	/* if level == 1 {
 		return "error", "error", nil, errors.New("Error creating new block signing key: Cannot replace level 1 key")
 	} */
@@ -20,7 +20,7 @@ func CreateNewBlockSignEntry(rootChainID string, levelAbovePrivate []byte, ec *f
 	var priv [64]byte
 	copy(priv[:32], levelAbovePrivate[:32])
 	_ = ed.GetPublicKey(&priv)
-	bs, newPriv, err := identity.MakeBlockSigningKey(rootChainID, &priv)
+	bs, newPriv, err := identity.MakeBlockSigningKey(rootChainID, subChainID, &priv)
 	if err != nil {
 		return "error", "error", nil, err
 	}

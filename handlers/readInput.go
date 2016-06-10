@@ -39,6 +39,9 @@ func GetInput(inputType string, message string) interface{} {
 	case "privStrRoot":
 		i := newPrivIN(message, 4)
 		return i.Input.ReadIn()
+	case "privStrLev1":
+		i := newPrivIN(message, 1)
+		return i.Input.ReadIn()
 	case "hexStr":
 		i := newHexIN(message, identity.SeedMin, identity.SeedMax)
 		return i.Input.ReadIn()
