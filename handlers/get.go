@@ -113,8 +113,8 @@ func getIDKey(key string) {
 
 		_, priv := getPrivateKey(key)
 		i := identity.NewIdentity()
-		i.GenerateIdentityFromPrivateKey(priv, lev-1)
-		fmt.Println("Identity Key: " + i.HumanReadableIdentity())
+		i.GenerateIdentityFromPrivateKey(priv, lev)
+		fmt.Println(i.HumanReadableIdentity())
 	} else {
 		if len(key) != 53 {
 			fmt.Println("Error: Invalid private key length")
