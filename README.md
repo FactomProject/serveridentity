@@ -70,9 +70,10 @@ serveridentity newkey btc [-s]
 
 
 ## Create a new Matryoshka Hash
-   ```
-   serveridentity mhash [-s]
-    ```
+```
+serveridentity mhash [-s]
+```
+ 
    * Follow Prompts, , -s flag will generate a script to run the curl commands
      1. Identity ChainID: Root identity chain ID
      2. Subchain ID: Sub identity chain ID
@@ -82,10 +83,9 @@ serveridentity newkey btc [-s]
 
 
 ## Get Pubkey from Private
- ```
- serveridentity get pubkey PRIVATEKEY
-  ```
-
+```
+serveridentity get pubkey PRIVATEKEY
+```
 * Follow Prompts
 * Example: ``` serveridentity get pubkey sk11pz4AG9XgB1eNVkbppYAWsgyg7sftDXqBASsagKJqvVRKYodCU ```
 
@@ -93,7 +93,6 @@ serveridentity newkey btc [-s]
 ## Get Identity Key from Private
 ```
 serveridentity get idkey PRIVATEKEY
- ```
+```
 
-* Follow Prompts
 * Example: ``` serveridentity get pubkey sk11pz4AG9XgB1eNVkbppYAWsgyg7sftDXqBASsagKJqvVRKYodCU ```
