@@ -82,7 +82,6 @@ serveridentity newkey btc [-s]
 
 
 ## Get Pubkey from Private
-
  ```
  serveridentity get pubkey PRIVATEKEY
   ```
@@ -92,7 +91,6 @@ serveridentity newkey btc [-s]
 
 
 ## Get Identity Key from Private
-
 ```
 serveridentity get idkey PRIVATEKEY
  ```

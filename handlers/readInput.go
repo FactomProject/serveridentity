@@ -77,11 +77,19 @@ func (i *Input) ReadIn() interface{} {
 	for true {
 		fmt.Print(i.message)
 		reader := bufio.NewReader(os.Stdin)
-		rawInput, err := reader.ReadString('\n')
+		rawInput, prefix, err := reader.ReadLine()
+
 		if err != nil {
+			if strings.Contains(err.Error(), "EOF") {
+				fmt.Println("Error in input: EOF. Program exiting...")
+				return nil
+			}
 			fmt.Println("Error in input: " + err.Error())
+		} else if prefix != false {
+			fmt.Println("Too many characters, exiting")
+			return nil
 		} else {
-			input := rawInput[:len(rawInput)-1]
+			input := string(rawInput[:])
 			if strings.Compare(input, "exit") == 0 {
 				return nil
 			}
