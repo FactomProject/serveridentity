@@ -6,7 +6,6 @@ import (
 	"github.com/FactomProject/serveridentity/handlers"
 )
 
-// Testing CLI
 func main() {
 	flag.Parse()
 	args := flag.Args()
