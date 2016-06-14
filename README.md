@@ -6,8 +6,8 @@ Here is a list of the entries that are created by this program and which chains 
 
 |Factom Identity List|Root Identity Chain|Sub Identity Chain
 |:---:|:---:|:---:|
-|"Register Factom Identity"<br />sk4 key sign|**"Identity Chain"**|**"Server Management"**
-||"Register Server Management"<br />sk4 key sign|"New Block Signing Key" <br />sk1 key sign
+|"Register Factom Identity"<br />sk1 key sign|**"Identity Chain"**|**"Server Management"**
+||"Register Server Management"<br />sk1 key sign|"New Block Signing Key" <br />sk1 key sign
 |||"New Bitcoin Key"<br />sk1 key sign|
 |||"New Matryoshka Hash<br />sk1 key sign"
 ## Compiling

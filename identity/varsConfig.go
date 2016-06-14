@@ -4,7 +4,7 @@ import ()
 
 var (
 	// Level to use in signing when registering
-	RegisterIdentityLevel int = 4
+	RegisterIdentityLevel int = 1
 	// For ChainIDs
 	ProofOfWorkChainID     = []byte{0x88, 0x88, 0x88}
 	ProofOfWorkLength  int = 1 // DEFAULT = 3, set lower for faster tests
