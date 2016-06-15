@@ -24,8 +24,9 @@ var Get = func() *sevCmd {
 		flag.Parse()
 		args = flag.Args()
 		c := cli.New()
-		c.Handle("pubkey", pubKey)
-		c.Handle("idkey", idKey)
+		c.Handle("pubkey", gpubKey)
+		c.Handle("idkey", gidKey)
+		c.Handle("btckey", gbtcKey)
 		c.HandleDefaultFunc(func(args []string) {
 			fmt.Println(cmd.helpMsg)
 		})
@@ -35,7 +36,7 @@ var Get = func() *sevCmd {
 	return cmd
 }()
 
-var idKey = func() *sevCmd {
+var gidKey = func() *sevCmd {
 	cmd := new(sevCmd)
 	cmd.helpMsg = "serveridentity get idkey KEY"
 	cmd.description = "Get a identity key from a private key"
@@ -53,7 +54,7 @@ var idKey = func() *sevCmd {
 	return cmd
 }()
 
-var pubKey = func() *sevCmd {
+var gpubKey = func() *sevCmd {
 	cmd := new(sevCmd)
 	cmd.helpMsg = "serveridentity get pubkey KEY"
 	cmd.description = "Get a public key from a private key"
@@ -71,9 +72,44 @@ var pubKey = func() *sevCmd {
 	return cmd
 }()
 
+var gbtcKey = func() *sevCmd {
+	cmd := new(sevCmd)
+	cmd.helpMsg = "serveridentity get btckey KEY"
+	cmd.description = "Get the 20byte bitcoin address from a ~34character btc pubkey"
+	cmd.execFunc = func(args []string) {
+		os.Args = args
+		flag.Parse()
+		if len(args) < 2 {
+			fmt.Println("No key given, 'serveridentity get btckey KEY'")
+			return
+		}
+		getBtcKey(args[1])
+
+	}
+	Help.Add("Get hash160", cmd)
+	return cmd
+}()
+
 /********************************
  *        CLI Functions         *
  ********************************/
+
+func getBtcKey(key string) {
+	PrintBanner()
+	if len(key) > 34 || len(key) < 25 {
+		fmt.Println("Error: Invalid btc key length")
+	} else if strings.Compare(key[:1], "1") == 0 {
+		x := base58.Decode(key)
+		fmt.Println("Btc Type: P2PKH")
+		fmt.Printf("Btc Hash160: %x\n", x[1:21])
+	} else if strings.Compare(key[:1], "3") == 0 {
+		x := base58.Decode(key)
+		fmt.Println("Btc Type: P2SH")
+		fmt.Printf("Btc Hash160: %x\n", x[1:21])
+	} else {
+		fmt.Println("Error: Invalid btc key prefix")
+	}
+}
 
 func getPubKey(key string) {
 	PrintBanner()

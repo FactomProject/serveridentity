@@ -63,10 +63,10 @@ func MakeBitcoinKey(rootChainID string, subChainID string, btcKeyLevel int, btcT
 		bk.btcType = bType
 	}
 
-	/*if len(btcKey) !=  {
+	if len(btcKey) != 25 {
 		return nil, errors.New("Error creating new BTC key: Incorrect bitcoin key length")
-	}*/
-	bk.btcKey = btcKey
+	}
+	bk.btcKey = btcKey[1:21]
 
 	t := interfaces.NewTimeStampNow()
 	if timestamp, err := t.MarshalBinary(); err != nil {
