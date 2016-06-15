@@ -3,4 +3,5 @@ BtcKey.sh
 BlockKey.sh
 MHash.sh
 startidentity.sh
+fullidentity.sh
 setup2.sh
