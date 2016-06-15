@@ -37,63 +37,60 @@ echo \* Setup script will create and register an identity and its subchain \ \ \
 echo \* Credits must be in EC2DKSYyRcNWf7RS963VFYgMExoHRYLHVeCfQ9PGPmNzwrcmgm2r \ \*
 echo \*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*
 echo - Creating Identity Chain - ChainID: 88598ef076ce7deedb93756634cede03fcb2abfa168822bc94a93b80a2a7b43f
-curl -X POST --data '{"jsonrpc":"2.0","id":1,"params":{"message":"0001553b8dd6a0fcad13f97dd3efdc89d5eb5e67e254f4ff5f98f03d8c5e7bb86ba5dc730faf37c3f5294b202a42711f57e69a809e90f689cef6d568223b1e2963e500af23b1ef68804348f4804b1d422947a2b415cbd5f352767d931acaead68ab6a21135b6680b3b6a27bcceb6a42d62a3a8d02a6f0d73653215771de243a63ac048a18b59da29f0d4275600c294113245c4a393751bb8045ca05a7d874f2992da40b58a32734e5ff367d74e87a3ef1c6c962c8984ab2e717658cc729b0f5cb484129338862005"},"method":"commit-chain"}' -H 'content-type:text/plain;' http://localhost:8088/v2
+curl -X POST --data '{"jsonrpc":"2.0","id":1,"params":{"message":"0001555477654abd391809a5adea2d429fbfc5b9cbd89843d1bd0a3045a341a78d0214b0383340c404032fbd2221b95c42e413e8fd561667fe7bbca52bafd8a2fdcf3b29245e13afad7b45499ac5be7e79b0129dfc256671056620e68d33d4618e001bcd8e9f5b0b3b6a27bcceb6a42d62a3a8d02a6f0d73653215771de243a63ac048a18b59da294f8cea562fe23fa54cd1fbab3308355e90320cb56f2dd21928f6c38a12c7bc5060ef57b2d094ac4bb9af50f817d61eea37409a227619497483386c62b1c8f30a"},"method":"commit-chain"}' -H 'content-type:text/plain;' http://localhost:8088/v2
 echo   
-curl -X POST --data '{"jsonrpc":"2.0","id":2,"params":{"entry":"0088598ef076ce7deedb93756634cede03fcb2abfa168822bc94a93b80a2a7b43f009f000100000e4964656e7469747920436861696e00204d9a880e8a437c97176f897b5b7a11c2f2abe2b16caf99d1412cd760f6cd0cab00208959030a14476c3b966eab52a94701ddcb82679f0452ee0470a88a219f381cec0020c0791b0a54501a2a6ae737668d36a0dddb5a1677be371aaee2567275017e0a40002012a0ae3b2a138c401d66e2fa67e592bbf57350da4e8aaedf53237f1e8090e25a00023239"},"method":"reveal-chain"}' -H 'content-type:text/plain;' http://localhost:8088/v2
+curl -X POST --data '{"jsonrpc":"2.0","id":2,"params":{"entry":"008888884ed5d23aa2086865bdf02f321d38d98c4717dfa1a78c030d12241d53d400a3000100000e4964656e7469747920436861696e00209c9c2c0cfb8f747ac1ae1e88e5186ced277ffabdd42a4f0c85a24f2b7d341a350020ea9ee62daf5a1500ceb7762bbb412dd0f38f4163022082d0fbdaee999a0068d300205d8b61022c64582e96e7f49998f9a2b8a746f169cc642c0aec695cfd60808c74002012429abdf57c788cd2e2aed51437a611c52800bc8153de289b4ba661f937ce4c0006313338353234"},"method":"reveal-chain"}' -H 'content-type:text/plain;' http://localhost:8088/v2
 echo   
 echo - Registering Identity Chain
-curl -X POST --data '{"jsonrpc":"2.0","id":3,"params":{"entry":"0001553b8dd6a13436ba7abebe32654dfe95980e56dbb21741adb78f3862f9172f5e0a83c896dc013b6a27bcceb6a42d62a3a8d02a6f0d73653215771de243a63ac048a18b59da29f995e3381044404d9ac267effa24115e6c6e4b86f967e7afa432c09681d747f3d097a188db5dd9a86e4317e755a72bd1722e325b1e3442b2eb2793f862cb7d0a"},"method":"commit-entry"}' -H 'content-type:text/plain;' http://localhost:8088/v2
+curl -X POST --data '{"jsonrpc":"2.0","id":3,"params":{"entry":"0001555477654f22777bdb211df516857f693d277a2a1ad4949e6ad7af4c7cfa627bb24cd19dcf013b6a27bcceb6a42d62a3a8d02a6f0d73653215771de243a63ac048a18b59da29a1fe621168cf339766f3607e638609cf59e218aca9b6d411f4f1d04e3ac5186277f050d5f004faadc7013cd475f93d0e69281d89c5c0456133a20a6bf123450c"},"method":"commit-entry"}' -H 'content-type:text/plain;' http://localhost:8088/v2
+echo  
+curl -X POST --data '{"jsonrpc":"2.0","id":4,"params":{"entry":"00e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b85500a40001000018526567697374657220466163746f6d204964656e7469747900208888884ed5d23aa2086865bdf02f321d38d98c4717dfa1a78c030d12241d53d4002101cda3cbde71b6277c21ca3af6be5e8038a851898aa14b6b5a78ae28ff582135e200402424784e69452274f56616cb4d5ecaa7d7d41c68715c1b3b10153f5beae8d6fcd23e8f90e52d30f3d8ffc2ac2653374a70c8cebf5a69f32eca27eee0a9eb5c06"},"method":"reveal-entry"}' -H 'content-type:text/plain;' http://localhost:8088/v2
 echo   
-curl -X POST --data '{"jsonrpc":"2.0","id":4,"params":{"entry":"00e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b85500a40001000018526567697374657220466163746f6d204964656e74697479002088598ef076ce7deedb93756634cede03fcb2abfa168822bc94a93b80a2a7b43f0021017e5c9951acb6c286f2496e162381537685fd58300c97c4422211441694ed939e004022f00670687e86495139c1bca3f62923aa8aedec257b39d10b0d0d018294eb991c93277c5f879794dfe9d307c9ef442642f455add282a1226acdae6555be7c03"},"method":"reveal-entry"}' -H 'content-type:text/plain;' http://localhost:8088/v2
-echo   
+
 echo - Creating Identity SubChain - ChainID: 883111484c5f0f7213c7c1fdd32117e68b492b6dee6cb36f4f5a88c2528f646c
-curl -X POST --data '{"jsonrpc":"2.0","id":5,"params":{"message":"0001553b8dd6a2401109bbc183ff89236bebe6fdea8c270f55510a66d8a87c792a1457a8c9d0611c5b1ab6b0d3e57e12adac39ebd41abcf632caf1bce93f88c631190a09f5f1c548cd34781acfd5e9346c5233b39d7bbbfa175a64f6cf5e8a243f5201bb4a099c0b3b6a27bcceb6a42d62a3a8d02a6f0d73653215771de243a63ac048a18b59da299d43fe453de70899a304afdcfaa918f5a8ba6d806d13ab2f8329ee8ae2a01c1301903dfd625e243db3abf7f3d57e8a7a684706f94c4b4402d3b6f4df918e2006"},"method":"commit-chain"}' -H 'content-type:text/plain;' http://localhost:8088/v2
-echo   
-curl -X POST --data '{"jsonrpc":"2.0","id":6,"params":{"entry":"00883111484c5f0f7213c7c1fdd32117e68b492b6dee6cb36f4f5a88c2528f646c003c0001000011536572766572204d616e6167656d656e74002088598ef076ce7deedb93756634cede03fcb2abfa168822bc94a93b80a2a7b43f00023730"},"method":"reveal-chain"}' -H 'content-type:text/plain;' http://localhost:8088/v2
+curl -X POST --data '{"jsonrpc":"2.0","id":5,"params":{"message":"0001555477ff4188fe60fc3fa3ebc078b066e0ef5c2bfa27843d821fa50804036a509682f2190973836c368da33387897faf105986d8bee4c95c1cac1768760a420f4e505819c07e7c1661f90a8d64a25044ac7bf3c542a2049bc2dd2f8d62451d2d477c8eb1810b3b6a27bcceb6a42d62a3a8d02a6f0d73653215771de243a63ac048a18b59da291c69e7409a90ea4467167f1f90f340700a6dc037f7fcda8613c2d24fdce169934bd90fd6e0f905bcecf4f4055c696d3be20b32db9d4887932132e732d078f50f"},"method":"commit-chain"}' -H 'content-type:text/plain;' http://localhost:8088/v2
+echo  
+curl -X POST --data '{"jsonrpc":"2.0","id":6,"params":{"entry":"00888888898fbc055f7e201b6e039bcfb859da557e10ae4d0a25b13f04accbc32700410001000011536572766572204d616e6167656d656e7400208888884ed5d23aa2086865bdf02f321d38d98c4717dfa1a78c030d12241d53d4000738313232333333"},"method":"reveal-chain"}' -H 'content-type:text/plain;' http://localhost:8088/v2
 echo   
 echo - Registering Identity SubChain
-curl -X POST --data '{"jsonrpc":"2.0","id":7,"params":{"entry":"0001553b8dd6a3434510c46577590690482b53f185aaa380c9049c437e4d6fc4cb449218a7d28b013b6a27bcceb6a42d62a3a8d02a6f0d73653215771de243a63ac048a18b59da293458f5c19d1a6eb112527d2270248d27de731b5ff52c9b22c769013dbfc2caed1e596105b671d6ced82eabc6c5d57a8e00ad4ed9f979541434ffd14156763903"},"method":"commit-entry"}' -H 'content-type:text/plain;' http://localhost:8088/v2
-echo   
-curl -X POST --data '{"jsonrpc":"2.0","id":8,"params":{"entry":"0088598ef076ce7deedb93756634cede03fcb2abfa168822bc94a93b80a2a7b43f00a6000100001a526567697374657220536572766572204d616e6167656d656e74002088598ef076ce7deedb93756634cede03fcb2abfa168822bc94a93b80a2a7b43f0021017e5c9951acb6c286f2496e162381537685fd58300c97c4422211441694ed939e0040cbfb07a03b382475950e7d1031fcd5630b07255c01b351e44fa6ba92aadfe5de8da517e1254155e3e9b00a40ab8549fc0a429d214e07429c865665615fd5c404"},"method":"reveal-entry"}' -H 'content-type:text/plain;' http://localhost:8088/v2
-echo   
+curl -X POST --data '{"jsonrpc":"2.0","id":7,"params":{"entry":"0001555477ff4268741b0c03163d7d900d869a36eff30b74c0cdd4d3ac4ca554fd5a869c25d8b6013b6a27bcceb6a42d62a3a8d02a6f0d73653215771de243a63ac048a18b59da29e654faf2067a29d78d5c01a8239e4c5897d3c2131e17debda553f9a14f2bb16ff1bea3404e5ea707c70a60edb124f1431c9cc4de98b5e99aec2f546146416205"},"method":"commit-entry"}' -H 'content-type:text/plain;' http://localhost:8088/v2
+echo  
+curl -X POST --data '{"jsonrpc":"2.0","id":8,"params":{"entry":"008888884ed5d23aa2086865bdf02f321d38d98c4717dfa1a78c030d12241d53d400a6000100001a526567697374657220536572766572204d616e6167656d656e7400208888884ed5d23aa2086865bdf02f321d38d98c4717dfa1a78c030d12241d53d4002101cda3cbde71b6277c21ca3af6be5e8038a851898aa14b6b5a78ae28ff582135e2004081ccc8eaee4ecba4e0243103646ad6b992de5c1daaabdb9b160b8b87ff603c1c2541e8351e21aa3bf7f90f60ff72ceea603d0de8f71310b436591d774f3a680c"},"method":"reveal-entry"}' -H 'content-type:text/plain;' http://localhost:8088/v2echo   
+echo  
+
+echo - New Block Signing Key
+curl -X POST --data '{"jsonrpc":"2.0","id":1,"params":{"entry":"000155547be7cf8b25d0c4074b01c988d703b3ce1d0e00c393930509a2616886fe98c31e8fd470013b6a27bcceb6a42d62a3a8d02a6f0d73653215771de243a63ac048a18b59da29e3786b4496dc6b665d7b8482f72fe78ab3b347f1e8747b3a0f03f6193776de1798329dc3daee5bdfb4448ccadc463253f15d2c1d5971b4af80ca9d6b6cd85107"},"method":"commit-entry"}' -H 'content-type:text/plain;' http://localhost:8088/v2
+echo
+curl -X POST --data '{"jsonrpc":"2.0","id":2,"params":{"entry":"00888888898fbc055f7e201b6e039bcfb859da557e10ae4d0a25b13f04accbc32700cb00010000154e657720426c6f636b205369676e696e67204b657900208888884ed5d23aa2086865bdf02f321d38d98c4717dfa1a78c030d12241d53d400207b1fa46a2178d5a19fcd200236314be0e47b20e44951f38c8e5ca5ba8b26d1f700060155547be7ce002101cda3cbde71b6277c21ca3af6be5e8038a851898aa14b6b5a78ae28ff582135e20040af2c63aae8aac7faedf91cbf3666ac16585a7e16ac6cfb9cfa7a022b99d5cfc90c835ac274c2d463205c39b33306d1827afce8148cdf99e119741dcf5488940a"},"method":"reveal-entry"}' -H 'content-type:text/plain;' http://localhost:8088/v2
 echo   
 
 echo - New Bitcoin Key
-curl -X POST --data '{"jsonrpc":"2.0","id":1,"params":{"entry":"0001553b8f913808bdb02762bc55da9d8b1078343b3df6f99923b3d8fecab91071b11fd047820a013b6a27bcceb6a42d62a3a8d02a6f0d73653215771de243a63ac048a18b59da292c55e8f886fa6a60d59963118bc5bef0cd7f820fea9943185e3e78b2d44bd96482873cb9a1f4cf5c05486fb55519caf8cef84866f5cff1f7c72e5b78d8cf3303"},"method":"commit-entry"}' -H 'content-type:text/plain;' http://localhost:8088/v2
-echo   
-curl -X POST --data '{"jsonrpc":"2.0","id":2,"params":{"entry":"00883111484c5f0f7213c7c1fdd32117e68b492b6dee6cb36f4f5a88c2528f646c00cb00010000154e657720426c6f636b205369676e696e67204b6579002088598ef076ce7deedb93756634cede03fcb2abfa168822bc94a93b80a2a7b43f00205a51c3eff4768513b6eeb3e10eeafb7a6832ba7e8dfb009e0aeabc05d584087c000601553b8f913700210194e72f2ec74ca123162369cc99d77168fefbc56963dd408757530a9b00ea89e70040cf9daeb576d40947e2002126c156266dc2aa4ba6fa94383d6831064fab4b65df821d6dd495aa2acda40feacf8c1a57264f61d88897769d1cb24b98725f473107"},"method":"reveal-entry"}' -H 'content-type:text/plain;' http://localhost:8088/v2
-echo   
-echo   
-
-echo - New Bitcoin Key
-curl -X POST --data '{"jsonrpc":"2.0","id":1,"params":{"entry":"0001553b90eb0bea2b5df18c7c04fcac6fdcbfcabebbcd7fc7552e2562a48c37c4c4647fd3827b013b6a27bcceb6a42d62a3a8d02a6f0d73653215771de243a63ac048a18b59da2911d68f947788f7aa77983af6de083492f5379e2dc1d69af5b4ed38ab448f12a094b6f3121eadd450cc49b9be9018ad7bfd890db8e9527fe1d8ea295fd4d59b03"},"method":"commit-entry"}' -H 'content-type:text/plain;' http://localhost:8088/v2
-echo   
-curl -X POST --data '{"jsonrpc":"2.0","id":2,"params":{"entry":"00883111484c5f0f7213c7c1fdd32117e68b492b6dee6cb36f4f5a88c2528f646c00bf000100000f4e657720426974636f696e204b6579002088598ef076ce7deedb93756634cede03fcb2abfa168822bc94a93b80a2a7b43f0001000001000014c5b7fd920dce5f61934e792c7e6fcc829aff533d000601553b90eb0a00210194e72f2ec74ca123162369cc99d77168fefbc56963dd408757530a9b00ea89e700402d92ddd5f23817fdb194fe52785eeb1f9a2eb01dc402a462aa4519acae58fb51ff18c049f7d3a4373ff9ee9361b934516cd9c62d461b86cb234e1d5afec38e05"},"method":"reveal-entry"}' -H 'content-type:text/plain;' http://localhost:8088/v2
-echo   
+curl -X POST --data '{"jsonrpc":"2.0","id":1,"params":{"entry":"000155547d224dedfd34c66725e03654b80a7822aa68b9b67d738c4ec4d303496434e8c18b3390013b6a27bcceb6a42d62a3a8d02a6f0d73653215771de243a63ac048a18b59da29c8a419e3ba707818ef19e7db23aad63b1978b0b61f20196678291d0a487277a38d7d91a17dab719b06c726d8bca79d7d63ec02b901a52584df2d58a2e732ce08"},"method":"commit-entry"}' -H 'content-type:text/plain;' http://localhost:8088/v2
+echo  
+curl -X POST --data '{"jsonrpc":"2.0","id":2,"params":{"entry":"00888888898fbc055f7e201b6e039bcfb859da557e10ae4d0a25b13f04accbc32700bf000100000f4e657720426974636f696e204b657900208888884ed5d23aa2086865bdf02f321d38d98c4717dfa1a78c030d12241d53d40001000001000014c5b7fd920dce5f61934e792c7e6fcc829aff533d00060155547d224d002101cda3cbde71b6277c21ca3af6be5e8038a851898aa14b6b5a78ae28ff582135e20040ece6b7d2f92fbe5947bb05faef1fbf6bbb7d60f6b7c17c600795f9505c5e855c4cbeb707e39df696e5078183637d4c84e8c3d485c60ab977d45c6756861b5e06"},"method":"reveal-entry"}' -H 'content-type:text/plain;' http://localhost:8088/v2 
 echo
 
-echo - New Bitcoin Key
-curl -X POST --data '{"jsonrpc":"2.0","id":1,"params":{"entry":"0001553b91a66cd8d9b51cd7ca3389da90d5f63d687b031d9de571a81fa875bd8b3efa8d965205013b6a27bcceb6a42d62a3a8d02a6f0d73653215771de243a63ac048a18b59da29694a0dc4c5439842e7c473f5285c9baf5d25543ed07c5329375dc251ea08aec3e73874d1410fdb65bef315696a6447af11ac8267b7f5e931f404646467138c0c"},"method":"commit-entry"}' -H 'content-type:text/plain;' http://localhost:8088/v2
-echo   
-curl -X POST --data '{"jsonrpc":"2.0","id":2,"params":{"entry":"00883111484c5f0f7213c7c1fdd32117e68b492b6dee6cb36f4f5a88c2528f646c00c900010000134e6577204d617472796f73686b612048617368002088598ef076ce7deedb93756634cede03fcb2abfa168822bc94a93b80a2a7b43f002088598ef076ce7deedb93756634cede03fcb2abfa168822bc94a93b80a2a7b43f000601553b91a66b00210194e72f2ec74ca123162369cc99d77168fefbc56963dd408757530a9b00ea89e70040658f06a18dc564e69ac91c3d6525e331ae517d43a38b817db3d539c575832477a43ce417c78c78aaa67ad55ffec5bb2e793cdd070b75bd157c8c51be844e4d04"},"method":"reveal-entry"}' -H 'content-type:text/plain;' http://localhost:8088/v2
-echo   
-echo
+echo - New MHash
+curl -X POST --data '{"jsonrpc":"2.0","id":1,"params":{"entry":"00015554808c1fce916b2cd7264a3f4608a7862c1a15eac82e3123242964c3e3ec0707c1b3e2ae013b6a27bcceb6a42d62a3a8d02a6f0d73653215771de243a63ac048a18b59da29a3ab508dfa0ee53873ba121ff88f72a5bbefeff3a1253caf6793ac6b9f45836aaf684a548632a5746e0d33a8ac97ced29712af9bd24644ba9e2c8c04823ee30a"},"method":"commit-entry"}' -H 'content-type:text/plain;' http://localhost:8088/v2
+echo  
+curl -X POST --data '{"jsonrpc":"2.0","id":2,"params":{"entry":"00888888898fbc055f7e201b6e039bcfb859da557e10ae4d0a25b13f04accbc32700c900010000134e6577204d617472796f73686b61204861736800208888884ed5d23aa2086865bdf02f321d38d98c4717dfa1a78c030d12241d53d40020d4a7b3cdb84069eb7b299a5165678399f9af4ade2596f457224b30f526231e5b0006015554808c1e002101cda3cbde71b6277c21ca3af6be5e8038a851898aa14b6b5a78ae28ff582135e20040d09daca80fd1fbd3ea5660f858c99503088b4af33011cc8be330ab82670137cc71b16bcecd729eeb90e7f921e44c5780d79b59eb417046b38721879208de2101"},"method":"reveal-entry"}' -H 'content-type:text/plain;' http://localhost:8088/v2
+echo  
 
 echo  Identity Chain Created, info:
 echo  Private Keys:
-echo  Level 1: sk13MMUdir8DnMzpC836252fCv2zWbVaJcSXh8MCz7XzECd1SB2zg
-echo  Level 2: sk23Utfzt1sX83ga2VBWgA9m24D6fJbYFJAznysa3CUPvoJ7mWZeo
+echo  Level 1: sk13iVjQEF2QNxgVf53x9AqxDFAZ52Y5bDUz47Z9qJLSup1A2WhxJ
+echo  Level 2: sk22HwURovN6kz1kkW2t9svn7MXb4g8VZxj4D58SNRdhyMtvoh3Hh
 echo  Level 3: sk34FdP7Xa5H6295SH4Ajebipe45LimFH8cKbYpwXJHMUBmkVFQWP
-echo  Level 4: sk4431HNNAEVEzabTPAmYy1Xkvxv3ggzyS3kwYzjPoxfheMgKYXfp
+echo  Level 4: sk33ZM8yKNgtjrpBkDxPFQPmU3rxgsGxXqPJ9NZaE9GrLuEwungUE
 echo  
 echo  ChainIDs:
 echo  Main Factom Identity List ChainID: e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
-echo  Root: 88598ef076ce7deedb93756634cede03fcb2abfa168822bc94a93b80a2a7b43f
-echo  Sub \: 883111484c5f0f7213c7c1fdd32117e68b492b6dee6cb36f4f5a88c2528f646c
+echo  Root: 8888884ed5d23aa2086865bdf02f321d38d98c4717dfa1a78c030d12241d53d4
+echo  Sub \: 888888898fbc055f7e201b6e039bcfb859da557e10ae4d0a25b13f04accbc327
 echo
-echo  Block Signing Key: 670e0d158c1f8c171222a18742d63ed6
+echo  Block Signing Key: e4f29f4d4abcf4510de3bd3424832210
 echo  BtcKey: 3kmKYEeCcBHa1KMwSg55z8vm4HZe
 echo  
-echo  MHash Seed: 88598ef076ce7deedb93756634cede03fcb2abfa168822bc94a93b80a2a7b43f
-echo  MHash: 88598ef076ce7deedb93756634cede03fcb2abfa168822bc94a93b80a2a7b43f
+echo  MHash Seed: 8888884ed5d23aa2086865bdf02f321d38d98c4717dfa1a78c030d12241d53d4
+echo  MHash: d4a7b3cdb84069eb7b299a5165678399f9af4ade2596f457224b30f526231e5b
 

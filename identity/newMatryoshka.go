@@ -59,13 +59,14 @@ func MakeMHash(rootChainID string, subChainID string, seed string, privateKey *[
 func generateMHash(seed string) ([]byte, error) {
 	s, err := hex.DecodeString(seed)
 	var holder [32]byte
+	copy(holder[:], s)
 	if err != nil {
 		return nil, err
 	}
 	for i := 0; i < MHashAmount; i++ {
 		holder = sha256.Sum256(holder[:])
 	}
-	return s, nil
+	return holder[:], nil
 }
 
 func (m *MHash) GetEntry() *factom.Entry {
