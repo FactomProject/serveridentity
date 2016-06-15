@@ -145,7 +145,7 @@ func createSubChain(sid *functions.ServerIdentity) {
 	fmt.Println(strCom + "\n")
 	fmt.Println(strRev + "\n")
 	// startidentity.sh
-	writeCurlCmd(file, "Creating Identity SubChain - ChainID: "+sid.SubChainID, strCom, strRev)
+	writeCurlCmd(file, "Creating Server Management SubChain - ChainID: "+sid.SubChainID, strCom, strRev)
 }
 
 // Step 2 : Subchain Register
@@ -158,7 +158,7 @@ func registerSubChain(sid *functions.ServerIdentity) {
 	fmt.Println(strCom + "\n")
 	fmt.Println(strRev + "\n")
 	// startidentity.sh
-	writeCurlCmd(file, "Registering Identity SubChain", strCom, strRev)
+	writeCurlCmd(file, "Registering Server Management SubChain", strCom, strRev)
 }
 
 func generateKeys() *functions.ServerIdentity {

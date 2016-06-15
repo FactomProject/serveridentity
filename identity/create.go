@@ -10,7 +10,7 @@ import (
 )
 
 var (
-	bruteForceDisplay int = 100000
+	bruteForceDisplay int = 400000
 )
 
 /**************************

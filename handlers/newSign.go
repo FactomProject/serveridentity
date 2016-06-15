@@ -73,7 +73,7 @@ var blockKey = func() *sevCmd {
 func newBtcKey(sh bool) {
 	PrintBanner()
 	if sh == true {
-		fmt.Println("A script to run the curl commands will be generated under: 'BtcKey.sh'.")
+		fmt.Println("A script to run the curl commands will be generated under: 'btckey.sh'.")
 	}
 	var raw interface{}
 
@@ -85,7 +85,7 @@ func newBtcKey(sh bool) {
 	}
 	rootID := raw.(string)
 
-	raw = GetInput("chainID", "Input the subchain ID in hex or 'exit':  ")
+	raw = GetInput("chainID", "Input the server management chainID in hex or 'exit':  ")
 	if raw == nil { // Exit case
 		return
 	}
@@ -143,7 +143,7 @@ func newBtcKey(sh bool) {
 
 	// Script Generating
 	if sh == true {
-		fileB := makeFile("BtcKey")
+		fileB := makeFile("btckey")
 		defer file.Close()
 		writeCurlCmd(fileB, "New Bitcoin Key", strCom, strRev)
 	}
@@ -151,7 +151,7 @@ func newBtcKey(sh bool) {
 
 func newBlockKey(sh bool) {
 	if sh == true {
-		fmt.Println("A script to run the curl commands will be generated under: 'BlockKey.sh'.")
+		fmt.Println("A script to run the curl commands will be generated under: 'blockkey.sh'.")
 	}
 	PrintBanner()
 	var raw interface{}
@@ -163,7 +163,7 @@ func newBlockKey(sh bool) {
 	}
 	rootID := raw.(string)
 
-	raw = GetInput("chainID", "Input the subchain ID in hex or 'exit':  ")
+	raw = GetInput("chainID", "Input the server management chainID in hex or 'exit':  ")
 	if raw == nil { // Exit case
 		return
 	}
@@ -194,8 +194,8 @@ func newBlockKey(sh bool) {
 
 	// Script Generating
 	if sh == true {
-		fileB := makeFile("BlockKey")
-		writeCurlCmd(fileB, "New Bitcoin Key", strCom, strRev)
+		fileB := makeFile("blockkey")
+		writeCurlCmd(fileB, "New Block Signing Key", strCom, strRev)
 	}
 }
 

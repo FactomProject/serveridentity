@@ -23,7 +23,7 @@ type BlockSigningKey struct {
 }
 
 // Creates a new BlockSigningKey type. Used to change keys in identity chain
-func MakeBlockSigningKey(rootChainIDStr string, subchainID string, levelAbovePrivateKey *[64]byte) (*BlockSigningKey, []byte, error) {
+func MakeBlockSigningKey(rootChainIDStr string, subchainID string, privateKey *[64]byte) (*BlockSigningKey, []byte, error) {
 	rootChainID, err := hex.DecodeString(rootChainIDStr)
 	if err != nil {
 		return nil, nil, err
@@ -51,10 +51,10 @@ func MakeBlockSigningKey(rootChainIDStr string, subchainID string, levelAbovePri
 
 	preI := make([]byte, 0)
 	preI = append(preI, []byte{0x01}...)
-	preI = append(preI, levelAbovePrivateKey[32:]...)
+	preI = append(preI, privateKey[32:]...)
 	b.identityPreimage = preI
 
-	sig := ed.Sign(levelAbovePrivateKey, b.versionToTimestamp())
+	sig := ed.Sign(privateKey, b.versionToTimestamp())
 	b.signiture = sig[:]
 	return b, priv[:], nil
 }

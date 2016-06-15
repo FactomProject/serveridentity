@@ -31,7 +31,7 @@ sleep 1
 echo Factom Identity Chain List Create
 curl -X POST --data '{"jsonrpc":"2.0","id":1,"params":{"message":"0001553ba74d8faa6ac2d4961882f42a345c7615f4133dde8e6d6e7c1b6b40ae4ff6ee52c393d024cbe2e7f360baad36a66b4f063f1f1b9f57f25deb35aad8fba8905cf2893eec1be40ce17636636117d9469de0f027cd74754e0e1871d249dfefac958d0f91de0b3b6a27bcceb6a42d62a3a8d02a6f0d73653215771de243a63ac048a18b59da299999aa8cfd722db62c61e53c7dbf9fa4de1a64b9891844f1d53b78a4cea3294fb6b88e5b53e5f132e32e1b1176335ead8ed351787457b9219f7743cc51b42803"},"method":"commit-chain"}' -H 'content-type:text/plain;' http://localhost:8088/v2
 curl -X POST --data '{"jsonrpc":"2.0","id":2,"params":{"entry":"00e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b85500004d61696e204964656e74697479204c697374"},"method":"reveal-chain"}' -H 'content-type:text/plain;' http://localhost:8088/v2
-
+echo  
 echo \*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*
 echo \* Setup script will create and register an identity and its subchain \ \ \ \ \ \ \*
 echo \* Credits must be in EC2DKSYyRcNWf7RS963VFYgMExoHRYLHVeCfQ9PGPmNzwrcmgm2r \ \*
@@ -57,6 +57,8 @@ curl -X POST --data '{"jsonrpc":"2.0","id":7,"params":{"entry":"0001555477ff4268
 echo  
 curl -X POST --data '{"jsonrpc":"2.0","id":8,"params":{"entry":"008888884ed5d23aa2086865bdf02f321d38d98c4717dfa1a78c030d12241d53d400a6000100001a526567697374657220536572766572204d616e6167656d656e7400208888884ed5d23aa2086865bdf02f321d38d98c4717dfa1a78c030d12241d53d4002101cda3cbde71b6277c21ca3af6be5e8038a851898aa14b6b5a78ae28ff582135e2004081ccc8eaee4ecba4e0243103646ad6b992de5c1daaabdb9b160b8b87ff603c1c2541e8351e21aa3bf7f90f60ff72ceea603d0de8f71310b436591d774f3a680c"},"method":"reveal-entry"}' -H 'content-type:text/plain;' http://localhost:8088/v2
 echo  
+
+sleep 1
 
 echo - New Block Signing Key
 curl -X POST --data '{"jsonrpc":"2.0","id":1,"params":{"entry":"000155547be7cf8b25d0c4074b01c988d703b3ce1d0e00c393930509a2616886fe98c31e8fd470013b6a27bcceb6a42d62a3a8d02a6f0d73653215771de243a63ac048a18b59da29e3786b4496dc6b665d7b8482f72fe78ab3b347f1e8747b3a0f03f6193776de1798329dc3daee5bdfb4448ccadc463253f15d2c1d5971b4af80ca9d6b6cd85107"},"method":"commit-entry"}' -H 'content-type:text/plain;' http://localhost:8088/v2

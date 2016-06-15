@@ -31,7 +31,7 @@ var NewMHash = func() *sevCmd {
 func newMHash(sh bool) {
 	PrintBanner()
 	if sh == true {
-		fmt.Println("A script to run the curl commands will be generated under: 'MHash.sh'.")
+		fmt.Println("A script to run the curl commands will be generated under: 'mhash.sh'.")
 	}
 	var raw interface{}
 	fmt.Println("To create a new Matryoshka Hash multiple inputs will be required.")
@@ -42,7 +42,7 @@ func newMHash(sh bool) {
 	}
 	rootID := raw.(string)
 
-	raw = GetInput("chainID", "Input the subchain ID in hex or 'exit':  ")
+	raw = GetInput("chainID", "Input the server management chainID in hex or 'exit':  ")
 	if raw == nil { // Exit case
 		return
 	}
@@ -78,8 +78,8 @@ func newMHash(sh bool) {
 	fmt.Println(strRev + "\n")
 
 	if sh == true {
-		fileB := makeFile("MHash")
+		fileB := makeFile("mhash")
 		defer file.Close()
-		writeCurlCmd(fileB, "New Bitcoin Key", strCom, strRev)
+		writeCurlCmd(fileB, "New Matryoshka Hash", strCom, strRev)
 	}
 }
