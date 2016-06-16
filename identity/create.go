@@ -9,10 +9,6 @@ import (
 	"strconv"
 )
 
-var (
-	bruteForceDisplay int = 400000
-)
-
 /**************************
  *    Shared Functions    *
  **************************/
@@ -30,7 +26,7 @@ func findValidNonce(i generalChainCreate) []byte {
 	for exit == false {
 		count++
 		exit = CheckNonce(upToNonce, count)
-		if ShowBruteForce == true && count%bruteForceDisplay == 0 {
+		if ShowBruteForce == true && count%BruteForcePeriod == 0 {
 			fmt.Print(".") // So user knows computation is happening
 		}
 	}
