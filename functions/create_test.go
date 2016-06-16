@@ -1,13 +1,13 @@
 package functions_test
 
 import (
-	"bytes"
-	"encoding/hex"
-	"fmt"
-	ed "github.com/FactomProject/ed25519"
-	"github.com/FactomProject/factom"
-	. "github.com/FactomProject/serveridentity/functions"
-	"testing"
+//"bytes"
+//"encoding/hex"
+//"fmt"
+//ed "github.com/FactomProject/ed25519"
+//"github.com/FactomProject/factom"
+//. "github.com/FactomProject/serveridentity/functions"
+//"testing"
 )
 
 /*

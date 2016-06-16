@@ -2,6 +2,7 @@ package identity
 
 import (
 	"bytes"
+	"encoding/binary"
 	"encoding/hex"
 	"errors"
 	ed "github.com/FactomProject/ed25519"
@@ -63,17 +64,18 @@ func MakeBitcoinKey(rootChainID string, subChainID string, btcKeyLevel int, btcT
 		bk.btcType = bType
 	}
 
-	if len(btcKey) != 25 {
+	if len(btcKey) == 25 {
+		bk.btcKey = btcKey[1:21]
+	} else if len(btcKey) == 20 {
+		bk.btcKey = btcKey
+	} else {
 		return nil, errors.New("Error creating new BTC key: Incorrect bitcoin key length")
 	}
-	bk.btcKey = btcKey[1:21]
 
-	t := interfaces.NewTimeStampNow()
-	if timestamp, err := t.MarshalBinary(); err != nil {
-		return nil, err
-	} else {
-		bk.timestamp = timestamp
-	}
+	t := interfaces.GetTimeMilli()
+	by := make([]byte, 8)
+	binary.BigEndian.PutUint64(by, t)
+	bk.timestamp = by
 
 	preI := make([]byte, 0)
 	preI = append(preI, []byte{0x01}...)

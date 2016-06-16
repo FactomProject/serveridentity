@@ -6,6 +6,7 @@ import (
 	"fmt"
 	ed "github.com/FactomProject/ed25519"
 	//"github.com/FactomProject/factom"
+	"encoding/binary"
 	"github.com/FactomProject/factomd/common/interfaces"
 	. "github.com/FactomProject/serveridentity/identity"
 	"testing"
@@ -21,10 +22,16 @@ func TestBTCKey(t *testing.T) {
 		//ec, err := factom.MakeECAddress(priv[:32])
 		chain := "888888d027c59579fc47a6fc6c4a5c0409c7c39bc38a86cb5fc0069978493762"
 
-		b, _ := MakeBitcoinKey(chain, chain, 0, 0, btcKey, &p)
-		tm := interfaces.NewTimeStampNow()
-		timestamp, _ := tm.MarshalBinary()
-		//fmt.Printf("DEBUG: %x\n", b.GetEntry().ExtIDs[8])
+		b, err := MakeBitcoinKey(chain, chain, 0, 0, btcKey, &p)
+		if err != nil {
+			fmt.Println(err.Error())
+		}
+
+		ti := interfaces.GetTimeMilli()
+		by := make([]byte, 8)
+		binary.BigEndian.PutUint64(by, ti)
+		timestamp := by
+		fmt.Printf("DEBUG: %x\n", timestamp)
 
 		buf := new(bytes.Buffer)
 		a, _ := hex.DecodeString("00")

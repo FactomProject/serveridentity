@@ -117,8 +117,8 @@ func fullStart(sid *functions.ServerIdentity) {
 	file.WriteString("echo " + bar + "\n")
 	file.WriteString("echo  Identity Info\n")
 	file.WriteString("echo " + bar + "\n")
-	file.WriteString("echo  Identity Chain:" + sid.RootChainID + "\n")
-	file.WriteString("echo  Identity Chain:" + sid.SubChainID + "\n")
+	file.WriteString("echo  Identity Chain: " + sid.RootChainID + "\n")
+	file.WriteString("echo  Identity SubChain: " + sid.SubChainID + "\n")
 
 	file.WriteString("echo EC Public : " + sid.ECAddr.PubString() + "\n")
 	file.WriteString("echo EC Private: " + sid.ECAddr.SecString() + "\n")

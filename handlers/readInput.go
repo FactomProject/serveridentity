@@ -78,6 +78,7 @@ func (i *Input) ReadIn() interface{} {
 		fmt.Print(i.message)
 		reader := bufio.NewReader(os.Stdin)
 		rawInput, prefix, err := reader.ReadLine()
+		fmt.Println(rawInput)
 
 		if err != nil {
 			if strings.Contains(err.Error(), "EOF") {

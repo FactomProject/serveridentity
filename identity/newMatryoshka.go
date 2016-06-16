@@ -3,6 +3,7 @@ package identity
 import (
 	"bytes"
 	"crypto/sha256"
+	"encoding/binary"
 	"encoding/hex"
 	ed "github.com/FactomProject/ed25519"
 	"github.com/FactomProject/factom"
@@ -39,12 +40,10 @@ func MakeMHash(rootChainID string, subChainID string, seed string, privateKey *[
 		m.newMHash = hash
 	}
 
-	t := interfaces.NewTimeStampNow()
-	if timestamp, err := t.MarshalBinary(); err != nil {
-		return nil, err
-	} else {
-		m.timestamp = timestamp
-	}
+	t := interfaces.GetTimeMilli()
+	by := make([]byte, 8)
+	binary.BigEndian.PutUint64(by, t)
+	m.timestamp = by
 
 	preI := make([]byte, 0)
 	preI = append(preI, []byte{0x01}...)

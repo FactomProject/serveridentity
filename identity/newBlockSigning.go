@@ -3,6 +3,7 @@ package identity
 import (
 	"bytes"
 	"crypto/rand"
+	"encoding/binary"
 	"encoding/hex"
 	"errors"
 	ed "github.com/FactomProject/ed25519"
@@ -43,11 +44,10 @@ func MakeBlockSigningKey(rootChainIDStr string, subchainID string, privateKey *[
 		return nil, nil, err
 	}
 
-	t := interfaces.NewTimeStampNow()
-	b.timestamp, err = t.MarshalBinary()
-	if err != nil {
-		return nil, nil, err
-	}
+	t := interfaces.GetTimeMilli()
+	by := make([]byte, 8)
+	binary.BigEndian.PutUint64(by, t)
+	b.timestamp = by
 
 	preI := make([]byte, 0)
 	preI = append(preI, []byte{0x01}...)

@@ -3,7 +3,6 @@ package identity_test
 import (
 	"bytes"
 	"encoding/hex"
-	"fmt"
 	. "github.com/FactomProject/serveridentity/identity"
 	"testing"
 )
@@ -27,9 +26,9 @@ func TestGenerateIdentityFromPrivateKey(t *testing.T) {
 	}
 
 	if debug == true {
-		strPb := hex.EncodeToString(id.GetPublicKey()[:])
-		strPv := hex.EncodeToString(id.GetPrivateKey()[:32])
-		strId := hex.EncodeToString(id.GetIdentityKey()[:])
+		//strPb := hex.EncodeToString(id.GetPublicKey()[:])
+		//strPv := hex.EncodeToString(id.GetPrivateKey()[:32])
+		//strId := hex.EncodeToString(id.GetIdentityKey()[:])
 		//fmt.Println("Test Data in Hex:")
 		//fmt.Print("Public Key:   ")
 		//fmt.Println(strPb)
