@@ -5,5 +5,5 @@ MHash.sh
 startidentity.sh
 fullidentity.sh
 setup2.sh
-Scripts/i/*.sh
-Scripts/nohup.out
+/Scripts/nohup.out
+/Scripts/i/*.sh
