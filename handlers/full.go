@@ -130,7 +130,7 @@ func fullStart(sid *functions.ServerIdentity) {
 	file.WriteString("echo  \n")
 	file.WriteString("echo  Private Keys\n")
 	for i, r := range sid.IDSet.IdentityLevel {
-		file.WriteString(fmt.Sprintf("echo  Level %d: %s\n", i, r.HumanReadablePrivate()))
+		file.WriteString(fmt.Sprintf("echo  Level %d: %s\n", i+1, r.HumanReadablePrivate()))
 	}
 	file.WriteString("echo  \n")
 	file.WriteString("echo  BTC Key: " + hex.EncodeToString(btcKeyHex))
