@@ -1,13 +1,14 @@
 package handlers
 
 import (
+	"crypto/rand"
 	"encoding/hex"
 	"flag"
 	"fmt"
-	"github.com/FactomProject/btcutil/base58"
 	"github.com/FactomProject/cli"
 	"github.com/FactomProject/serveridentity/functions"
 	"github.com/FactomProject/serveridentity/identity"
+	"io"
 	"os"
 )
 
@@ -92,7 +93,10 @@ func fullStart(sid *functions.ServerIdentity) {
 	createSubChain(sid, false)
 	registerSubChain(sid, false)
 	//file.WriteString("echo   \n")
-	btcKeyHex := base58.Decode("1D1biEdmKwq6CVkFPsDkYKry8Ng1opJwM3")
+	random := rand.Reader
+	var r [20]byte
+	_, _ = io.ReadFull(random, r[:20])
+	btcKeyHex := r[:20]
 
 	p := sid.IDSet.IdentityLevel[0].GetPrivateKey()
 	priv := p[:32]
@@ -131,7 +135,7 @@ func fullStart(sid *functions.ServerIdentity) {
 		file.WriteString(fmt.Sprintf("echo  Level %d: %s\n", i, r.HumanReadablePrivate()))
 	}
 	file.WriteString("echo  \n")
-	file.WriteString("echo  BTC Key: 1D1biEdmKwq6CVkFPsDkYKry8Ng1opJwM3\n")
+	file.WriteString("echo  BTC Key: " + hex.EncodeToString(btcKeyHex))
 	file.WriteString("echo  Block Signing Key: " + hex.EncodeToString(newPriv) + "\n")
 	file.WriteString("echo  \n")
 	file.WriteString("echo  MHashSeed: " + sid.RootChainID + "\n")
