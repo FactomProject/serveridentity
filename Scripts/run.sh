@@ -1,5 +1,6 @@
 #/bin/bash
 
+
 if [ $1 = "all" ]; then
 	for each in ./i/*.sh; do bash $each; done
 else
