@@ -49,7 +49,7 @@ func existingEC(args []string) {
 		return
 	} else if l == 52 {
 		// Generate all new Keys from EC
-		sid := generateKeysFromEC(args[0])
+		sid := generateKeysFromEC(args[0], true)
 		if sid == nil {
 			return
 		}
@@ -62,7 +62,7 @@ func existingEC(args []string) {
 func fresh(args []string) {
 	PrintBanner()
 	// Generate all new Keys
-	sid := generateKeys()
+	sid := generateKeys(true)
 	if sid == nil {
 		return
 	}
@@ -88,11 +88,11 @@ func start(sid *functions.ServerIdentity) {
 	file.WriteString("echo " + bar + "\n")
 
 	PrintHeader("Root Chain Curls")
-	createIdentityChain(sid)
-	registerIdentityChain(sid)
+	createIdentityChain(sid, true)
+	registerIdentityChain(sid, true)
 	PrintHeader("Sub Chain Curls")
-	createSubChain(sid)
-	registerSubChain(sid)
+	createSubChain(sid, true)
+	registerSubChain(sid, true)
 	file.WriteString("echo   \n")
 }
 
@@ -108,61 +108,67 @@ func waitForEnter() error {
 }
 
 // Step 1 : Root Chain Create
-func createIdentityChain(sid *functions.ServerIdentity) {
+func createIdentityChain(sid *functions.ServerIdentity, out bool) {
 	strCom, strRev, err := functions.CreateIdentityChain(sid)
 	if err != nil {
 		panic(err)
 	}
-	fmt.Println("Root Chain ID: " + sid.RootChainID + "\n")
+	if out == true {
+		fmt.Println("Root Chain ID: " + sid.RootChainID + "\n")
 
-	fmt.Println(strCom + "\n")
-	fmt.Println(strRev + "\n")
-	// startidentity.sh
+		fmt.Println(strCom + "\n")
+		fmt.Println(strRev + "\n")
+	}
+
 	writeCurlCmd(file, "Creating Identity Chain - ChainID: "+sid.RootChainID, strCom, strRev)
 }
 
 // Step 2 : Root Chain Register
-func registerIdentityChain(sid *functions.ServerIdentity) {
+func registerIdentityChain(sid *functions.ServerIdentity, out bool) {
 	strCom, strRev, err := functions.RegisterServerIdentity(sid)
 	if err != nil {
 		panic(err)
 	}
+	if out == true {
+		fmt.Println(strCom + "\n")
+		fmt.Println(strRev + "\n")
+	}
 
-	fmt.Println(strCom + "\n")
-	fmt.Println(strRev + "\n")
-	// startidentity.sh
 	writeCurlCmd(file, "Registering Identity Chain", strCom, strRev)
 }
 
 // Step 1 : Subchain Create
-func createSubChain(sid *functions.ServerIdentity) {
+func createSubChain(sid *functions.ServerIdentity, out bool) {
 	strCom, strRev, err := functions.CreateSubChain(sid)
 	if err != nil {
 		panic(err)
 	}
-	fmt.Println("Sub Chain ID: " + sid.SubChainID + "\n")
+	if out == true {
+		fmt.Println("Sub Chain ID: " + sid.SubChainID + "\n")
 
-	fmt.Println(strCom + "\n")
-	fmt.Println(strRev + "\n")
-	// startidentity.sh
+		fmt.Println(strCom + "\n")
+		fmt.Println(strRev + "\n")
+	}
+
 	writeCurlCmd(file, "Creating Server Management SubChain - ChainID: "+sid.SubChainID, strCom, strRev)
 }
 
 // Step 2 : Subchain Register
-func registerSubChain(sid *functions.ServerIdentity) {
+func registerSubChain(sid *functions.ServerIdentity, out bool) {
 	strCom, strRev, err := functions.RegisterSubchain(sid)
 	if err != nil {
 		panic(err)
 	}
+	if out == true {
+		fmt.Println(strCom + "\n")
+		fmt.Println(strRev + "\n")
+	}
 
-	fmt.Println(strCom + "\n")
-	fmt.Println(strRev + "\n")
-	// startidentity.sh
 	writeCurlCmd(file, "Registering Server Management SubChain", strCom, strRev)
 }
 
-func generateKeys() *functions.ServerIdentity {
-	fmt.Print("All new keys for an identity will be created as well as a new Entry \nCredit address. Are you sure you want to continue? y/n :  ")
+func generateKeys(out bool) *functions.ServerIdentity {
+	/*fmt.Print("All new keys for an identity will be created as well as a new Entry \nCredit address. Are you sure you want to continue? y/n :  ")
 	reader := bufio.NewReader(os.Stdin)
 	input, err := reader.ReadString('\n')
 	if err != nil {
@@ -171,7 +177,7 @@ func generateKeys() *functions.ServerIdentity {
 	// If not yes, exit
 	if strings.Compare("y\n", input) != 0 {
 		return nil
-	}
+	}*/
 
 	// Key generation
 	sid, err := functions.MakeServerIdentity()
@@ -179,17 +185,18 @@ func generateKeys() *functions.ServerIdentity {
 	if err != nil {
 		panic(err)
 	}
+	if out == true {
+		fmt.Println("Key Generation Complete")
+		str := formatIDKeysString(sid.IDSet) + "\n"
+		str = str + formatECKeyString(sid.ECAddr)
 
-	fmt.Println("Key Generation Complete")
-	str := formatIDKeysString(sid.IDSet) + "\n"
-	str = str + formatECKeyString(sid.ECAddr)
-
-	fmt.Println(str)
+		fmt.Println(str)
+	}
 	return sid
 }
 
-func generateKeysFromEC(ecStr string) *functions.ServerIdentity {
-	fmt.Print("All new keys for an identity will be created. Your EC address will \nbe used. Are you sure you want to continue? y/n :  ")
+func generateKeysFromEC(ecStr string, out bool) *functions.ServerIdentity {
+	/*fmt.Print("All new keys for an identity will be created. Your EC address will \nbe used. Are you sure you want to continue? y/n :  ")
 	reader := bufio.NewReader(os.Stdin)
 	input, err := reader.ReadString('\n')
 	if err != nil {
@@ -198,7 +205,7 @@ func generateKeysFromEC(ecStr string) *functions.ServerIdentity {
 	// If not yes, exit
 	if strings.Compare("y\n", input) != 0 {
 		return nil
-	}
+	}*/
 
 	// Key generation
 	if strings.Compare(ecStr[:2], "Es") != 0 {
@@ -216,12 +223,12 @@ func generateKeysFromEC(ecStr string) *functions.ServerIdentity {
 		fmt.Println("Error: " + err.Error())
 		return nil
 	}
-
-	fmt.Println("Key Generation Complete")
-	str := formatIDKeysString(sid.IDSet) + "\n"
-	str = str + formatECKeyString(sid.ECAddr)
-
-	fmt.Println(str)
+	if out == true {
+		fmt.Println("Key Generation Complete")
+		str := formatIDKeysString(sid.IDSet) + "\n"
+		str = str + formatECKeyString(sid.ECAddr)
+		fmt.Println(str)
+	}
 	return sid
 }
 

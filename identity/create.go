@@ -30,7 +30,9 @@ func findValidNonce(i generalChainCreate) []byte {
 			fmt.Print(".") // So user knows computation is happening
 		}
 	}
-	fmt.Println("")
+	if ShowBruteForce == true {
+		fmt.Println("")
+	}
 	return []byte(strconv.Itoa(count))
 }
 

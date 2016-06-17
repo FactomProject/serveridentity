@@ -7,10 +7,14 @@ import (
 	"github.com/FactomProject/btcutil/base58"
 	"github.com/FactomProject/cli"
 	"github.com/FactomProject/serveridentity/functions"
+	"github.com/FactomProject/serveridentity/identity"
 	"os"
 )
 
+var SCRIPTNAME string = "fullidentity"
+
 var Full = func() *sevCmd {
+	identity.ShowBruteForce = false
 	cmd := new(sevCmd)
 	cmd.helpMsg = "serveridentity full 'fresh'|ESAddress"
 	cmd.description = "Create new identity and subchain as well as entries in the subchain."
@@ -35,8 +39,10 @@ func existingECFull(args []string) {
 		Help.All()
 		return
 	}
-
-	PrintBanner()
+	os.Args = args
+	filename := flag.String("n", "fullidentity", "Change the script name")
+	flag.Parse()
+	SCRIPTNAME = *filename
 	l := len(args[0])
 	if l != 64 && l != 52 {
 		fmt.Println("server identity full 'fresh'|ESAddress")
@@ -44,7 +50,7 @@ func existingECFull(args []string) {
 		return
 	} else if l == 52 {
 		// Generate all new Keys from EC
-		sid := generateKeysFromEC(args[0])
+		sid := generateKeysFromEC(args[0], false)
 		if sid == nil {
 			return
 		}
@@ -55,9 +61,12 @@ func existingECFull(args []string) {
 }
 
 func freshFull(args []string) {
-	PrintBanner()
+	os.Args = args
+	filename := flag.String("n", "fullidentity", "Change the script name")
+	flag.Parse()
+	SCRIPTNAME = *filename
 	// Generate all new Keys
-	sid := generateKeys()
+	sid := generateKeys(false)
 	if sid == nil {
 		return
 	}
@@ -65,13 +74,7 @@ func freshFull(args []string) {
 }
 
 func fullStart(sid *functions.ServerIdentity) {
-	fmt.Print("If you have copied down these keys, then ")
-	err := waitForEnter()
-	if err != nil {
-		panic(err)
-	}
-
-	file = makeFile("fullidentity")
+	file = makeFile(SCRIPTNAME)
 	defer file.Close()
 	var bar string
 	for i := 0; i < 76; i++ {
@@ -82,12 +85,12 @@ func fullStart(sid *functions.ServerIdentity) {
 	//file.WriteString("echo \\* Credits must be in " + sid.ECAddr.PubString() + " \\ \\*\n")
 	//file.WriteString("echo " + bar + "\n")
 
-	PrintHeader("Root Chain Curls")
-	createIdentityChain(sid)
-	registerIdentityChain(sid)
-	PrintHeader("Sub Chain Curls")
-	createSubChain(sid)
-	registerSubChain(sid)
+	//PrintHeader("Root Chain Curls")
+	createIdentityChain(sid, false)
+	registerIdentityChain(sid, false)
+	//PrintHeader("Sub Chain Curls")
+	createSubChain(sid, false)
+	registerSubChain(sid, false)
 	//file.WriteString("echo   \n")
 	btcKeyHex := base58.Decode("1D1biEdmKwq6CVkFPsDkYKry8Ng1opJwM3")
 

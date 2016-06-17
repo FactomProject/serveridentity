@@ -5,3 +5,6 @@ MHash.sh
 startidentity.sh
 fullidentity.sh
 setup2.sh
+!Scripts/run.sh
+!Scripts/create.sh
+!Scripts/clean.sh
