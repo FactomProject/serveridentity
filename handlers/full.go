@@ -14,6 +14,10 @@ import (
 
 var SCRIPTNAME string = "fullidentity"
 
+/*
+ * This method is mainly for testing purposes
+ */
+
 var Full = func() *sevCmd {
 	identity.ShowBruteForce = false
 	cmd := new(sevCmd)
@@ -81,18 +85,12 @@ func fullStart(sid *functions.ServerIdentity) {
 	for i := 0; i < 76; i++ {
 		bar = bar + "\\*"
 	}
-	//file.WriteString("echo " + bar + "\n")
-	//file.WriteString("echo \\* Setup script will create and register an identity and its subchain \\ \\ \\ \\ \\ \\ \\*\n")
-	//file.WriteString("echo \\* Credits must be in " + sid.ECAddr.PubString() + " \\ \\*\n")
-	//file.WriteString("echo " + bar + "\n")
 
-	//PrintHeader("Root Chain Curls")
 	createIdentityChain(sid, false)
 	registerIdentityChain(sid, false)
-	//PrintHeader("Sub Chain Curls")
 	createSubChain(sid, false)
 	registerSubChain(sid, false)
-	//file.WriteString("echo   \n")
+
 	random := rand.Reader
 	var r [20]byte
 	_, _ = io.ReadFull(random, r[:20])
