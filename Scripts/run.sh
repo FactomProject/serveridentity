@@ -1,6 +1,7 @@
 #/bin/bash
+
 if [ $1 = "all" ]; then
-	sh ./i/*.sh
+	for each in ./i/*.sh; do bash $each; done
 else
 	COUNTER=$1
 	 while [  $COUNTER -lt $2 ]; do
