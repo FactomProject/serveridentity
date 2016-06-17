@@ -44,7 +44,7 @@ func MakeBlockSigningKey(rootChainIDStr string, subchainID string, privateKey *[
 		return nil, nil, err
 	}
 
-	t := interfaces.GetTimeMilli()
+	t := interfaces.GetTime()
 	by := make([]byte, 8)
 	binary.BigEndian.PutUint64(by, t)
 	b.timestamp = by

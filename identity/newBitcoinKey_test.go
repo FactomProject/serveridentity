@@ -27,7 +27,7 @@ func TestBTCKey(t *testing.T) {
 			fmt.Println(err.Error())
 		}
 
-		ti := interfaces.GetTimeMilli()
+		ti := interfaces.GetTime()
 		by := make([]byte, 8)
 		binary.BigEndian.PutUint64(by, ti)
 		timestamp := by

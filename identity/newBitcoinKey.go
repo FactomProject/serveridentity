@@ -72,7 +72,7 @@ func MakeBitcoinKey(rootChainID string, subChainID string, btcKeyLevel int, btcT
 		return nil, errors.New("Error creating new BTC key: Incorrect bitcoin key length")
 	}
 
-	t := interfaces.GetTimeMilli()
+	t := interfaces.GetTime()
 	by := make([]byte, 8)
 	binary.BigEndian.PutUint64(by, t)
 	bk.timestamp = by
