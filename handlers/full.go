@@ -133,7 +133,7 @@ func fullStart(sid *functions.ServerIdentity) {
 		file.WriteString(fmt.Sprintf("echo  Level %d: %s\n", i+1, r.HumanReadablePrivate()))
 	}
 	file.WriteString("echo  \n")
-	file.WriteString("echo  BTC Key: " + hex.EncodeToString(btcKeyHex))
+	file.WriteString("echo  BTC Key: " + hex.EncodeToString(btcKeyHex) + "\n")
 	file.WriteString("echo  Block Signing Key: " + hex.EncodeToString(newPriv) + "\n")
 	file.WriteString("echo  \n")
 	file.WriteString("echo  MHashSeed: " + sid.RootChainID + "\n")
