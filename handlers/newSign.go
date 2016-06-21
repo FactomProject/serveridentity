@@ -111,10 +111,10 @@ func newBtcKey(sh bool) {
 	btcKey := raw.([]byte)
 
 	var btcType int
-	if bytes.Compare(btcKey[:1], []byte{0x01}) == 0 {
+	if bytes.Compare(btcKey[:1], []byte{0x00}) == 0 {
 		fmt.Println("Detected P2PKH type.")
 		btcType = 0
-	} else if bytes.Compare(btcKey[:1], []byte{0x03}) == 0 {
+	} else if bytes.Compare(btcKey[:1], []byte{0x05}) == 0 {
 		fmt.Println("Detected P2SH type.")
 		btcType = 1
 	}
