@@ -5,7 +5,7 @@ import (
 )
 
 func RegisterSubchain(sid *ServerIdentity) (string, string, error) {
-	reg, err := identity.MakeRegisterSubchain(sid.IDSet, sid.RootChainID)
+	reg, err := identity.MakeRegisterSubchain(sid.IDSet, sid.SubChainID)
 	if err != nil {
 		return "error", "error", err
 	}
