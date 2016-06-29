@@ -19,4 +19,5 @@ var (
 	//Seed Hex Length (length/2 = bytes)
 	SeedMin int = 4
 	SeedMax int = 64
+	NUMBER  string
 )

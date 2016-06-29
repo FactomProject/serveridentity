@@ -2,6 +2,7 @@ package functions
 
 import (
 	"github.com/FactomProject/serveridentity/identity"
+	"os"
 )
 
 func RegisterSubchain(sid *ServerIdentity) (string, string, error) {
@@ -20,6 +21,12 @@ func RegisterSubchain(sid *ServerIdentity) (string, string, error) {
 	if err != nil {
 		return "error", "error", err
 	}
+
+	// TODO: REMOVE
+	sub, _ := os.OpenFile("subhash.txt", os.O_RDWR|os.O_APPEND, 0660)
+	sub.WriteString(identity.NUMBER + "#" + sid.SubChainID + "#")
+	sub.Close()
+	//END
 
 	return CurlWrapPOST(strCom), CurlWrapPOST(strRev), nil
 }

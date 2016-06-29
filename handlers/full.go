@@ -1,14 +1,14 @@
 package handlers
 
 import (
-	"crypto/rand"
-	"encoding/hex"
+	//"crypto/rand"
+	//"encoding/hex"
 	"flag"
 	"fmt"
 	"github.com/FactomProject/cli"
 	"github.com/FactomProject/serveridentity/functions"
 	"github.com/FactomProject/serveridentity/identity"
-	"io"
+	//"io"
 	"os"
 )
 
@@ -50,6 +50,8 @@ func existingECFull(args []string) {
 	garble := flag.Bool("b", false, "Make incorrect entries")
 	flag.Parse()
 	SCRIPTNAME = *filename
+	// REMOVE
+	identity.NUMBER = *filename
 	l := len(args[0])
 	if l != 64 && l != 52 {
 		fmt.Println("server identity full 'fresh'|ESAddress")
@@ -101,108 +103,108 @@ func fullStart(sid *functions.ServerIdentity, garble bool) {
 	}
 	createSubChain(sid, PRINT_OUT)
 	registerSubChain(sid, PRINT_OUT)
+	/*
+		random := rand.Reader
+		var r [20]byte
+		_, _ = io.ReadFull(random, r[:20])
+		btcKeyHex := r[:20]
 
-	random := rand.Reader
-	var r [20]byte
-	_, _ = io.ReadFull(random, r[:20])
-	btcKeyHex := r[:20]
-
-	p := sid.IDSet.IdentityLevel[0].GetPrivateKey()
-	priv := p[:32]
-
-	file.WriteString("sleep 1\n")
-
-	strCom, strRev, err := functions.CreateNewBitcoinKey(sid.RootChainID, sid.SubChainID, 0, 0, btcKeyHex, priv, sid.ECAddr)
-	if err != nil {
-		panic(err)
-	}
-	writeCurlCmd(file, "New Bitcoin Key", strCom, strRev)
-
-	strCom, strRev, newPriv, err := functions.CreateNewBlockSignEntry(sid.RootChainID, sid.SubChainID, priv, sid.ECAddr)
-	if err != nil {
-		panic(err)
-	}
-	writeCurlCmd(file, "New Block Signing Key", strCom, strRev)
-
-	strCom, strRev, mHash, err := functions.CreateNewMHash(sid.RootChainID, sid.SubChainID, priv, sid.RootChainID, sid.ECAddr)
-	if err != nil {
-		panic(err)
-	}
-	writeCurlCmd(file, "New Matryoshka Hash", strCom, strRev)
-
-	file.WriteString("echo " + bar + "\n")
-	file.WriteString("echo  Identity Info\n")
-	file.WriteString("echo " + bar + "\n")
-	file.WriteString("echo  Identity Chain: " + sid.RootChainID + "\n")
-	file.WriteString("echo  Identity SubChain: " + sid.SubChainID + "\n")
-
-	file.WriteString("echo EC Public : " + sid.ECAddr.PubString() + "\n")
-	file.WriteString("echo EC Private: " + sid.ECAddr.SecString() + "\n")
-	file.WriteString("echo  \n")
-	file.WriteString("echo  Private Keys\n")
-	for i, r := range sid.IDSet.IdentityLevel {
-		file.WriteString(fmt.Sprintf("echo  Level %d: %s\n", i+1, r.HumanReadablePrivate()))
-	}
-	file.WriteString("echo  \n")
-	file.WriteString("echo  BTC Key: " + hex.EncodeToString(btcKeyHex) + "\n")
-	file.WriteString("echo  Block Signing Key: " + hex.EncodeToString(newPriv) + "\n")
-	file.WriteString("echo  \n")
-	file.WriteString("echo  MHashSeed: " + sid.RootChainID + "\n")
-	file.WriteString("echo  MHash: " + mHash + "\n")
-
-	if garble {
-		PrintHeader("GARBLE: Wrong Key")
-		p = sid.IDSet.IdentityLevel[2].GetPrivateKey()
-		priv = p[:32]
+		p := sid.IDSet.IdentityLevel[0].GetPrivateKey()
+		priv := p[:32]
 
 		file.WriteString("sleep 1\n")
 
-		strCom, strRev, err = functions.CreateNewBitcoinKey(sid.RootChainID, sid.SubChainID, 0, 0, btcKeyHex, priv, sid.ECAddr)
+		strCom, strRev, err := functions.CreateNewBitcoinKey(sid.RootChainID, sid.SubChainID, 0, 0, btcKeyHex, priv, sid.ECAddr)
 		if err != nil {
-			//panic(err)
+			panic(err)
 		}
 		writeCurlCmd(file, "New Bitcoin Key", strCom, strRev)
 
-		strCom, strRev, newPriv, err = functions.CreateNewBlockSignEntry(sid.RootChainID, sid.SubChainID, priv, sid.ECAddr)
+		strCom, strRev, newPriv, err := functions.CreateNewBlockSignEntry(sid.RootChainID, sid.SubChainID, priv, sid.ECAddr)
 		if err != nil {
-			//panic(err)
+			panic(err)
 		}
 		writeCurlCmd(file, "New Block Signing Key", strCom, strRev)
 
-		strCom, strRev, mhash, err := functions.CreateNewMHash(sid.RootChainID, sid.SubChainID, priv, sid.RootChainID, sid.ECAddr)
+		strCom, strRev, mHash, err := functions.CreateNewMHash(sid.RootChainID, sid.SubChainID, priv, sid.RootChainID, sid.ECAddr)
 		if err != nil {
-			//panic(err)
+			panic(err)
 		}
 		writeCurlCmd(file, "New Matryoshka Hash", strCom, strRev)
 
-		PrintHeader("GARBLE: Bad Key & BTC KEY")
-		btcKeyHex = []byte{0x00, 0x00, 0x00}
-		p = sid.IDSet.IdentityLevel[0].GetPrivateKey()
-		priv = p[1:33]
+		file.WriteString("echo " + bar + "\n")
+		file.WriteString("echo  Identity Info\n")
+		file.WriteString("echo " + bar + "\n")
+		file.WriteString("echo  Identity Chain: " + sid.RootChainID + "\n")
+		file.WriteString("echo  Identity SubChain: " + sid.SubChainID + "\n")
 
-		file.WriteString("sleep 1\n")
-
-		strCom, strRev, err = functions.CreateNewBitcoinKey(sid.RootChainID, sid.SubChainID, 0, 0, btcKeyHex, priv, sid.ECAddr)
-		if err != nil {
-			//panic(err)
+		file.WriteString("echo EC Public : " + sid.ECAddr.PubString() + "\n")
+		file.WriteString("echo EC Private: " + sid.ECAddr.SecString() + "\n")
+		file.WriteString("echo  \n")
+		file.WriteString("echo  Private Keys\n")
+		for i, r := range sid.IDSet.IdentityLevel {
+			file.WriteString(fmt.Sprintf("echo  Level %d: %s\n", i+1, r.HumanReadablePrivate()))
 		}
-		writeCurlCmd(file, "New Bitcoin Key", strCom, strRev)
-
-		strCom, strRev, newPriv, err = functions.CreateNewBlockSignEntry(sid.RootChainID, sid.SubChainID, priv, sid.ECAddr)
-		if err != nil {
-			//panic(err)
-		}
-		writeCurlCmd(file, "New Block Signing Key", strCom, strRev)
-
-		strCom, strRev, mhash, err = functions.CreateNewMHash(sid.RootChainID, sid.SubChainID, priv, sid.RootChainID, sid.ECAddr)
-		if err != nil {
-			//panic(err)
-		}
-		writeCurlCmd(file, "New Matryoshka Hash", strCom, strRev)
 		file.WriteString("echo  \n")
 		file.WriteString("echo  BTC Key: " + hex.EncodeToString(btcKeyHex) + "\n")
 		file.WriteString("echo  Block Signing Key: " + hex.EncodeToString(newPriv) + "\n")
-		file.WriteString("echo  MHash: " + mhash + "\n")
-	}
+		file.WriteString("echo  \n")
+		file.WriteString("echo  MHashSeed: " + sid.RootChainID + "\n")
+		file.WriteString("echo  MHash: " + mHash + "\n")
+
+		if garble {
+			PrintHeader("GARBLE: Wrong Key")
+			p = sid.IDSet.IdentityLevel[2].GetPrivateKey()
+			priv = p[:32]
+
+			file.WriteString("sleep 1\n")
+
+			strCom, strRev, err = functions.CreateNewBitcoinKey(sid.RootChainID, sid.SubChainID, 0, 0, btcKeyHex, priv, sid.ECAddr)
+			if err != nil {
+				//panic(err)
+			}
+			writeCurlCmd(file, "New Bitcoin Key", strCom, strRev)
+
+			strCom, strRev, newPriv, err = functions.CreateNewBlockSignEntry(sid.RootChainID, sid.SubChainID, priv, sid.ECAddr)
+			if err != nil {
+				//panic(err)
+			}
+			writeCurlCmd(file, "New Block Signing Key", strCom, strRev)
+
+			strCom, strRev, mhash, err := functions.CreateNewMHash(sid.RootChainID, sid.SubChainID, priv, sid.RootChainID, sid.ECAddr)
+			if err != nil {
+				//panic(err)
+			}
+			writeCurlCmd(file, "New Matryoshka Hash", strCom, strRev)
+
+			PrintHeader("GARBLE: Bad Key & BTC KEY")
+			btcKeyHex = []byte{0x00, 0x00, 0x00}
+			p = sid.IDSet.IdentityLevel[0].GetPrivateKey()
+			priv = p[1:33]
+
+			file.WriteString("sleep 1\n")
+
+			strCom, strRev, err = functions.CreateNewBitcoinKey(sid.RootChainID, sid.SubChainID, 0, 0, btcKeyHex, priv, sid.ECAddr)
+			if err != nil {
+				//panic(err)
+			}
+			writeCurlCmd(file, "New Bitcoin Key", strCom, strRev)
+
+			strCom, strRev, newPriv, err = functions.CreateNewBlockSignEntry(sid.RootChainID, sid.SubChainID, priv, sid.ECAddr)
+			if err != nil {
+				//panic(err)
+			}
+			writeCurlCmd(file, "New Block Signing Key", strCom, strRev)
+
+			strCom, strRev, mhash, err = functions.CreateNewMHash(sid.RootChainID, sid.SubChainID, priv, sid.RootChainID, sid.ECAddr)
+			if err != nil {
+				//panic(err)
+			}
+			writeCurlCmd(file, "New Matryoshka Hash", strCom, strRev)
+			file.WriteString("echo  \n")
+			file.WriteString("echo  BTC Key: " + hex.EncodeToString(btcKeyHex) + "\n")
+			file.WriteString("echo  Block Signing Key: " + hex.EncodeToString(newPriv) + "\n")
+			file.WriteString("echo  MHash: " + mhash + "\n")
+		}*/
 
 }
