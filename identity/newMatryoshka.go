@@ -40,7 +40,7 @@ func MakeMHash(rootChainID string, subChainID string, seed string, privateKey *[
 		m.newMHash = hash
 	}
 
-	t := interfaces.GetTime()
+	t := interfaces.Timestamp.GetTimeSeconds()
 	by := make([]byte, 8)
 	binary.BigEndian.PutUint64(by, t)
 	m.timestamp = by
