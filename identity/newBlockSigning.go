@@ -6,9 +6,10 @@ import (
 	"encoding/binary"
 	"encoding/hex"
 	"errors"
+
 	ed "github.com/FactomProject/ed25519"
 	"github.com/FactomProject/factom"
-	"github.com/FactomProject/factomd/common/interfaces"
+	"github.com/FactomProject/factomd/common/primitives"
 )
 
 type BlockSigningKey struct {
@@ -44,9 +45,9 @@ func MakeBlockSigningKey(rootChainIDStr string, subchainID string, privateKey *[
 		return nil, nil, err
 	}
 
-	t := interfaces.Timestamp.GetTimeSeconds()
+	t := primitives.NewTimestampNow().GetTimeSeconds()
 	by := make([]byte, 8)
-	binary.BigEndian.PutUint64(by, t)
+	binary.BigEndian.PutUint64(by, uint64(t))
 	b.timestamp = by
 
 	preI := make([]byte, 0)

@@ -7,7 +7,7 @@ import (
 	"encoding/hex"
 	ed "github.com/FactomProject/ed25519"
 	"github.com/FactomProject/factom"
-	"github.com/FactomProject/factomd/common/interfaces"
+	"github.com/FactomProject/factomd/common/primitives"
 )
 
 type MHash struct {
@@ -40,9 +40,9 @@ func MakeMHash(rootChainID string, subChainID string, seed string, privateKey *[
 		m.newMHash = hash
 	}
 
-	t := interfaces.Timestamp.GetTimeSeconds()
+	t := primitives.NewTimestampNow().GetTimeSeconds()
 	by := make([]byte, 8)
-	binary.BigEndian.PutUint64(by, t)
+	binary.BigEndian.PutUint64(by, uint64(t))
 	m.timestamp = by
 
 	preI := make([]byte, 0)

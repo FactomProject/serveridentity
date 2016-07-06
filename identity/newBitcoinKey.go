@@ -5,9 +5,10 @@ import (
 	"encoding/binary"
 	"encoding/hex"
 	"errors"
+
 	ed "github.com/FactomProject/ed25519"
 	"github.com/FactomProject/factom"
-	"github.com/FactomProject/factomd/common/interfaces"
+	"github.com/FactomProject/factomd/common/primitives"
 )
 
 type BitcoinKey struct {
@@ -72,9 +73,9 @@ func MakeBitcoinKey(rootChainID string, subChainID string, btcKeyLevel int, btcT
 		return nil, errors.New("Error creating new BTC key: Incorrect bitcoin key length")
 	}
 
-	t := interfaces.Timestamp.GetTimeSeconds()
+	t := primitives.NewTimestampNow().GetTimeSeconds()
 	by := make([]byte, 8)
-	binary.BigEndian.PutUint64(by, t)
+	binary.BigEndian.PutUint64(by, uint64(t))
 	bk.timestamp = by
 
 	preI := make([]byte, 0)
