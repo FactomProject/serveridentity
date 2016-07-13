@@ -24,8 +24,13 @@ type BlockSigningKey struct {
 	subchain string
 }
 
+func MakeBlockSigningKey(rootChainIDStr string, subchainID string, privateKey *[64]byte) (*BlockSigningKey, []byte, error) {
+	a, b, c := MakeBlockSigningKeyFixed(rootChainIDStr, subchainID, privateKey, false)
+	return a, b, c
+}
+
 // Creates a new BlockSigningKey type. Used to change keys in identity chain
-func MakeBlockSigningKey(rootChainIDStr string, subchainID string, privateKey *[64]byte, random bool) (*BlockSigningKey, []byte, error) {
+func MakeBlockSigningKeyFixed(rootChainIDStr string, subchainID string, privateKey *[64]byte, random bool) (*BlockSigningKey, []byte, error) {
 	rootChainID, err := hex.DecodeString(rootChainIDStr)
 	if err != nil {
 		return nil, nil, err
