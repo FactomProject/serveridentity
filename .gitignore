@@ -7,3 +7,5 @@ fullidentity.sh
 setup2.sh
 /Scripts/nohup.out
 /Scripts/i/*.sh
+/Scripts/hammer.sh
+setup3.sh
