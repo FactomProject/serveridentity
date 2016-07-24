@@ -15,10 +15,6 @@ Here is a list of the entries that are created by this program and which chains 
   * Requires this branch, no previous will be compatible
 * /identity/varsconfig.go contains various hardcode options. Until release, refer to these when creating an identity.
 
-## Testing
-* To test in sandbox, run ```sh maketest.sh ```. This will add funds to the 'zeros' wallet and create the factom identity list, identity chain, and subchain. It will then add a new block signing key, btc key, and a new MHash.
-
-
 Using Server Management Tool
 ========
 ## Creating a new Server Identity
