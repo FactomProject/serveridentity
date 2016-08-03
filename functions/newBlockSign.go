@@ -20,7 +20,7 @@ func CreateNewBlockSignEntry(rootChainID string, subChainID string, levelAbovePr
 	var priv [64]byte
 	copy(priv[:32], levelAbovePrivate[:32])
 	_ = ed.GetPublicKey(&priv)
-	bs, newPriv, err := identity.MakeBlockSigningKey(rootChainID, subChainID, &priv)
+	bs, newPriv, err := identity.MakeBlockSigningKeyFixed(rootChainID, subChainID, &priv, true)
 	if err != nil {
 		return "error", "error", nil, err
 	}
