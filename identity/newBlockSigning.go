@@ -24,6 +24,18 @@ type BlockSigningKey struct {
 	subchain string
 }
 
+func MakeBlockSigningKeySeeded(rootChainIDStr string, subchainID string, privateKey *[64]byte, signingkey *[64]byte) (*BlockSigningKey, []byte, error) {
+	block, _, err := MakeBlockSigningKeyFixed(rootChainIDStr, subchainID, privateKey, false)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	block.newPubKey = signingkey[:32]
+	block.newPubKey = signingkey[:32]
+
+	return block, signingkey[32:], nil
+}
+
 func MakeBlockSigningKey(rootChainIDStr string, subchainID string, privateKey *[64]byte) (*BlockSigningKey, []byte, error) {
 	a, b, c := MakeBlockSigningKeyFixed(rootChainIDStr, subchainID, privateKey, false)
 	return a, b, c
