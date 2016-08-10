@@ -1,6 +1,9 @@
 package functions
 
 import (
+	"fmt"
+	"os"
+
 	ed "github.com/FactomProject/ed25519"
 	"github.com/FactomProject/factom"
 	"github.com/FactomProject/serveridentity/identity"
@@ -24,6 +27,11 @@ func CreateNewBlockSignEntry(rootChainID string, subChainID string, levelAbovePr
 	if err != nil {
 		return "error", "error", nil, err
 	}
+
+	block, _ := os.OpenFile("block.txt", os.O_RDWR|os.O_APPEND, 0660)
+	str := fmt.Sprintf(identity.NUMBER+"#"+"%x#", newPriv)
+	block.WriteString(str)
+	block.Close()
 
 	e := bs.GetEntry()
 	strCom, err := identity.GetEntryCommitString(e, ec)
