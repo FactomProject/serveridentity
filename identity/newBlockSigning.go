@@ -24,34 +24,15 @@ type BlockSigningKey struct {
 }
 
 func MakeBlockSigningKeySeeded(rootChainIDStr string, subchainID string, privateKey *[64]byte, signingkey *[64]byte) (*BlockSigningKey, []byte, error) {
-	rootChainID, err := hex.DecodeString(rootChainIDStr)
+	block, _, err := MakeBlockSigningKeyFixed(rootChainIDStr, subchainID, privateKey, false)
 	if err != nil {
 		return nil, nil, err
 	}
-	if bytes.Compare(rootChainID[:ProofOfWorkLength], ProofOfWorkChainID[:ProofOfWorkLength]) != 0 {
-		return nil, nil, errors.New("Error making a new block signing key: Root ChainID invalid")
-	}
-	b := new(BlockSigningKey)
-	b.version = []byte{0x00}
-	b.message = []byte("New Block Signing Key")
-	b.rootChainID = rootChainID
-	b.subchain = subchainID
 
-	b.newPubKey = signingkey[:32]
+	block.newPubKey = signingkey[:32]
+	block.newPubKey = signingkey[:32]
 
-	t := primitives.NewTimestampNow().GetTimeSeconds()
-	by := make([]byte, 8)
-	binary.BigEndian.PutUint64(by, uint64(t))
-	b.timestamp = by
-
-	preI := make([]byte, 0)
-	preI = append(preI, []byte{0x01}...)
-	preI = append(preI, privateKey[32:]...)
-	b.identityPreimage = preI
-
-	sig := ed.Sign(privateKey, b.versionToTimestamp())
-	b.signiture = sig[:]
-	return b, signingkey[32:], nil
+	return block, signingkey[32:], nil
 }
 
 func MakeBlockSigningKey(rootChainIDStr string, subchainID string, privateKey *[64]byte) (*BlockSigningKey, []byte, error) {
