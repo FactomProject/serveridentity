@@ -10,7 +10,7 @@ var (
 	ProofOfWorkLength  int = 3 // DEFAULT = 3, set lower for faster tests
 	// For Registering Root Chain
 	// e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
-	RootRegisterChain string = "1d1d1d1d07714fea910f9c6e42e5dc072c86491a3d80418855a2499e85b0039f"
+	RootRegisterChain string = "888888001750ede0eff4b05f0c3f557890b256450cabbb84cada937f9c258327"
 	// If true will show "." on screen to show user program is computing
 	ShowBruteForce bool = true
 	// Will change frequency of dots for brute forcing
