@@ -30,10 +30,22 @@ func MakeBlockSigningKeySeeded(rootChainIDStr string, subchainID string, private
 		return nil, nil, err
 	}
 
-	block.newPubKey = signingkey[:32]
-	block.newPubKey = signingkey[:32]
+	block.newPubKey = signingkey[32:]
 
-	return block, signingkey[32:], nil
+	t := primitives.NewTimestampNow().GetTimeSeconds()
+	by := make([]byte, 8)
+	binary.BigEndian.PutUint64(by, uint64(t))
+	block.timestamp = by
+
+	preI := make([]byte, 0)
+	preI = append(preI, []byte{0x01}...)
+	preI = append(preI, privateKey[32:]...)
+	block.identityPreimage = preI
+
+	sig := ed.Sign(privateKey, block.versionToTimestamp())
+	block.signiture = sig[:]
+
+	return block, signingkey[:32], nil
 }
 
 func MakeBlockSigningKey(rootChainIDStr string, subchainID string, privateKey *[64]byte) (*BlockSigningKey, []byte, error) {
