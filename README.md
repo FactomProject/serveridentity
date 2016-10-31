@@ -11,8 +11,6 @@ Here is a list of the entries that are created by this program and which chains 
 |||"New Bitcoin Key"<br />sk1 key sign|
 |||"New Matryoshka Hash"<br />sk1 key sign
 ## Compiling
-* 6/9/2016 Compiles with factom m2v2 branch
-  * Requires this branch, no previous will be compatible
 * /identity/varsconfig.go contains various hardcode options. Until release, refer to these when creating an identity.
 
 Using Server Management Tool
