@@ -4,7 +4,7 @@ An application that creates and manages a Factom Server's Identity. This applica
 
 Here is a list of the entries that are created by this program and which chains they will be entered into. Each column represents a factom chain. Italicized names are the first entry in a chain, while unbolded are new entries.
 
-|Factom Identity List<br />ChainID:[e3b0c4...]|Identity Chain <br />ChainID:[888888...]|Server Management SubChain<br />ChainID:[888888...]
+|Factom Identity List<br />ChainID:[88888800...]|Identity Chain <br />ChainID:[888888...]|Server Management SubChain<br />ChainID:[888888...]
 |:---:|:---:|:---:|
 |"Register Factom Identity"<br />sk1 key sign|<i>"Identity Chain"</i>|<i>"Server Management"</i>
 ||"Register Server Management"<br />sk1 key sign|"New Block Signing Key" <br />sk1 key sign
