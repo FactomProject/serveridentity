@@ -187,7 +187,7 @@ func newBlockKey(sh bool) {
 	}
 
 	PrintHeader("New Block Signing Key Curl Commands")
-	fmt.Println("New PrivateKey : " + hex.EncodeToString(newPriv)[:32] + "\n")
+	fmt.Println("New PrivateKey : " + hex.EncodeToString(newPriv[:32]) + "\n")
 	fmt.Println("New Public Key : " + hex.EncodeToString(newPriv[32:]) + "\n")
 	fmt.Println(strCom + "\n")
 	fmt.Println(strRev + "\n")
