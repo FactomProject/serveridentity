@@ -11,43 +11,43 @@ import (
  **************************/
 
 type RegisterIdentity struct {
-	version          []byte
-	message          []byte
-	encodedChainID   []byte
-	identityPreimage []byte
-	signiture        []byte
+	Version          []byte
+	Message          []byte
+	EncodedChainID   []byte
+	IdentityPreimage []byte
+	Signiture        []byte
 }
 
 func MakeRegisterIdentity(idSet *IdentitySet, chainID string) (*RegisterIdentity, error) {
 	r := new(RegisterIdentity)
-	r.version = []byte{0x00}
-	r.message = []byte("Register Factom Identity")
+	r.Version = []byte{0x00}
+	r.Message = []byte("Register Factom Identity")
 	hex, err := hex.DecodeString(chainID)
 	if err != nil {
 		return nil, err
 	}
-	r.encodedChainID = hex
-	r.identityPreimage = append([]byte{0x01}, idSet.IdentityLevel[RegisterIdentityLevel-1].GetPublicKey()[:]...)
+	r.EncodedChainID = hex
+	r.IdentityPreimage = append([]byte{0x01}, idSet.IdentityLevel[RegisterIdentityLevel-1].GetPublicKey()[:]...)
 
 	sigMsg := make([]byte, 0)
-	sigMsg = append(sigMsg, r.version[:]...)
-	sigMsg = append(sigMsg, r.message[:]...)
-	sigMsg = append(sigMsg, r.encodedChainID[:]...)
-	//sigMsg = append(sigMsg, r.identityPreimage[:]...)
+	sigMsg = append(sigMsg, r.Version[:]...)
+	sigMsg = append(sigMsg, r.Message[:]...)
+	sigMsg = append(sigMsg, r.EncodedChainID[:]...)
+	//sigMsg = append(sigMsg, r.IdentityPreimage[:]...)
 
 	priv := idSet.IdentityLevel[RegisterIdentityLevel-1].GetPrivateKey()
-	r.signiture = ed.Sign(priv, sigMsg)[:]
+	r.Signiture = ed.Sign(priv, sigMsg)[:]
 
 	return r, nil
 }
 
 func (r *RegisterIdentity) extIDList() [][]byte {
 	list := make([][]byte, 0)
-	list = append(list, r.version)
-	list = append(list, r.message)
-	list = append(list, r.encodedChainID)
-	list = append(list, r.identityPreimage)
-	list = append(list, r.signiture)
+	list = append(list, r.Version)
+	list = append(list, r.Message)
+	list = append(list, r.EncodedChainID)
+	list = append(list, r.IdentityPreimage)
+	list = append(list, r.Signiture)
 
 	return list
 }
@@ -66,43 +66,43 @@ func (r *RegisterIdentity) GetEntry() *factom.Entry {
  **************************/
 
 type RegisterSubchain struct {
-	version          []byte
-	message          []byte
+	Version          []byte
+	Message          []byte
 	subChainID       []byte
-	identityPreimage []byte
-	signiture        []byte
+	IdentityPreimage []byte
+	Signiture        []byte
 }
 
 func MakeRegisterSubchain(idSet *IdentitySet, chainID string) (*RegisterSubchain, error) {
 	r := new(RegisterSubchain)
-	r.version = []byte{0x00}
-	r.message = []byte("Register Server Management")
+	r.Version = []byte{0x00}
+	r.Message = []byte("Register Server Management")
 	hex, err := hex.DecodeString(chainID)
 	if err != nil {
 		return nil, err
 	}
 	r.subChainID = hex
-	r.identityPreimage = append([]byte{0x01}, idSet.IdentityLevel[RegisterIdentityLevel-1].GetPublicKey()[:]...)
+	r.IdentityPreimage = append([]byte{0x01}, idSet.IdentityLevel[RegisterIdentityLevel-1].GetPublicKey()[:]...)
 
 	sigMsg := make([]byte, 0)
-	sigMsg = append(sigMsg, r.version[:]...)
-	sigMsg = append(sigMsg, r.message[:]...)
+	sigMsg = append(sigMsg, r.Version[:]...)
+	sigMsg = append(sigMsg, r.Message[:]...)
 	sigMsg = append(sigMsg, r.subChainID[:]...)
-	//sigMsg = append(sigMsg, r.identityPreimage[:]...)
+	//sigMsg = append(sigMsg, r.IdentityPreimage[:]...)
 
 	priv := idSet.IdentityLevel[RegisterIdentityLevel-1].GetPrivateKey()
-	r.signiture = ed.Sign(priv, sigMsg)[:]
+	r.Signiture = ed.Sign(priv, sigMsg)[:]
 
 	return r, nil
 }
 
 func (r *RegisterSubchain) extIDList() [][]byte {
 	list := make([][]byte, 0)
-	list = append(list, r.version)
-	list = append(list, r.message)
+	list = append(list, r.Version)
+	list = append(list, r.Message)
 	list = append(list, r.subChainID)
-	list = append(list, r.identityPreimage)
-	list = append(list, r.signiture)
+	list = append(list, r.IdentityPreimage)
+	list = append(list, r.Signiture)
 
 	return list
 }

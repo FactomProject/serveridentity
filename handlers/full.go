@@ -236,6 +236,10 @@ func fullStartElements(sid *functions.ServerIdentity) {
 	}
 	fmt.Println(a)
 
+	b, err := functions.RegisterServerIdentityElements(sid)
+
+	fmt.Println(b)
+
 	//modified to here so far
 
 	/*

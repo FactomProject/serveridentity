@@ -2,7 +2,6 @@ package functions
 
 import (
 	"encoding/hex"
-	//"fmt"
 	"github.com/FactomProject/serveridentity/identity"
 )
 
@@ -39,9 +38,7 @@ func CreateIdentityChainElements(sid *ServerIdentity) (string, error) {
 			elements += "-h "
 			elements += hex.EncodeToString(el)
 			elements += " "
-
 		}
-
 	}
 
 	sid.RootChainID = chain.ChainID
