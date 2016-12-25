@@ -2,7 +2,7 @@ package functions
 
 import (
 	"encoding/hex"
-	"fmt"
+	//"fmt"
 	"github.com/FactomProject/serveridentity/identity"
 )
 
@@ -27,13 +27,22 @@ func CreateIdentityChainElements(sid *ServerIdentity) (string, error) {
 		return "error", err
 	}
 
-	elements := make([]string, 0)
+	elements := ""
 
-	for _, el := range chain.FirstEntry.ExtIDs {
-		elements = append(elements, hex.EncodeToString(el))
+	for n, el := range chain.FirstEntry.ExtIDs {
+		if n == 1 || n == 6 {
+			elements += "-n \""
+			elements += string(el)
+			elements += "\" "
+
+		} else {
+			elements += "-h "
+			elements += hex.EncodeToString(el)
+			elements += " "
+
+		}
+
 	}
-
-	fmt.Println(elements)
 
 	sid.RootChainID = chain.ChainID
 	return elements, nil
