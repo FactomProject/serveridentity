@@ -230,25 +230,28 @@ func fullStartElements(sid *functions.ServerIdentity) {
 	if PRINT_OUT {
 		//PrintHeader("Root Chain Curls")
 	}
-	a, err := functions.CreateIdentityChainElements(sid)
+	ice, err := functions.CreateIdentityChainElements(sid)
 	if err != nil {
 		panic(err)
 	}
-	fmt.Println(a)
+	fmt.Println(ice)
+	icr, err := functions.RegisterServerIdentityElements(sid)
+	fmt.Println(icr)
 
-	b, err := functions.RegisterServerIdentityElements(sid)
-
-	fmt.Println(b)
+	if PRINT_OUT {
+		PrintHeader("Sub Chain Curls")
+	}
+	sce, err := functions.CreateSubChainElements(sid)
+	if err != nil {
+		panic(err)
+	}
+	fmt.Println(sce)
+	scr, err := functions.RegisterSubChainElements(sid)
+	fmt.Println(scr)
 
 	//modified to here so far
 
 	/*
-		registerIdentityChain(sid, PRINT_OUT)
-		if PRINT_OUT {
-			PrintHeader("Sub Chain Curls")
-		}
-		createSubChain(sid, PRINT_OUT)
-		registerSubChain(sid, PRINT_OUT)
 
 		random := rand.Reader
 		var r [20]byte
