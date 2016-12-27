@@ -26,7 +26,7 @@ func CreateIdentityChainElements(sid *ServerIdentity) (string, error) {
 		return "error", err
 	}
 
-	elements := ""
+	elements := "addchain "
 
 	for n, el := range chain.FirstEntry.ExtIDs {
 		if n == 1 || n == 6 {

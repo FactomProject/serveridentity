@@ -32,7 +32,7 @@ func RegisterServerIdentityElements(sid *ServerIdentity) (string, error) {
 		return "error", err
 	}
 
-	elements := ""
+	elements := "addentry "
 
 	listingValue := reflect.ValueOf(reg)
 	listingElem := listingValue.Elem()
@@ -40,16 +40,20 @@ func RegisterServerIdentityElements(sid *ServerIdentity) (string, error) {
 	for i := 0; i < listingElem.NumField(); i++ {
 		el := listingElem.Field(i)
 		if i == 1 {
-			elements += "-n \""
+			elements += "-e \""
 			elements += string(el.Interface().([]byte))
 			elements += "\" "
 
 		} else {
-			elements += "-h "
+			elements += "-x "
 			elements += hex.EncodeToString(el.Interface().([]byte))
 			elements += " "
 		}
 	}
+
+	elements += "-c "
+	elements += identity.RootRegisterChain
+	elements += " "
 
 	return elements, nil
 }

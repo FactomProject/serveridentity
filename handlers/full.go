@@ -53,7 +53,7 @@ func existingECFull(args []string) {
 	SCRIPTNAME = *filename
 	l := len(args[0])
 	if l != 64 && l != 52 {
-		fmt.Println("server identity full 'fresh'|ESAddress")
+		fmt.Println("serveridentity full 'fresh'|ESAddress")
 		fmt.Println("Invalid ES Address entered, exiting program...")
 		return
 	} else if l == 52 {
@@ -87,10 +87,27 @@ func elementsFull(args []string) {
 	filename := flag.String("n", "fullidentity", "Change the script name")
 	flag.Parse()
 	SCRIPTNAME = *filename
-	// Generate all new Keys
-	sid := generateKeysFromEC("Es2Rf7iM6PdsqfYCo3D1tnAR65SkLENyWJG1deUzpRMQmbh9F3eG", PRINT_OUT)
-	if sid == nil {
-		return
+	var sid *functions.ServerIdentity
+
+	if len(args) > 1 {
+		fmt.Println(args[1])
+		l := len(args[1])
+		if l != 52 {
+			fmt.Println("serveridentity elements ESAddress")
+			fmt.Println("Invalid ES Address entered, exiting program...")
+			return
+		} else {
+			// Generate all new Keys from EC
+			sid = generateKeysFromEC(args[1], PRINT_OUT)
+			if sid == nil {
+				return
+			}
+		}
+	} else {
+		sid = generateKeysFromEC("Es2Rf7iM6PdsqfYCo3D1tnAR65SkLENyWJG1deUzpRMQmbh9F3eG", PRINT_OUT)
+		if sid == nil {
+			return
+		}
 	}
 	fullStartElements(sid)
 }
@@ -223,6 +240,15 @@ func fullStart(sid *functions.ServerIdentity, garble bool) {
 
 }
 
+func cliFormat(cliCommand string, ECaddress string) string {
+	cliLine := "echo -n \"\" | factom-cli "
+	cliLine += cliCommand
+	cliLine += " "
+	cliLine += ECaddress
+
+	return cliLine
+}
+
 func fullStartElements(sid *functions.ServerIdentity) {
 	file = makeFile(SCRIPTNAME)
 	defer file.Close()
@@ -234,13 +260,13 @@ func fullStartElements(sid *functions.ServerIdentity) {
 	if err != nil {
 		panic(err)
 	}
-	fmt.Println(ice)
-	icr, err := functions.RegisterServerIdentityElements(sid)
-	fmt.Println(icr)
+	f := cliFormat(a, sid.ECAddr.String())
+	fmt.Println(f)
 
-	if PRINT_OUT {
-		PrintHeader("Sub Chain Curls")
-	}
+	icr, err := functions.RegisterServerIdentityElements(sid)
+	f = cliFormat(icr, sid.ECAddr.String())
+	fmt.Println(f)
+
 	sce, err := functions.CreateSubChainElements(sid)
 	if err != nil {
 		panic(err)
