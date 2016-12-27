@@ -34,11 +34,11 @@ func RegisterServerIdentityElements(sid *ServerIdentity) (string, error) {
 
 	elements := "addentry "
 
-	listingValue := reflect.ValueOf(reg)
-	listingElem := listingValue.Elem()
+	structValue := reflect.ValueOf(reg)
+	structElem := structValue.Elem()
 
-	for i := 0; i < listingElem.NumField(); i++ {
-		el := listingElem.Field(i)
+	for i := 0; i < structElem.NumField(); i++ {
+		el := structElem.Field(i)
 		if i == 1 {
 			elements += "-e \""
 			elements += string(el.Interface().([]byte))

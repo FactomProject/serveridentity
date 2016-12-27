@@ -198,24 +198,24 @@ func (i *RootChain) extIdList() [][]byte {
  **************************/
 
 type Subchain struct {
-	version     []byte
-	message     []byte
-	rootChainID []byte
-	nonce       []byte
+	Version     []byte
+	Message     []byte
+	RootChainID []byte
+	Nonce       []byte
 	ChainID     string
 }
 
 // Chain ID of root identity chain
 func MakeSubChain(chainID string) (*Subchain, error) {
 	sub := new(Subchain)
-	sub.version = []byte{0x00}
-	sub.message = []byte("Server Management")
+	sub.Version = []byte{0x00}
+	sub.Message = []byte("Server Management")
 	if root, err := hex.DecodeString(chainID); err != nil {
 		return nil, err
 	} else {
-		sub.rootChainID = root
+		sub.RootChainID = root
 	}
-	sub.nonce = findValidNonce(sub)
+	sub.Nonce = findValidNonce(sub)
 	sub.ChainID = hex.EncodeToString(calcChainID(sub))
 
 	return sub, nil
@@ -233,10 +233,10 @@ func (sub *Subchain) GetFactomChain() *factom.Chain {
 
 func (sub *Subchain) extIdList() [][]byte {
 	list := make([][]byte, 0)
-	list = append(list, sub.version)
-	list = append(list, sub.message)
-	list = append(list, sub.rootChainID)
-	list = append(list, sub.nonce)
+	list = append(list, sub.Version)
+	list = append(list, sub.Message)
+	list = append(list, sub.RootChainID)
+	list = append(list, sub.Nonce)
 
 	return list
 }
@@ -244,18 +244,18 @@ func (sub *Subchain) extIdList() [][]byte {
 func (sub *Subchain) upToNonce() []byte {
 	buf := new(bytes.Buffer)
 
-	result := sha256.Sum256(sub.version)
+	result := sha256.Sum256(sub.Version)
 	buf.Write(result[:])
 
-	result = sha256.Sum256(sub.message)
+	result = sha256.Sum256(sub.Message)
 	buf.Write(result[:])
 
-	result = sha256.Sum256(sub.rootChainID)
+	result = sha256.Sum256(sub.RootChainID)
 	buf.Write(result[:])
 
 	return buf.Bytes()
 }
 
 func (sub *Subchain) getNonce() []byte {
-	return sub.nonce
+	return sub.Nonce
 }

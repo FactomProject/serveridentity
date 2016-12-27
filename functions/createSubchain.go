@@ -5,7 +5,9 @@ package functions
  */
 
 import (
+	"encoding/hex"
 	"github.com/FactomProject/serveridentity/identity"
+	"reflect"
 )
 
 func CreateSubChain(sid *ServerIdentity) (string, string, error) {
@@ -32,20 +34,31 @@ func CreateSubChain(sid *ServerIdentity) (string, string, error) {
 func CreateSubChainElements(sid *ServerIdentity) (string, error) {
 	sub, err := identity.MakeSubChain(sid.RootChainID)
 	if err != nil {
-		return "error", "error", err
+		return "error", err
 	}
 
-	chain := sub.GetFactomChain()
-	strCom, err := identity.GetChainCommitString(chain, sid.ECAddr)
-	if err != nil {
-		return "error", "error", err
+	elements := "addchain "
+
+	structValue := reflect.ValueOf(sub)
+	structElem := structValue.Elem()
+
+	for i := 0; i < structElem.NumField(); i++ {
+		el := structElem.Field(i)
+		if i == 1 || i == 3 {
+			elements += "-n \""
+			elements += string(el.Interface().([]byte))
+			elements += "\" "
+
+		} else if i < 4 {
+			elements += "-h "
+			elements += hex.EncodeToString(el.Interface().([]byte))
+			elements += " "
+		} else if i == 4 {
+			elements += "-c "
+			elements += string(el.Interface().(string))
+			elements += " "
+		}
 	}
 
-	strRev, err := identity.GetChainRevealString(chain)
-	if err != nil {
-		return "error", "error", err
-	}
-
-	sid.SubChainID = chain.ChainID
-	return CurlWrapPOST(strCom), CurlWrapPOST(strRev), nil
+	return elements, nil
 }

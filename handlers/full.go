@@ -260,10 +260,13 @@ func fullStartElements(sid *functions.ServerIdentity) {
 	if err != nil {
 		panic(err)
 	}
-	f := cliFormat(a, sid.ECAddr.String())
+	f := cliFormat(ice, sid.ECAddr.String())
 	fmt.Println(f)
 
 	icr, err := functions.RegisterServerIdentityElements(sid)
+	if err != nil {
+		panic(err)
+	}
 	f = cliFormat(icr, sid.ECAddr.String())
 	fmt.Println(f)
 
@@ -271,10 +274,14 @@ func fullStartElements(sid *functions.ServerIdentity) {
 	if err != nil {
 		panic(err)
 	}
-	fmt.Println(sce)
+	f = cliFormat(sce, sid.ECAddr.String())
+	fmt.Println(f)
 	scr, err := functions.RegisterSubChainElements(sid)
-	fmt.Println(scr)
-
+	if err != nil {
+		panic(err)
+	}
+	f = cliFormat(scr, sid.ECAddr.String())
+	fmt.Println(f)
 	//modified to here so far
 
 	/*
