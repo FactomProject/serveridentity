@@ -96,7 +96,7 @@ func MakeRegisterSubchain(idSet *IdentitySet, chainID string) (*RegisterSubchain
 	return r, nil
 }
 
-func (r *RegisterSubchain) extIDList() [][]byte {
+func (r *RegisterSubchain) ExtIDList() [][]byte {
 	list := make([][]byte, 0)
 	list = append(list, r.Version)
 	list = append(list, r.Message)
@@ -110,7 +110,7 @@ func (r *RegisterSubchain) extIDList() [][]byte {
 func (r *RegisterSubchain) GetEntry(rootChainID string) *factom.Entry {
 	e := new(factom.Entry)
 	e.ChainID = rootChainID
-	e.ExtIDs = r.extIDList()
+	e.ExtIDs = r.ExtIDList()
 	e.Content = []byte{}
 
 	return e

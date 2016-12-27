@@ -60,5 +60,7 @@ func CreateSubChainElements(sid *ServerIdentity) (string, error) {
 		}
 	}
 
+	sid.SubChainID = sub.ChainID
+
 	return elements, nil
 }

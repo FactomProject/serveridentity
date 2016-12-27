@@ -1,6 +1,7 @@
 package functions
 
 import (
+	"encoding/hex"
 	"github.com/FactomProject/serveridentity/identity"
 )
 
@@ -30,18 +31,24 @@ func RegisterSubChainElements(sid *ServerIdentity) (string, error) {
 		return "error", err
 	}
 
-	e := reg.GetEntry(sid.RootChainID)
-	strCom, err := identity.GetEntryCommitString(e, sid.ECAddr)
-	if err != nil {
-		return "error", err
+	elements := "addentry "
+
+	for i, el := range reg.ExtIDList() {
+		if i == 1 {
+			elements += "-e \""
+			elements += string(el)
+			elements += "\" "
+
+		} else {
+			elements += "-x "
+			elements += hex.EncodeToString(el)
+			elements += " "
+		}
 	}
 
-	strRev, err := identity.GetEntryRevealString(e)
-	if err != nil {
-		return "error", err
-	}
+	elements += "-c "
+	elements += sid.RootChainID
+	elements += " "
 
-	_ = strCom
-	_ = strRev
-	return "", nil
+	return elements, nil
 }
