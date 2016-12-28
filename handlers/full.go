@@ -282,6 +282,21 @@ func fullStartElements(sid *functions.ServerIdentity) {
 	}
 	f = cliFormat(scr, sid.ECAddr.String())
 	fmt.Println(f)
+	
+	bse, err := functions.CreateNewBlockSignEntryElements(sid)
+	if err != nil {
+		panic(err)
+	}
+	f = cliFormat(bse, sid.ECAddr.String())
+	fmt.Println(f)
+	fmt.Println("nowcmd=\"printf '%016x' $(date +%s)\"")
+	fmt.Println("now=eval $nowcmd")
+	unsignedUntimedBse, _ := functions.CreateNewBlockSignEntryUnsigned(sid)
+	fmt.Printf("sig=signwithed25519 %s$now %s", unsignedUntimedBse, "output the privatekey to sign with") 
+
+	//strCom, strRev, newPriv, err := functions.CreateNewBlockSignEntry(sid.RootChainID, sid.SubChainID, priv, sid.ECAddr)
+	
+	
 	//modified to here so far
 
 	/*
