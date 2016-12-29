@@ -57,7 +57,7 @@ func SignatureOfMessage(args []string) string {
 	}
 
 	privateKey := new([ed.PrivateKeySize]byte)
-	copy(privateKey[:32], sec[:32])
+	copy(privateKey[:ed.PrivateKeySize], sec[:ed.PrivateKeySize])
 
 	// Get public key bytes
 	var _ = ed.GetPublicKey(privateKey)
