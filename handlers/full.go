@@ -6,6 +6,7 @@ import (
 	"flag"
 	"fmt"
 	"github.com/FactomProject/cli"
+	ed "github.com/FactomProject/ed25519"
 	"github.com/FactomProject/serveridentity/functions"
 	"github.com/FactomProject/serveridentity/identity"
 	"io"
@@ -260,28 +261,25 @@ func fullStartElements(sid *functions.ServerIdentity) {
 	if err != nil {
 		panic(err)
 	}
-	f := cliFormat(ice, sid.ECAddr.String())
-	fmt.Println(f)
+	fice := cliFormat(ice, sid.ECAddr.String())
 
 	icr, err := functions.RegisterServerIdentityElements(sid)
 	if err != nil {
 		panic(err)
 	}
-	f = cliFormat(icr, sid.ECAddr.String())
-	fmt.Println(f)
+	ficr := cliFormat(icr, sid.ECAddr.String())
 
 	sce, err := functions.CreateSubChainElements(sid)
 	if err != nil {
 		panic(err)
 	}
-	f = cliFormat(sce, sid.ECAddr.String())
-	fmt.Println(f)
+	fsce := cliFormat(sce, sid.ECAddr.String())
+
 	scr, err := functions.RegisterSubChainElements(sid)
 	if err != nil {
 		panic(err)
 	}
-	f = cliFormat(scr, sid.ECAddr.String())
-	fmt.Println(f)
+	fscr := cliFormat(scr, sid.ECAddr.String())
 
 	p := sid.IDSet.IdentityLevel[0].GetPrivateKey()
 	lowestLevelSigningKey := p[:32]
@@ -292,13 +290,26 @@ func fullStartElements(sid *functions.ServerIdentity) {
 		panic(err)
 	}
 
-	fmt.Println("now=$(printf '%016x' $(date +%s))")
-
 	unsignedUntimedBse, _ := functions.CreateNewBlockSignEntryUnsigned(sid, bsPriv)
-	fmt.Printf("sig=$(signwithed25519 %s$now %s)\n", unsignedUntimedBse, lowestLevelSigningKeyHex)
 
-	f = cliFormat(bse, sid.ECAddr.String())
-	fmt.Println(f)
+	fbse := cliFormat(bse, sid.ECAddr.String())
+
+	bsPrivHex := fmt.Sprintf("%032x", bsPriv)
+	fmt.Printf("block signing private key: %s\n", bsPrivHex)
+
+	var priv [64]byte
+	copy(priv[:32], bsPriv[:32])
+	bsPub := ed.GetPublicKey(&priv)
+	fmt.Printf("block signing public key: %032x\n", *bsPub)
+	fmt.Println()
+
+	fmt.Println(fice)
+	fmt.Println(ficr)
+	fmt.Println(fsce)
+	fmt.Println(fscr)
+	fmt.Println("now=$(printf '%016x' $(date +%s))")
+	fmt.Printf("sig=$(signwithed25519 %s$now %s)\n", unsignedUntimedBse, lowestLevelSigningKeyHex)
+	fmt.Println(fbse)
 
 	//strCom, strRev, newPriv, err := functions.CreateNewBlockSignEntry(sid.RootChainID, sid.SubChainID, priv, sid.ECAddr)
 
