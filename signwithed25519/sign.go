@@ -1,4 +1,4 @@
-package signwithed25519
+package main
 
 import (
 	"encoding/hex"
