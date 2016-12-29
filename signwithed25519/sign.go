@@ -11,11 +11,6 @@ import (
 var _ = fmt.Sprintf("")
 
 func main() {
-	// Flags
-	var (
-	// example      = flag.String("flagex", "defaultval", "Example description")
-	)
-
 	flag.Parse()
 
 	// Arg[0] = {MESSAGE_IN_HEX}
@@ -57,7 +52,7 @@ func SignatureOfMessage(args []string) string {
 	}
 
 	privateKey := new([ed.PrivateKeySize]byte)
-	copy(privateKey[:ed.PrivateKeySize], sec[:ed.PrivateKeySize])
+	copy(privateKey[:32], sec[:32])
 
 	// Get public key bytes
 	var _ = ed.GetPublicKey(privateKey)
