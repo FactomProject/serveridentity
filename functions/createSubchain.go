@@ -53,10 +53,6 @@ func CreateSubChainElements(sid *ServerIdentity) (string, error) {
 			elements += "-h "
 			elements += hex.EncodeToString(el.Interface().([]byte))
 			elements += " "
-		} else if i == 4 {
-			elements += "-c "
-			elements += string(el.Interface().(string))
-			elements += " "
 		}
 	}
 

@@ -38,3 +38,23 @@ func CreateNewBlockSignEntry(rootChainID string, subChainID string, levelAbovePr
 
 	return CurlWrapPOST(strCom), CurlWrapPOST(strRev), newPriv, nil
 }
+
+func CreateNewBlockSignEntryElements(sid *ServerIdentity) (string, error) {
+	elements := "addentry -x 00 -e \"New Block Signing Key\" -x "
+	elements += sid.RootChainID
+	elements += " -x "
+	elements += " %%%identity key here%%% "
+	elements += " -x $now -x $sig"
+	
+	elements += " -c "
+	elements += sid.SubChainID
+	return elements, nil
+}
+
+func CreateNewBlockSignEntryUnsigned(sid *ServerIdentity) (string, error) {
+	elements := "004E657720426C6F636B205369676E696E67204B6579"
+	elements += sid.RootChainID
+	elements += " %%%identity key here%%% "
+	return elements, nil
+}
+
