@@ -1,6 +1,8 @@
 package functions
 
 import (
+	"crypto/rand"
+	"fmt"
 	ed "github.com/FactomProject/ed25519"
 	"github.com/FactomProject/factom"
 	"github.com/FactomProject/serveridentity/identity"
@@ -39,22 +41,28 @@ func CreateNewBlockSignEntry(rootChainID string, subChainID string, levelAbovePr
 	return CurlWrapPOST(strCom), CurlWrapPOST(strRev), newPriv, nil
 }
 
-func CreateNewBlockSignEntryElements(sid *ServerIdentity) (string, error) {
+func CreateNewBlockSignEntryElements(sid *ServerIdentity) (string, []byte, error) {
+	pub, priv, err := ed.GenerateKey(rand.Reader)
+	if err != nil {
+		return "", nil, err
+	}
+	blockSigningPubkey := pub[:32]
+	blockSigningPrivatekey := priv[:32]
+
 	elements := "addentry -x 00 -e \"New Block Signing Key\" -x "
 	elements += sid.RootChainID
 	elements += " -x "
-	elements += " %%%identity key here%%% "
+	elements += fmt.Sprintf("%032x", blockSigningPubkey)
 	elements += " -x $now -x $sig"
-	
+
 	elements += " -c "
 	elements += sid.SubChainID
-	return elements, nil
+	return elements, blockSigningPrivatekey, nil
 }
 
-func CreateNewBlockSignEntryUnsigned(sid *ServerIdentity) (string, error) {
-	elements := "004E657720426C6F636B205369676E696E67204B6579"
+func CreateNewBlockSignEntryUnsigned(sid *ServerIdentity, blockSigningPubkey []byte) (string, error) {
+	elements := "004E657720426C6F636B205369676E696E67204B6579" //00 and ascii New Block Signing Key
 	elements += sid.RootChainID
-	elements += " %%%identity key here%%% "
+	elements += fmt.Sprintf("%032x", blockSigningPubkey)
 	return elements, nil
 }
-

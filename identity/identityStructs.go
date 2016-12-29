@@ -23,7 +23,7 @@ var (
 	pubPrefix4  = [3]byte{0x3f, 0xbf, 0x14}
 )
 
-// Individual component in an IdentitySet
+// Individual component level in an IdentitySet
 type Identity struct {
 	privateKey  *[ed.PrivateKeySize]byte
 	publicKey   *[ed.PublicKeySize]byte
