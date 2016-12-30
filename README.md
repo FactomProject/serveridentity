@@ -89,7 +89,7 @@ serveridentity get pubkey PRIVATEKEY
 serveridentity get idkey PRIVATEKEY
 ```
 
-* Example: ``` serveridentity get pubkey sk11pz4AG9XgB1eNVkbppYAWsgyg7sftDXqBASsagKJqvVRKYodCU ```
+* Example: ``` serveridentity get idkey sk11pz4AG9XgB1eNVkbppYAWsgyg7sftDXqBASsagKJqvVRKYodCU ```
 
 
 ## Get Bitcoin Hash160 from Public key
@@ -97,4 +97,4 @@ serveridentity get idkey PRIVATEKEY
 serveridentity get btckey BTCKEY
 ```
 
-* Example: ``` serveridentity get pubkey 1BvBMSEYstWetqTFn5Au4m4GFg7xJaNVN2 ```
+* Example: ``` serveridentity get btckey 1BvBMSEYstWetqTFn5Au4m4GFg7xJaNVN2 ```

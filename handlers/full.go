@@ -242,6 +242,31 @@ func fullStartElements(sid *functions.ServerIdentity) {
 	fmt.Printf("block signing public key: %032x\n", *bsPub)
 	fmt.Println()
 
+	// Create a Bitcoin Key
+	random := rand.Reader
+	var r [20]byte
+	_, _ = io.ReadFull(random, r[:20])
+	btcKeyHex := r[:20]
+
+	fmt.Printf("BTC Key: %x\n", btcKeyHex)
+
+	bke, err := functions.CreateNewBitcoinKeyElements(sid.RootChainID, sid.SubChainID, 0, 0, btcKeyHex, lowestLevelSigningKey, sid.ECAddr)
+	if err != nil {
+		panic(err)
+	}
+
+	fbke := cliFormat(bke, sid.ECAddr.String())
+
+	unsignedUntimesBKe, err := functions.CreateNewBitcoinKeyElementsUnsigned(sid.RootChainID, sid.SubChainID, 0, 0, btcKeyHex, lowestLevelSigningKey, sid.ECAddr)
+	if err != nil {
+		panic(err)
+	}
+
+	PrintHeader("Factom-cli commands")
+	/*****************************
+	 * Begin factom-cli commands *
+	 *****************************/
+
 	// factom-cli commands to be run will be outputted to the script. Default name is 'fullidentity.sh'
 	fileText := ""
 
@@ -258,16 +283,25 @@ func fullStartElements(sid *functions.ServerIdentity) {
 	fmt.Println(fscr)
 	fileText += fscr + "\n"
 
-	// Block signing key
+	// Declare now
 	nowBash := "now=$(printf '%016x' $(date +%s))"
+	fileText += nowBash + "\n"
+	// Block signing key
 	fmt.Println(nowBash)
-	sigBash := fmt.Sprintf("sig=$(signwithed25519 %s$now %s)\n", unsignedUntimedBse, lowestLevelSigningKeyHex)
-	fmt.Printf(sigBash)
+	sigBashBlock := fmt.Sprintf("sig=$(signwithed25519 %s$now %s)\n", unsignedUntimedBse, lowestLevelSigningKeyHex)
+	fmt.Printf(sigBashBlock)
 	fmt.Println(fbse)
 
-	fileText += nowBash + "\n"
-	fileText += sigBash
+	fileText += sigBashBlock
 	fileText += fbse + "\n"
+
+	// Bitcoin Key
+	sigBashBTC := fmt.Sprintf("sigBTC=$(signwithed25519 %s$now %s)\n", unsignedUntimesBKe, lowestLevelSigningKeyHex)
+	fmt.Printf(sigBashBTC)
+	fmt.Println(fbke)
+
+	fileText += sigBashBTC
+	fileText += fbke + "\n"
 
 	// Write fileText to file
 	file.WriteString(fileText)

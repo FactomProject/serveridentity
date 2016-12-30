@@ -53,7 +53,11 @@ func CreateNewBlockSignEntryElements(sid *ServerIdentity) (string, []byte, error
 	elements += sid.RootChainID
 	elements += " -x "
 	elements += fmt.Sprintf("%032x", blockSigningPubkey)
-	elements += " -x $now -x $sig"
+	elements += " -x $now"
+	idKey := *(sid.IDSet.IdentityLevel[0].GetPublicKey())
+	preImage := append([]byte{0x01}, idKey[:]...)
+	elements += fmt.Sprintf(" -x %x", preImage)
+	elements += " -x $sig"
 
 	elements += " -c "
 	elements += sid.SubChainID
