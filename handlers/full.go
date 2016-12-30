@@ -80,6 +80,8 @@ func freshFull(args []string) {
 	fullStart(sid)
 }
 
+var PRINT_CLI bool = true
+
 func elementsFull(args []string) {
 	if len(args) > 1 {
 		os.Args = args[1:]
@@ -87,7 +89,9 @@ func elementsFull(args []string) {
 		os.Args = args
 	}
 	filename := flag.String("n", "fullidentity", "Change the script name")
+	printCLI := flag.Bool("p", true, "Print factom-cli commands")
 	flag.Parse()
+	PRINT_CLI = *printCLI
 	SCRIPTNAME = *filename
 	var sid *functions.ServerIdentity
 
@@ -288,7 +292,9 @@ func fullStartElements(sid *functions.ServerIdentity) {
 		panic(err)
 	}
 
-	PrintHeader("Factom-cli commands")
+	if PRINT_CLI {
+		PrintHeader("Factom-cli commands")
+	}
 	/*****************************
 	 * Begin factom-cli commands *
 	 *****************************/
@@ -297,42 +303,42 @@ func fullStartElements(sid *functions.ServerIdentity) {
 	fileText := ""
 
 	// "Identity Chain"
-	fmt.Println(fice)
+	Print(fice + "\n")
 	fileText += fice + "\n"
 	// "Register Factom Identity"
-	fmt.Println(ficr)
+	Print(ficr + "\n")
 	fileText += ficr + "\n"
 	// "Server Management"
-	fmt.Println(fsce)
+	Print(fsce + "\n")
 	fileText += fsce + "\n"
 	// "Register Server Management"
-	fmt.Println(fscr)
+	Print(fscr + "\n")
 	fileText += fscr + "\n"
 
 	// Declare now
 	nowBash := "now=$(printf '%016x' $(date +%s))"
 	fileText += nowBash + "\n"
 	// Block signing key
-	fmt.Println(nowBash)
+	Print(nowBash + "\n")
 	sigBashBlock := fmt.Sprintf("sig=$(signwithed25519 %s$now %s)\n", unsignedUntimedBse, lowestLevelSigningKeyHex)
-	fmt.Printf(sigBashBlock)
-	fmt.Println(fbse)
+	Print(sigBashBlock)
+	Print(fbse + "\n")
 
 	fileText += sigBashBlock
 	fileText += fbse + "\n"
 
 	// Bitcoin Key
 	sigBashBTC := fmt.Sprintf("sigBTC=$(signwithed25519 %s$now %s)\n", unsignedUntimesBKe, lowestLevelSigningKeyHex)
-	fmt.Printf(sigBashBTC)
-	fmt.Println(fbke)
+	Print(sigBashBTC)
+	Print(fbke + "\n")
 
 	fileText += sigBashBTC
 	fileText += fbke + "\n"
 
 	// MHash
 	sigBashMHash := fmt.Sprintf("sigMHASH=$(signwithed25519 %s$now %s)\n", unsignedUntimesMHe, lowestLevelSigningKeyHex)
-	fmt.Printf(sigBashMHash)
-	fmt.Println(fmhe)
+	Print(sigBashMHash)
+	Print(fmhe + "\n")
 
 	fileText += sigBashMHash
 	fileText += fmhe + "\n"
@@ -348,5 +354,10 @@ func fullStartElements(sid *functions.ServerIdentity) {
 	configFileText += bsPubHex
 	configFileText += "\n"
 	configfile.WriteString(configFileText)
+}
 
+func Print(str string) {
+	if PRINT_CLI {
+		fmt.Print(str)
+	}
 }

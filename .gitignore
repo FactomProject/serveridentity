@@ -10,3 +10,4 @@ setup2.sh
 /Scripts/hammer.sh
 setup3.sh
 *.conf
+/ids/*
