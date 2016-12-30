@@ -49,7 +49,6 @@ func existingECFull(args []string) {
 	}
 	os.Args = args
 	filename := flag.String("n", "fullidentity", "Change the script name")
-	garble := flag.Bool("b", false, "Make incorrect entries")
 	flag.Parse()
 	SCRIPTNAME = *filename
 	l := len(args[0])
@@ -63,7 +62,7 @@ func existingECFull(args []string) {
 		if sid == nil {
 			return
 		}
-		fullStart(sid, *garble)
+		fullStart(sid)
 	} else if l == 64 {
 		fmt.Println("Only base58 human readable key accepted.")
 	}
@@ -72,7 +71,6 @@ func existingECFull(args []string) {
 func freshFull(args []string) {
 	os.Args = args
 	filename := flag.String("n", "fullidentity", "Change the script name")
-	garble := flag.Bool("b", false, "Make incorrect entries")
 	flag.Parse()
 	SCRIPTNAME = *filename
 	// Generate all new Keys
@@ -80,7 +78,7 @@ func freshFull(args []string) {
 	if sid == nil {
 		return
 	}
-	fullStart(sid, *garble)
+	fullStart(sid)
 }
 
 func elementsFull(args []string) {
@@ -113,10 +111,7 @@ func elementsFull(args []string) {
 	fullStartElements(sid)
 }
 
-func fullStart(sid *functions.ServerIdentity, garble bool) {
-	if garble {
-		fmt.Println("Incorrect curls also provided")
-	}
+func fullStart(sid *functions.ServerIdentity) {
 	file = makeFile(SCRIPTNAME)
 	defer file.Close()
 	var bar string
@@ -183,62 +178,6 @@ func fullStart(sid *functions.ServerIdentity, garble bool) {
 	file.WriteString("echo  \n")
 	file.WriteString("echo  MHashSeed: " + sid.RootChainID + "\n")
 	file.WriteString("echo  MHash: " + mHash + "\n")
-
-	if garble {
-		PrintHeader("GARBLE: Wrong Key")
-		p = sid.IDSet.IdentityLevel[2].GetPrivateKey()
-		priv = p[:32]
-
-		file.WriteString("sleep 1\n")
-
-		strCom, strRev, err = functions.CreateNewBitcoinKey(sid.RootChainID, sid.SubChainID, 0, 0, btcKeyHex, priv, sid.ECAddr)
-		if err != nil {
-			//panic(err)
-		}
-		writeCurlCmd(file, "New Bitcoin Key", strCom, strRev)
-
-		strCom, strRev, newPriv, err = functions.CreateNewBlockSignEntry(sid.RootChainID, sid.SubChainID, priv, sid.ECAddr)
-		if err != nil {
-			//panic(err)
-		}
-		writeCurlCmd(file, "New Block Signing Key", strCom, strRev)
-
-		strCom, strRev, mhash, err := functions.CreateNewMHash(sid.RootChainID, sid.SubChainID, priv, sid.RootChainID, sid.ECAddr)
-		if err != nil {
-			//panic(err)
-		}
-		writeCurlCmd(file, "New Matryoshka Hash", strCom, strRev)
-
-		PrintHeader("GARBLE: Bad Key & BTC KEY")
-		btcKeyHex = []byte{0x00, 0x00, 0x00}
-		p = sid.IDSet.IdentityLevel[0].GetPrivateKey()
-		priv = p[1:33]
-
-		file.WriteString("sleep 1\n")
-
-		strCom, strRev, err = functions.CreateNewBitcoinKey(sid.RootChainID, sid.SubChainID, 0, 0, btcKeyHex, priv, sid.ECAddr)
-		if err != nil {
-			//panic(err)
-		}
-		writeCurlCmd(file, "New Bitcoin Key", strCom, strRev)
-
-		strCom, strRev, newPriv, err = functions.CreateNewBlockSignEntry(sid.RootChainID, sid.SubChainID, priv, sid.ECAddr)
-		if err != nil {
-			//panic(err)
-		}
-		writeCurlCmd(file, "New Block Signing Key", strCom, strRev)
-
-		strCom, strRev, mhash, err = functions.CreateNewMHash(sid.RootChainID, sid.SubChainID, priv, sid.RootChainID, sid.ECAddr)
-		if err != nil {
-			//panic(err)
-		}
-		writeCurlCmd(file, "New Matryoshka Hash", strCom, strRev)
-		file.WriteString("echo  \n")
-		file.WriteString("echo  BTC Key: " + hex.EncodeToString(btcKeyHex) + "\n")
-		file.WriteString("echo  Block Signing Key: " + hex.EncodeToString(newPriv) + "\n")
-		file.WriteString("echo  MHash: " + mhash + "\n")
-	}
-
 }
 
 func cliFormat(cliCommand string, ECaddress string) string {
@@ -303,13 +242,35 @@ func fullStartElements(sid *functions.ServerIdentity) {
 	fmt.Printf("block signing public key: %032x\n", *bsPub)
 	fmt.Println()
 
+	// factom-cli commands to be run will be outputted to the script. Default name is 'fullidentity.sh'
+	fileText := ""
+
+	// "Identity Chain"
 	fmt.Println(fice)
+	fileText += fice + "\n"
+	// "Register Factom Identity"
 	fmt.Println(ficr)
+	fileText += ficr + "\n"
+	// "Server Management"
 	fmt.Println(fsce)
+	fileText += fsce + "\n"
+	// "Register Server Management"
 	fmt.Println(fscr)
-	fmt.Println("now=$(printf '%016x' $(date +%s))")
-	fmt.Printf("sig=$(signwithed25519 %s$now %s)\n", unsignedUntimedBse, lowestLevelSigningKeyHex)
+	fileText += fscr + "\n"
+
+	// Block signing key
+	nowBash := "now=$(printf '%016x' $(date +%s))"
+	fmt.Println(nowBash)
+	sigBash := fmt.Sprintf("sig=$(signwithed25519 %s$now %s)\n", unsignedUntimedBse, lowestLevelSigningKeyHex)
+	fmt.Printf(sigBash)
 	fmt.Println(fbse)
+
+	fileText += nowBash + "\n"
+	fileText += sigBash
+	fileText += fbse + "\n"
+
+	// Write fileText to file
+	file.WriteString(fileText)
 
 	//strCom, strRev, newPriv, err := functions.CreateNewBlockSignEntry(sid.RootChainID, sid.SubChainID, priv, sid.ECAddr)
 
