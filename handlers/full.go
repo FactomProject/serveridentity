@@ -82,7 +82,11 @@ func freshFull(args []string) {
 }
 
 func elementsFull(args []string) {
-	os.Args = args
+	if len(args) > 1 {
+		os.Args = args[1:]
+	} else {
+		os.Args = args
+	}
 	filename := flag.String("n", "fullidentity", "Change the script name")
 	flag.Parse()
 	SCRIPTNAME = *filename
