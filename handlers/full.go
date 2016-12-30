@@ -195,7 +195,7 @@ func cliFormat(cliCommand string, ECaddress string) string {
 func fullStartElements(sid *functions.ServerIdentity) {
 	file := makeFile(SCRIPTNAME + ".sh")
 	defer file.Close()
-	configfile := makeFile(SCRIPTNAME + ".config")
+	configfile := makeFile(SCRIPTNAME + ".conf")
 	defer configfile.Close()
 
 	PrintHeader("Creating Identity Chains/Keys")

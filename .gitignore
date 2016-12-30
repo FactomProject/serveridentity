@@ -9,3 +9,4 @@ setup2.sh
 /Scripts/i/*.sh
 /Scripts/hammer.sh
 setup3.sh
+*.conf
