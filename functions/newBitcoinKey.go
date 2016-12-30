@@ -58,7 +58,7 @@ func CreateNewBitcoinKeyElementsUnsigned(rootChainID string, subChainID string, 
 	e := btcKeyStruct.GetEntry()
 	var toTimestamp []byte
 
-	for _, exID := range e.ExtIDs[:5] {
+	for _, exID := range e.ExtIDs[:6] {
 		toTimestamp = append(toTimestamp, exID[:]...)
 	}
 

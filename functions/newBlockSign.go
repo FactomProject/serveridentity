@@ -41,10 +41,10 @@ func CreateNewBlockSignEntry(rootChainID string, subChainID string, levelAbovePr
 	return CurlWrapPOST(strCom), CurlWrapPOST(strRev), newPriv, nil
 }
 
-func CreateNewBlockSignEntryElements(sid *ServerIdentity) (string, []byte, error) {
+func CreateNewBlockSignEntryElements(sid *ServerIdentity) (string, []byte, []byte, error) {
 	pub, priv, err := ed.GenerateKey(rand.Reader)
 	if err != nil {
-		return "", nil, err
+		return "", nil, nil, err
 	}
 	blockSigningPubkey := pub[:32]
 	blockSigningPrivatekey := priv[:32]
@@ -61,7 +61,7 @@ func CreateNewBlockSignEntryElements(sid *ServerIdentity) (string, []byte, error
 
 	elements += " -c "
 	elements += sid.SubChainID
-	return elements, blockSigningPrivatekey, nil
+	return elements, blockSigningPrivatekey, blockSigningPubkey, nil
 }
 
 func CreateNewBlockSignEntryUnsigned(sid *ServerIdentity, blockSigningPubkey []byte) (string, error) {

@@ -17,7 +17,7 @@ import (
  ********************************/
 var Get = func() *sevCmd {
 	cmd := new(sevCmd)
-	cmd.helpMsg = "serveridentity get pubkey|idkey KEY"
+	cmd.helpMsg = "serveridentity get pubkey|idkey|btc|privkey KEY"
 	cmd.description = "Get a public key or identity key from a private key"
 	cmd.execFunc = func(args []string) {
 		os.Args = args
@@ -27,6 +27,7 @@ var Get = func() *sevCmd {
 		c.Handle("pubkey", gpubKey)
 		c.Handle("idkey", gidKey)
 		c.Handle("btckey", gbtcKey)
+		c.Handle("privkey", gprivKey)
 		c.HandleDefaultFunc(func(args []string) {
 			fmt.Println(cmd.helpMsg)
 		})
@@ -69,6 +70,24 @@ var gpubKey = func() *sevCmd {
 
 	}
 	Help.Add("Get a public key from a private key", cmd)
+	return cmd
+}()
+
+var gprivKey = func() *sevCmd {
+	cmd := new(sevCmd)
+	cmd.helpMsg = "serveridentity get priv KEY"
+	cmd.description = "Get the private key hex from a SK# key"
+	cmd.execFunc = func(args []string) {
+		os.Args = args
+		flag.Parse()
+		if len(args) < 2 {
+			fmt.Println("No key given, 'serveridentity get privkey KEY'")
+			return
+		}
+		getPrivateKeyHex(args[1])
+
+	}
+	Help.Add("Get the private key hex from a SK# key", cmd)
 	return cmd
 }()
 
@@ -151,6 +170,30 @@ func getIDKey(key string) {
 		i := identity.NewIdentity()
 		i.GenerateIdentityFromPrivateKey(priv, lev)
 		fmt.Println(i.HumanReadableIdentity())
+	} else {
+		if len(key) != 53 {
+			fmt.Println("Error: Invalid private key length")
+		} else if strings.Compare(key[:2], "sk") != 0 {
+			fmt.Println("Error: Invalid private key prefix")
+		} else {
+			fmt.Println("Error: Invalid private key")
+		}
+	}
+}
+
+func getPrivateKeyHex(key string) {
+	PrintBanner()
+	if len(key) == 53 && strings.Compare(key[:2], "sk") == 0 {
+		if lev, err := strconv.Atoi(key[2:3]); err != nil {
+			fmt.Println("Error in input: " + err.Error())
+			return
+		} else if lev < 1 || lev > 4 {
+			fmt.Println("Error: Key level is outside range (1-4)")
+			return
+		}
+
+		_, priv := getPrivateKey(key)
+		fmt.Printf("Private Key Hex: %x\n", priv[:32])
 	} else {
 		if len(key) != 53 {
 			fmt.Println("Error: Invalid private key length")

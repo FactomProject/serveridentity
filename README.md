@@ -91,6 +91,12 @@ serveridentity get idkey PRIVATEKEY
 
 * Example: ``` serveridentity get idkey sk11pz4AG9XgB1eNVkbppYAWsgyg7sftDXqBASsagKJqvVRKYodCU ```
 
+## Get Private Key Hex from Private Sk# Key
+```
+serveridentity get privkey PRIVATEKEY
+```
+
+* Example: ``` serveridentity get privkey sk11pz4AG9XgB1eNVkbppYAWsgyg7sftDXqBASsagKJqvVRKYodCU ```
 
 ## Get Bitcoin Hash160 from Public key
 ```

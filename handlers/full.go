@@ -92,7 +92,7 @@ func elementsFull(args []string) {
 		fmt.Println(args[1])
 		l := len(args[1])
 		if l != 52 {
-			fmt.Println("serveridentity elements ESAddress")
+			fmt.Println("serveridentity full elements ESAddress")
 			fmt.Println("Invalid ES Address entered, exiting program...")
 			return
 		} else {
@@ -193,9 +193,7 @@ func fullStartElements(sid *functions.ServerIdentity) {
 	file = makeFile(SCRIPTNAME)
 	defer file.Close()
 	//	var bar string
-	if PRINT_OUT {
-		//PrintHeader("Root Chain Curls")
-	}
+	PrintHeader("Creating Identity Chains/Keys")
 	ice, err := functions.CreateIdentityChainElements(sid)
 	if err != nil {
 		panic(err)
@@ -220,16 +218,21 @@ func fullStartElements(sid *functions.ServerIdentity) {
 	}
 	fscr := cliFormat(scr, sid.ECAddr.String())
 
+	fmt.Println("Root Chain: " + sid.RootChainID)
+	fmt.Println("Management Chain: " + sid.RootChainID)
+	fmt.Println()
+
 	p := sid.IDSet.IdentityLevel[0].GetPrivateKey()
 	lowestLevelSigningKey := p[:32]
 	lowestLevelSigningKeyHex := fmt.Sprintf("%032x", lowestLevelSigningKey)
 
-	bse, bsPriv, err := functions.CreateNewBlockSignEntryElements(sid)
+	// Block signing key
+	bse, bsPriv, bsPublic, err := functions.CreateNewBlockSignEntryElements(sid)
 	if err != nil {
 		panic(err)
 	}
 
-	unsignedUntimedBse, _ := functions.CreateNewBlockSignEntryUnsigned(sid, bsPriv)
+	unsignedUntimedBse, _ := functions.CreateNewBlockSignEntryUnsigned(sid, bsPublic)
 
 	fbse := cliFormat(bse, sid.ECAddr.String())
 
@@ -258,6 +261,26 @@ func fullStartElements(sid *functions.ServerIdentity) {
 	fbke := cliFormat(bke, sid.ECAddr.String())
 
 	unsignedUntimesBKe, err := functions.CreateNewBitcoinKeyElementsUnsigned(sid.RootChainID, sid.SubChainID, 0, 0, btcKeyHex, lowestLevelSigningKey, sid.ECAddr)
+	if err != nil {
+		panic(err)
+	}
+
+	// New MHash
+	randomSeed := rand.Reader
+	var rS [20]byte
+	_, _ = io.ReadFull(randomSeed, rS[:20])
+	seed := fmt.Sprintf("%x", rS[:20])
+
+	fmt.Printf("MHash Seed (hex): %x\n", seed)
+
+	mhe, err := functions.CreateNewMHashElements(sid.RootChainID, sid.SubChainID, lowestLevelSigningKey, seed, sid.ECAddr)
+	if err != nil {
+		panic(err)
+	}
+
+	fmhe := cliFormat(mhe, sid.ECAddr.String())
+
+	unsignedUntimesMHe, err := functions.CreateNewMHashElementsUnsigned(sid.RootChainID, sid.SubChainID, lowestLevelSigningKey, seed, sid.ECAddr)
 	if err != nil {
 		panic(err)
 	}
@@ -303,65 +326,14 @@ func fullStartElements(sid *functions.ServerIdentity) {
 	fileText += sigBashBTC
 	fileText += fbke + "\n"
 
+	// MHash
+	sigBashMHash := fmt.Sprintf("sigMHASH=$(signwithed25519 %s$now %s)\n", unsignedUntimesMHe, lowestLevelSigningKeyHex)
+	fmt.Printf(sigBashMHash)
+	fmt.Println(fmhe)
+
+	fileText += sigBashMHash
+	fileText += fmhe + "\n"
+
 	// Write fileText to file
 	file.WriteString(fileText)
-
-	//strCom, strRev, newPriv, err := functions.CreateNewBlockSignEntry(sid.RootChainID, sid.SubChainID, priv, sid.ECAddr)
-
-	//modified to here so far
-
-	/*
-
-		random := rand.Reader
-		var r [20]byte
-		_, _ = io.ReadFull(random, r[:20])
-		btcKeyHex := r[:20]
-
-		p := sid.IDSet.IdentityLevel[0].GetPrivateKey()
-		priv := p[:32]
-
-		file.WriteString("sleep 1\n")
-
-		strCom, strRev, err := functions.CreateNewBitcoinKey(sid.RootChainID, sid.SubChainID, 0, 0, btcKeyHex, priv, sid.ECAddr)
-		if err != nil {
-			panic(err)
-		}
-		writeCurlCmd(file, "New Bitcoin Key", strCom, strRev)
-
-		strCom, strRev, newPriv, err := functions.CreateNewBlockSignEntry(sid.RootChainID, sid.SubChainID, priv, sid.ECAddr)
-		if err != nil {
-			panic(err)
-		}
-		writeCurlCmd(file, "New Block Signing Key", strCom, strRev)
-
-		strCom, strRev, mHash, err := functions.CreateNewMHash(sid.RootChainID, sid.SubChainID, priv, sid.RootChainID, sid.ECAddr)
-		if err != nil {
-			panic(err)
-		}
-		writeCurlCmd(file, "New Matryoshka Hash", strCom, strRev)
-
-		file.WriteString("echo " + bar + "\n")
-		file.WriteString("echo  Identity Info\n")
-		file.WriteString("echo " + bar + "\n")
-		file.WriteString("echo  Identity Chain: " + sid.RootChainID + "\n")
-		file.WriteString("echo  Identity SubChain: " + sid.SubChainID + "\n")
-
-		file.WriteString("echo EC Public : " + sid.ECAddr.PubString() + "\n")
-		file.WriteString("echo EC Private: " + sid.ECAddr.SecString() + "\n")
-		file.WriteString("echo  \n")
-		file.WriteString("echo  Private Keys\n")
-		for i, r := range sid.IDSet.IdentityLevel {
-			file.WriteString(fmt.Sprintf("echo  Level %d: %s\n", i+1, r.HumanReadablePrivate()))
-		}
-		file.WriteString("echo  \n")
-		file.WriteString("echo  BTC Key: " + hex.EncodeToString(btcKeyHex) + "\n")
-		keyString := hex.EncodeToString(newPriv)
-		keyString = "\n echo - Sec: " + keyString[:64] + "\n echo - Pub: " + keyString[64:]
-		file.WriteString("echo  Block Signing Key: " + keyString + "\n")
-		file.WriteString("echo  \n")
-		file.WriteString("echo  MHashSeed: " + sid.RootChainID + "\n")
-		file.WriteString("echo  MHash: " + mHash + "\n")
-
-	*/
-
 }
