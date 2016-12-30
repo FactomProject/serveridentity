@@ -15,6 +15,47 @@ Here is a list of the entries that are created by this program and which chains 
 
 Using Server Management Tool
 ========
+
+There are two ways to create an Identity. You can choose the manual way, and choose each key, or do the quick automatic way and allow keys to be chosen for you randomly.
+
+# Automatic (Quick) Method -- Recommended for new Identity
+## Requirements
+
+* signwith25519
+  * Go Install 'signwith25519' in the subdirectory 'serveridentity/signwith25519/'
+* factom-cli
+* factomd
+* factom-walletd
+
+## Generating a new Identity
+
+All Keys will be generated randomly and printed out to stdout
+```
+serveridentity full elements {ENTRY_CREDIT_PRIVATE_KEY} -n={OPTIONAL_FILENAME}
+```
+
+Several files will be produced:
+* Scripts to add the Identity to the blockchain
+  * Script utilizes factom-cli
+  * Name of script is by default 'fullidentity.sh' or ''{OPTIONAL_FILENAME}.sh' if provided
+* Config file needed for the server
+  * Place in ~/factom/m2 and rename to factomd.conf
+  * Name of config is by default 'fullidentity.conf' or ''{OPTIONAL_FILENAME}.conf' if provided
+
+### Building Identity and Launching Factomd with new Identity
+1. Copy down keys in stdout
+* Start factomd and wait for it to sync
+* Start factom-walletd and use cli/gui to import the private entry credit address
+  * Load with entry credits (>= 26)
+* Run 'fullidentity.sh' (or given name)
+* Place config in required spot and rename
+* Restart factomd with config file
+
+
+
+
+# Manual Way
+
 ## Creating a new Server Identity
 To create a new server identity is very simple, after compiling the source code run:
 ```
