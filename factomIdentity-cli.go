@@ -18,6 +18,7 @@ func main() {
 	c.Handle("newkey", handlers.NewKey)
 	c.Handle("get", handlers.Get)
 	c.Handle("full", handlers.Full)
+	c.Handle("check", handlers.CheckStatus)
 
 	c.HandleDefault(handlers.Help)
 	c.Execute(args)

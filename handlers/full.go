@@ -15,10 +15,6 @@ import (
 var SCRIPTNAME string = "fullidentity"
 var PRINT_OUT bool = true
 
-/*
- * This file is only used for testing purposes
- */
-
 var Full = func() *sevCmd {
 	identity.ShowBruteForce = PRINT_OUT
 	cmd := new(sevCmd)
