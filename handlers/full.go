@@ -6,7 +6,6 @@ import (
 	"flag"
 	"fmt"
 	"github.com/FactomProject/cli"
-	ed "github.com/FactomProject/ed25519"
 	"github.com/FactomProject/serveridentity/functions"
 	"github.com/FactomProject/serveridentity/identity"
 	"io"
@@ -116,7 +115,7 @@ func elementsFull(args []string) {
 }
 
 func fullStart(sid *functions.ServerIdentity) {
-	file = makeFile(SCRIPTNAME)
+	file := makeFile(SCRIPTNAME + ".sh")
 	defer file.Close()
 	var bar string
 	for i := 0; i < 76; i++ {
@@ -125,13 +124,13 @@ func fullStart(sid *functions.ServerIdentity) {
 	if PRINT_OUT {
 		PrintHeader("Root Chain Curls")
 	}
-	createIdentityChain(sid, PRINT_OUT)
-	registerIdentityChain(sid, PRINT_OUT)
+	createIdentityChain(sid, PRINT_OUT, file)
+	registerIdentityChain(sid, PRINT_OUT, file)
 	if PRINT_OUT {
 		PrintHeader("Sub Chain Curls")
 	}
-	createSubChain(sid, PRINT_OUT)
-	registerSubChain(sid, PRINT_OUT)
+	createSubChain(sid, PRINT_OUT, file)
+	registerSubChain(sid, PRINT_OUT, file)
 
 	random := rand.Reader
 	var r [20]byte
@@ -194,9 +193,11 @@ func cliFormat(cliCommand string, ECaddress string) string {
 }
 
 func fullStartElements(sid *functions.ServerIdentity) {
-	file = makeFile(SCRIPTNAME)
+	file := makeFile(SCRIPTNAME + ".sh")
 	defer file.Close()
-	//	var bar string
+	configfile := makeFile(SCRIPTNAME + ".config")
+	defer configfile.Close()
+
 	PrintHeader("Creating Identity Chains/Keys")
 	ice, err := functions.CreateIdentityChainElements(sid)
 	if err != nil {
@@ -243,10 +244,8 @@ func fullStartElements(sid *functions.ServerIdentity) {
 	bsPrivHex := fmt.Sprintf("%032x", bsPriv)
 	fmt.Printf("block signing private key: %s\n", bsPrivHex)
 
-	var priv [64]byte
-	copy(priv[:32], bsPriv[:32])
-	bsPub := ed.GetPublicKey(&priv)
-	fmt.Printf("block signing public key: %032x\n", *bsPub)
+	bsPubHex := fmt.Sprintf("%032x", bsPublic)
+	fmt.Printf("block signing public key: %s\n", bsPubHex)
 	fmt.Println()
 
 	// Create a Bitcoin Key
@@ -340,4 +339,14 @@ func fullStartElements(sid *functions.ServerIdentity) {
 
 	// Write fileText to file
 	file.WriteString(fileText)
+
+	configFileText := "IdentityChainID                       = "
+	configFileText += sid.RootChainID
+	configFileText += "\nLocalServerPrivKey                    = "
+	configFileText += bsPrivHex
+	configFileText += "\nLocalServerPublicKey                  = "
+	configFileText += bsPubHex
+	configFileText += "\n"
+	configfile.WriteString(configFileText)
+
 }

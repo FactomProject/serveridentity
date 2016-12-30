@@ -6,9 +6,9 @@ import (
 
 func makeFile(name string) *os.File {
 	var err error
-	file, err = os.Create(name + ".sh")
+	file, err := os.Create(name)
 	if err != nil {
-		file, err = os.Open(name + ".sh")
+		file, err = os.Open(name)
 		if err != nil {
 			panic(err)
 		}

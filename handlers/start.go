@@ -13,8 +13,6 @@ import (
 	"strings"
 )
 
-var file *os.File
-
 var Start = func() *sevCmd {
 	cmd := new(sevCmd)
 	cmd.helpMsg = "serveridentity start 'fresh'|ESAddress"
@@ -76,7 +74,7 @@ func start(sid *functions.ServerIdentity) {
 		panic(err)
 	}
 
-	file = makeFile("startidentity")
+	file := makeFile("startidentity.sh")
 	defer file.Close()
 	var bar string
 	for i := 0; i < 76; i++ {
@@ -88,11 +86,11 @@ func start(sid *functions.ServerIdentity) {
 	file.WriteString("echo " + bar + "\n")
 
 	PrintHeader("Root Chain Curls")
-	createIdentityChain(sid, true)
-	registerIdentityChain(sid, true)
+	createIdentityChain(sid, true, file)
+	registerIdentityChain(sid, true, file)
 	PrintHeader("Sub Chain Curls")
-	createSubChain(sid, true)
-	registerSubChain(sid, true)
+	createSubChain(sid, true, file)
+	registerSubChain(sid, true, file)
 	file.WriteString("echo   \n")
 }
 
@@ -108,7 +106,7 @@ func waitForEnter() error {
 }
 
 // Step 1 : Root Chain Create
-func createIdentityChain(sid *functions.ServerIdentity, out bool) {
+func createIdentityChain(sid *functions.ServerIdentity, out bool, file *os.File) {
 	strCom, strRev, err := functions.CreateIdentityChain(sid)
 	if err != nil {
 		panic(err)
@@ -124,7 +122,7 @@ func createIdentityChain(sid *functions.ServerIdentity, out bool) {
 }
 
 // Step 2 : Root Chain Register
-func registerIdentityChain(sid *functions.ServerIdentity, out bool) {
+func registerIdentityChain(sid *functions.ServerIdentity, out bool, file *os.File) {
 	strCom, strRev, err := functions.RegisterServerIdentity(sid)
 	if err != nil {
 		panic(err)
@@ -138,7 +136,7 @@ func registerIdentityChain(sid *functions.ServerIdentity, out bool) {
 }
 
 // Step 1 : Subchain Create
-func createSubChain(sid *functions.ServerIdentity, out bool) {
+func createSubChain(sid *functions.ServerIdentity, out bool, file *os.File) {
 	strCom, strRev, err := functions.CreateSubChain(sid)
 	if err != nil {
 		panic(err)
@@ -154,7 +152,7 @@ func createSubChain(sid *functions.ServerIdentity, out bool) {
 }
 
 // Step 2 : Subchain Register
-func registerSubChain(sid *functions.ServerIdentity, out bool) {
+func registerSubChain(sid *functions.ServerIdentity, out bool, file *os.File) {
 	strCom, strRev, err := functions.RegisterSubchain(sid)
 	if err != nil {
 		panic(err)

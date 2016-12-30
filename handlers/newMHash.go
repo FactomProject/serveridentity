@@ -78,8 +78,8 @@ func newMHash(sh bool) {
 	fmt.Println(strRev + "\n")
 
 	if sh == true {
-		fileB := makeFile("mhash")
-		defer file.Close()
+		fileB := makeFile("mhash.sh")
+		defer fileB.Close()
 		writeCurlCmd(fileB, "New Matryoshka Hash", strCom, strRev)
 	}
 }

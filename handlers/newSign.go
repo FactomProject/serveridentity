@@ -143,8 +143,8 @@ func newBtcKey(sh bool) {
 
 	// Script Generating
 	if sh == true {
-		fileB := makeFile("btckey")
-		defer file.Close()
+		fileB := makeFile("btckey.sh")
+		defer fileB.Close()
 		writeCurlCmd(fileB, "New Bitcoin Key", strCom, strRev)
 	}
 }
@@ -194,7 +194,7 @@ func newBlockKey(sh bool) {
 
 	// Script Generating
 	if sh == true {
-		fileB := makeFile("blockkey")
+		fileB := makeFile("blockkey.sh")
 		writeCurlCmd(fileB, "New Block Signing Key", strCom, strRev)
 	}
 }
