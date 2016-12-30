@@ -36,6 +36,9 @@ var CheckStatus = func() *sevCmd {
 		}
 		err = checkStatus(cid, *details)
 		if err != nil {
+			if *details {
+				fmt.Println(err.Error())
+			}
 			fmt.Println(false)
 			return
 		}

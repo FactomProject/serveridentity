@@ -13,10 +13,22 @@ Here is a list of the entries that are created by this program and which chains 
 ## Compiling
 * /identity/varsconfig.go contains various hardcode options. Until release, refer to these when creating an identity.
 
+
 Using Server Management Tool
 ========
 
 There are two ways to create an Identity. You can choose the manual way, and choose each key, or do the quick automatic way and allow keys to be chosen for you randomly.
+
+### Identity Check Tool
+You can also check to see if an identity is "full" and able to be promoted. It will return true/false to indicate full/not full
+```
+serveridentity check CHAINID -host={HOST} -v={true/false}
+```
+* host = Location of factomd api
+  * default: localhost:8088
+* v = printout keys if all found
+  * default: false
+    * Only prints true/false as return
 
 # Automatic (Quick) Method -- Recommended for new Identity
 ## Requirements
