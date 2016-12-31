@@ -1,0 +1,16 @@
+package: github.com/FactomProject/serveridentity
+import:
+- package: github.com/FactomProject/btcutil
+  subpackages:
+  - base58
+- package: github.com/FactomProject/cli
+- package: github.com/FactomProject/ed25519
+- package: github.com/FactomProject/factom
+  version: develop
+- package: github.com/FactomProject/factomd
+  version: develop
+  subpackages:
+  - common/entryBlock
+  - common/interfaces
+  - common/primitives
+  - state
