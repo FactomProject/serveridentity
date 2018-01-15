@@ -342,7 +342,8 @@ func fullStartElements(sid *functions.ServerIdentity) {
 	// Write fileText to file
 	file.WriteString(fileText)
 
-	configFileText := "IdentityChainID                       = "
+	configFileText := "[app]\n"
+	configFileText += "IdentityChainID                       = "
 	configFileText += sid.RootChainID
 	configFileText += "\nLocalServerPrivKey                    = "
 	configFileText += bsPrivHex
