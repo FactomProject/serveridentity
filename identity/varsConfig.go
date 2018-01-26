@@ -7,7 +7,7 @@ var (
 	RegisterIdentityLevel int = 1
 	// For ChainIDs
 	ProofOfWorkChainID     = []byte{0x88, 0x88, 0x88}
-	ProofOfWorkLength  int = 3 // DEFAULT = 3, set lower for faster tests
+	ProofOfWorkLength  int = 1 // DEFAULT = 3, set lower for faster tests
 	// For Registering Root Chain
 	// e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
 	RootRegisterChain string = "888888001750ede0eff4b05f0c3f557890b256450cabbb84cada937f9c258327"

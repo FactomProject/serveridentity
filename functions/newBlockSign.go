@@ -49,7 +49,7 @@ func CreateNewBlockSignEntryElements(sid *ServerIdentity) (string, []byte, []byt
 	blockSigningPubkey := pub[:32]
 	blockSigningPrivatekey := priv[:32]
 
-	elements := "addentry -x 00 -e \"New Block Signing Key\" -x "
+	elements := "addentry " + ELEMENTS_FLAG + " -x 00 -e \"New Block Signing Key\" -x "
 	elements += sid.RootChainID
 	elements += " -x "
 	elements += fmt.Sprintf("%032x", blockSigningPubkey)

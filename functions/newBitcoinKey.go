@@ -80,7 +80,7 @@ func CreateNewBitcoinKeyElements(rootChainID string, subChainID string, btcKeyLe
 
 	e := btcKeyStruct.GetEntry()
 	extIDs := e.ExtIDs
-	elements := "addentry"
+	elements := "addentry " + ELEMENTS_FLAG
 	elements += fmt.Sprintf(" -x %x", extIDs[0][:])             // Version
 	elements += fmt.Sprintf(" -e \"%s\"", string(extIDs[1][:])) // "New Bitcoin Key"
 	elements += fmt.Sprintf(" -x %x", extIDs[2][:])             // Root chain

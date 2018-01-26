@@ -86,10 +86,14 @@ func elementsFull(args []string) {
 	}
 	filename := flag.String("n", "fullidentity", "Change the script name")
 	printCLI := flag.Bool("p", true, "Print factom-cli commands")
+	forceFlag := flag.Bool("f", false, "Add force flag to script file")
 	flag.Parse()
 	PRINT_CLI = *printCLI
 	SCRIPTNAME = *filename
 	var sid *functions.ServerIdentity
+	if *forceFlag {
+		functions.ELEMENTS_FLAG = "-f "
+	}
 
 	if len(args) > 1 {
 		fmt.Println(args[1])

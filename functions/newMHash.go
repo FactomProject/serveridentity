@@ -70,7 +70,7 @@ func CreateNewMHashElements(rootChainID string, subChainID string, privateKey []
 
 	e := mh.GetEntry()
 	extIDs := e.ExtIDs
-	elements := "addentry"
+	elements := "addentry " + ELEMENTS_FLAG
 	elements += fmt.Sprintf(" -x %x", extIDs[0][:])             // Version
 	elements += fmt.Sprintf(" -e \"%s\"", string(extIDs[1][:])) // "New Matryoshka Hash"
 	elements += fmt.Sprintf(" -x %x", extIDs[2][:])             // Root chain

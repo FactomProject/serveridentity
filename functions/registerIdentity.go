@@ -32,7 +32,7 @@ func RegisterServerIdentityElements(sid *ServerIdentity) (string, error) {
 		return "error", err
 	}
 
-	elements := "addentry "
+	elements := "addentry " + ELEMENTS_FLAG
 
 	structValue := reflect.ValueOf(reg)
 	structElem := structValue.Elem()

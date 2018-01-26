@@ -37,7 +37,7 @@ func CreateSubChainElements(sid *ServerIdentity) (string, error) {
 		return "error", err
 	}
 
-	elements := "addchain "
+	elements := "addchain " + ELEMENTS_FLAG
 
 	structValue := reflect.ValueOf(sub)
 	structElem := structValue.Elem()
