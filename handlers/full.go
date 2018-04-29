@@ -77,6 +77,7 @@ func freshFull(args []string) {
 }
 
 var PRINT_CLI bool = true
+var FactomdHost string = "localhost:8088"
 
 func elementsFull(args []string) {
 	if len(args) > 1 {
@@ -87,7 +88,9 @@ func elementsFull(args []string) {
 	filename := flag.String("n", "fullidentity", "Change the script name")
 	printCLI := flag.Bool("p", true, "Print factom-cli commands")
 	forceFlag := flag.Bool("f", false, "Add force flag to script file")
+	factomdHost := flag.String("s", "localhost:8088", "Change host for factom-cli")
 	flag.Parse()
+	FactomdHost = *factomdHost
 	PRINT_CLI = *printCLI
 	SCRIPTNAME = *filename
 	var sid *functions.ServerIdentity
@@ -188,7 +191,7 @@ func fullStart(sid *functions.ServerIdentity) {
 }
 
 func cliFormat(cliCommand string, ECaddress string) string {
-	cliLine := "echo -n \"\" | factom-cli "
+	cliLine := "echo -n \"\" | factom-cli -s " + FactomdHost +" "
 	cliLine += cliCommand
 	cliLine += " "
 	cliLine += ECaddress
