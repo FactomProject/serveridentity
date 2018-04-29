@@ -238,7 +238,7 @@ func formatIDKeysString(i *identity.IdentitySet) string {
 	str = str + "Level 3: " + i.IdentityLevel[2].HumanReadablePrivate() + "\n"
 	str = str + "Level 4: " + i.IdentityLevel[3].HumanReadablePrivate() + "\n"
 
-	/*str = str + "\nPublic keys (hex) and their corresponding levels. Copy these down, this program will \nnot save them for you.\n"
+	str = str + "\nPublic keys (hex) and their corresponding levels. Copy these down, this program will \nnot save them for you.\n"
 	str = str + "Level 1: " + i.IdentityLevel[0].HumanReadablePublic() + "\n"
 	str = str + "Level 2: " + i.IdentityLevel[1].HumanReadablePublic() + "\n"
 	str = str + "Level 3: " + i.IdentityLevel[2].HumanReadablePublic() + "\n"
@@ -248,7 +248,7 @@ func formatIDKeysString(i *identity.IdentitySet) string {
 	str = str + "Level 1: " + i.IdentityLevel[0].HumanReadableIdentity() + "\n"
 	str = str + "Level 2: " + i.IdentityLevel[1].HumanReadableIdentity() + "\n"
 	str = str + "Level 3: " + i.IdentityLevel[2].HumanReadableIdentity() + "\n"
-	str = str + "Level 4: " + i.IdentityLevel[3].HumanReadableIdentity() + "\n"*/
+	str = str + "Level 4: " + i.IdentityLevel[3].HumanReadableIdentity() + "\n"
 	return str
 }
 
