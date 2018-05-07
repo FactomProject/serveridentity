@@ -228,7 +228,7 @@ func fullStartElements(sid *functions.ServerIdentity) {
 	fscr := cliFormat(scr, sid.ECAddr.String())
 
 	fmt.Println("Root Chain: " + sid.RootChainID)
-	fmt.Println("Management Chain: " + sid.RootChainID)
+	fmt.Println("Management Chain: " + sid.SubChainID)
 	fmt.Println()
 
 	p := sid.IDSet.IdentityLevel[0].GetPrivateKey()
